@@ -2,8 +2,13 @@
 <html lang="id" class="h-full">
 
 <head>
+
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
 
   <title>Inu Chicken - POS Kasir</title>
 
@@ -17,123 +22,73 @@
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
   <script>
+
     tailwind.config = {
-      darkMode: 'class',
+
+      darkMode: "class",
 
       theme: {
+
         extend: {
 
           colors: {
 
             brand: {
-              50: '#fff7ed',
-              100: '#ffedd5',
-              200: '#fed7aa',
-              300: '#fdba74',
-              400: '#fb923c',
-              500: '#f97316',
-              600: '#ea580c',
-              700: '#c2410c',
-              800: '#9a3412',
-              900: '#7c2d12'
+
+              50: "#fff7ed",
+              100: "#ffedd5",
+              200: "#fed7aa",
+              300: "#fdba74",
+              400: "#fb923c",
+              500: "#f97316",
+              600: "#ea580c",
+              700: "#c2410c",
+              800: "#9a3412",
+              900: "#7c2d12"
+
             }
-
-          },
-
-          boxShadow: {
-
-            soft:
-              '0 4px 20px rgba(15,23,42,.06)',
-
-            orange:
-              '0 8px 25px rgba(234,88,12,.15)'
 
           }
 
         }
+
       }
-    }
+
+    };
+
   </script>
-
-  <style>
-
-    html {
-      scroll-behavior: smooth;
-    }
-
-    body {
-      -webkit-tap-highlight-color: transparent;
-    }
-
-    ::-webkit-scrollbar {
-      width: 7px;
-      height: 7px;
-    }
-
-    ::-webkit-scrollbar-track {
-      background: transparent;
-    }
-
-    ::-webkit-scrollbar-thumb {
-      background: #fdba74;
-      border-radius: 999px;
-    }
-
-    ::-webkit-scrollbar-thumb:hover {
-      background: #f97316;
-    }
-
-    .menu-card {
-      transition:
-        transform .2s ease,
-        box-shadow .2s ease,
-        border-color .2s ease;
-    }
-
-    .menu-card:hover {
-      transform: translateY(-3px);
-    }
-
-    .menu-card:active {
-      transform: scale(.98);
-    }
-
-    .glass {
-      background: rgba(255,255,255,.88);
-      backdrop-filter: blur(12px);
-    }
-
-    .dark .glass {
-      background: rgba(15,23,42,.88);
-    }
-
-  </style>
 
 </head>
 
 
-<body class="bg-orange-50/40 dark:bg-slate-950 text-slate-800 dark:text-slate-100 min-h-screen font-sans transition-colors">
+<body
+  class="bg-slate-50 dark:bg-slate-950 text-slate-800 dark:text-slate-100 min-h-screen font-sans transition-colors"
+>
 
 
 <!-- =========================================================
      HEADER
 ========================================================= -->
 
-<header class="glass border-b border-orange-100 dark:border-slate-800 sticky top-0 z-30 shadow-sm">
+<header
+  class="bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 sticky top-0 z-30 shadow-sm"
+>
 
-  <div class="max-w-6xl mx-auto px-4 py-3 flex flex-wrap justify-between items-center gap-3">
+  <div
+    class="max-w-6xl mx-auto px-4 py-2.5 flex flex-wrap justify-between items-center gap-3"
+  >
 
-    <!-- BRAND -->
+    <div class="flex items-center gap-2.5">
 
-    <div class="flex items-center gap-3">
-
-      <div class="w-11 h-11 rounded-2xl bg-white overflow-hidden shadow-orange border border-orange-100 flex items-center justify-center">
+      <div
+        class="w-10 h-10 rounded-xl bg-white overflow-hidden shadow-md border border-slate-200 flex items-center justify-center"
+      >
 
         <img
           src="https://drive.google.com/thumbnail?id=1dVBSCD8Vx692icERGy2i7j_LxCcgjdNN&sz=w200"
           alt="Logo Inu Chicken"
           class="w-full h-full object-cover"
-          onerror="this.style.display='none'; this.parentElement.innerHTML='🍗'; this.parentElement.classList.add('text-2xl');"
+          onerror="this.style.display='none'; this.parentElement.innerHTML='🍗'; this.parentElement.classList.add('text-xl');"
         >
 
       </div>
@@ -141,9 +96,8 @@
 
       <div>
 
-        <h1 class="text-lg font-black leading-tight tracking-tight">
-          Inu Chicken
-          <span class="text-brand-600">POS</span>
+        <h1 class="text-base font-bold leading-tight">
+          Inu Chicken POS
         </h1>
 
       </div>
@@ -151,16 +105,16 @@
     </div>
 
 
-    <!-- CONTROLS -->
-
     <div class="flex items-center gap-2">
 
-      <div class="bg-slate-100 dark:bg-slate-800 p-1 rounded-xl flex items-center gap-1 text-xs font-bold">
+      <div
+        class="bg-slate-100 dark:bg-slate-800 p-1 rounded-xl flex items-center gap-1 text-xs font-semibold"
+      >
 
         <button
           id="btnRoleKasir"
           onclick="switchRole('kasir')"
-          class="px-3 py-2 rounded-lg bg-white dark:bg-slate-700 text-brand-600 shadow-sm flex items-center gap-1.5 transition"
+          class="px-3 py-1.5 rounded-lg bg-white dark:bg-slate-700 text-brand-600 shadow-sm flex items-center gap-1.5"
         >
 
           <i class="fa-solid fa-cash-register"></i>
@@ -173,7 +127,7 @@
         <button
           id="btnRoleAdmin"
           onclick="switchRole('admin')"
-          class="px-3 py-2 rounded-lg text-slate-600 dark:text-slate-400 flex items-center gap-1.5 transition"
+          class="px-3 py-1.5 rounded-lg text-slate-600 dark:text-slate-400 flex items-center gap-1.5"
         >
 
           <i class="fa-solid fa-user-shield"></i>
@@ -188,10 +142,13 @@
       <button
         id="themeToggle"
         onclick="toggleTheme()"
-        class="w-9 h-9 rounded-xl text-slate-500 hover:text-brand-600 hover:bg-orange-50 dark:hover:bg-slate-800 transition flex items-center justify-center"
+        class="p-2 rounded-lg text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800 transition"
       >
 
-        <i id="themeIcon" class="fa-solid fa-moon"></i>
+        <i
+          id="themeIcon"
+          class="fa-solid fa-moon"
+        ></i>
 
       </button>
 
@@ -203,15 +160,19 @@
 
 
 
-<main class="max-w-6xl mx-auto w-full px-4 py-6 space-y-6">
+<main
+  class="max-w-6xl mx-auto w-full px-4 py-6 space-y-6"
+>
 
 
 <!-- =========================================================
      KASIR
 ========================================================= -->
 
-<section id="viewKasir" class="space-y-6">
-
+<section
+  id="viewKasir"
+  class="space-y-6"
+>
 
   <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
 
@@ -221,11 +182,15 @@
     <div class="lg:col-span-2 space-y-4">
 
 
-      <div class="flex justify-between items-center bg-gradient-to-r from-orange-50 to-amber-50 dark:from-orange-950/30 dark:to-amber-950/20 border border-orange-200 dark:border-orange-900/50 p-4 rounded-2xl shadow-sm">
+      <div
+        class="flex justify-between items-center bg-brand-50 dark:bg-brand-950/30 border border-brand-200 dark:border-brand-900/50 p-4 rounded-2xl"
+      >
 
         <div class="flex items-center gap-3">
 
-          <div class="w-11 h-11 rounded-2xl bg-brand-600 text-white flex items-center justify-center shadow-orange">
+          <div
+            class="w-10 h-10 rounded-xl bg-brand-600 text-white flex items-center justify-center"
+          >
 
             <i class="fa-solid fa-utensils"></i>
 
@@ -234,11 +199,15 @@
 
           <div>
 
-            <h2 class="font-black text-slate-900 dark:text-white">
+            <h2
+              class="font-bold text-slate-900 dark:text-white"
+            >
               Pilih Menu
             </h2>
 
-            <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
+            <p
+              class="text-xs text-slate-500 dark:text-slate-400"
+            >
               Klik menu untuk menambahkan pesanan
             </p>
 
@@ -249,18 +218,15 @@
       </div>
 
 
-
-      <!-- MENU CARDS -->
-
       <div class="grid grid-cols-2 gap-3">
 
 
-        <!-- NASI AYAM -->
+        <!-- PRODUK 1 -->
 
         <button
           type="button"
           onclick="addToCart('Nasi + Ayam',10000)"
-          class="menu-card group p-4 rounded-2xl border border-slate-200 dark:border-slate-700 hover:border-brand-400 dark:hover:border-brand-500 bg-white dark:bg-slate-800 text-left shadow-soft hover:shadow-orange"
+          class="group p-4 rounded-2xl border border-slate-200 dark:border-slate-700 hover:border-brand-500 bg-white dark:bg-slate-900 text-left shadow-sm hover:shadow-md transition"
         >
 
           <div class="flex justify-between items-start">
@@ -269,7 +235,9 @@
               🍗🍚
             </span>
 
-            <span class="w-8 h-8 rounded-xl bg-brand-100 dark:bg-brand-900/40 text-brand-600 flex items-center justify-center group-hover:bg-brand-600 group-hover:text-white transition">
+            <span
+              class="w-7 h-7 rounded-full bg-brand-100 dark:bg-brand-900/50 text-brand-600 flex items-center justify-center"
+            >
 
               <i class="fa-solid fa-plus"></i>
 
@@ -284,7 +252,7 @@
               Nasi + Ayam
             </p>
 
-            <p class="text-xs text-brand-600 font-black mt-1">
+            <p class="text-xs text-brand-600 font-bold mt-1">
               Rp 10.000
             </p>
 
@@ -293,13 +261,12 @@
         </button>
 
 
-
-        <!-- AYAM -->
+        <!-- PRODUK 2 -->
 
         <button
           type="button"
           onclick="addToCart('Ayam',8000)"
-          class="menu-card group p-4 rounded-2xl border border-slate-200 dark:border-slate-700 hover:border-brand-400 dark:hover:border-brand-500 bg-white dark:bg-slate-800 text-left shadow-soft hover:shadow-orange"
+          class="group p-4 rounded-2xl border border-slate-200 dark:border-slate-700 hover:border-brand-500 bg-white dark:bg-slate-900 text-left shadow-sm hover:shadow-md transition"
         >
 
           <div class="flex justify-between items-start">
@@ -308,7 +275,9 @@
               🍗
             </span>
 
-            <span class="w-8 h-8 rounded-xl bg-brand-100 dark:bg-brand-900/40 text-brand-600 flex items-center justify-center group-hover:bg-brand-600 group-hover:text-white transition">
+            <span
+              class="w-7 h-7 rounded-full bg-brand-100 dark:bg-brand-900/50 text-brand-600 flex items-center justify-center"
+            >
 
               <i class="fa-solid fa-plus"></i>
 
@@ -323,7 +292,7 @@
               Ayam Only
             </p>
 
-            <p class="text-xs text-brand-600 font-black mt-1">
+            <p class="text-xs text-brand-600 font-bold mt-1">
               Rp 8.000
             </p>
 
@@ -332,13 +301,12 @@
         </button>
 
 
-
-        <!-- NASI -->
+        <!-- PRODUK 3 -->
 
         <button
           type="button"
           onclick="addToCart('Nasi',3000)"
-          class="menu-card group p-4 rounded-2xl border border-slate-200 dark:border-slate-700 hover:border-brand-400 dark:hover:border-brand-500 bg-white dark:bg-slate-800 text-left shadow-soft hover:shadow-orange"
+          class="group p-4 rounded-2xl border border-slate-200 dark:border-slate-700 hover:border-brand-500 bg-white dark:bg-slate-900 text-left shadow-sm hover:shadow-md transition"
         >
 
           <div class="flex justify-between items-start">
@@ -347,7 +315,9 @@
               🍚
             </span>
 
-            <span class="w-8 h-8 rounded-xl bg-brand-100 dark:bg-brand-900/40 text-brand-600 flex items-center justify-center group-hover:bg-brand-600 group-hover:text-white transition">
+            <span
+              class="w-7 h-7 rounded-full bg-brand-100 dark:bg-brand-900/50 text-brand-600 flex items-center justify-center"
+            >
 
               <i class="fa-solid fa-plus"></i>
 
@@ -362,7 +332,7 @@
               Nasi Putih
             </p>
 
-            <p class="text-xs text-brand-600 font-black mt-1">
+            <p class="text-xs text-brand-600 font-bold mt-1">
               Rp 3.000
             </p>
 
@@ -371,13 +341,12 @@
         </button>
 
 
-
-        <!-- SAMBAL -->
+        <!-- PRODUK 4 -->
 
         <button
           type="button"
           onclick="addToCart('Saus / Sambal',3000)"
-          class="menu-card group p-4 rounded-2xl border border-slate-200 dark:border-slate-700 hover:border-brand-400 dark:hover:border-brand-500 bg-white dark:bg-slate-800 text-left shadow-soft hover:shadow-orange"
+          class="group p-4 rounded-2xl border border-slate-200 dark:border-slate-700 hover:border-brand-500 bg-white dark:bg-slate-900 text-left shadow-sm hover:shadow-md transition"
         >
 
           <div class="flex justify-between items-start">
@@ -386,7 +355,9 @@
               🌶️
             </span>
 
-            <span class="w-8 h-8 rounded-xl bg-brand-100 dark:bg-brand-900/40 text-brand-600 flex items-center justify-center group-hover:bg-brand-600 group-hover:text-white transition">
+            <span
+              class="w-7 h-7 rounded-full bg-brand-100 dark:bg-brand-900/50 text-brand-600 flex items-center justify-center"
+            >
 
               <i class="fa-solid fa-plus"></i>
 
@@ -401,7 +372,7 @@
               Saus / Sambal Extra
             </p>
 
-            <p class="text-xs text-brand-600 font-black mt-1">
+            <p class="text-xs text-brand-600 font-bold mt-1">
               Rp 3.000
             </p>
 
@@ -412,7 +383,10 @@
       </div>
 
 
-      <div id="statusAlert" class="hidden p-3 rounded-xl text-sm font-medium"></div>
+      <div
+        id="statusAlert"
+        class="hidden p-3 rounded-xl text-sm font-medium"
+      ></div>
 
     </div>
 
@@ -422,20 +396,21 @@
 
     <div>
 
-      <div class="bg-white dark:bg-slate-800 p-5 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-soft min-h-[380px] flex flex-col justify-between">
-
+      <div
+        class="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm min-h-[380px] flex flex-col justify-between"
+      >
 
         <div>
 
-          <div class="flex justify-between items-center pb-3 border-b border-slate-100 dark:border-slate-700 mb-3">
+          <div
+            class="flex justify-between items-center pb-3 border-b border-slate-100 dark:border-slate-700 mb-3"
+          >
 
-            <h3 class="font-black flex items-center gap-2">
+            <h3 class="font-bold flex items-center gap-2">
 
-              <span class="w-8 h-8 rounded-lg bg-orange-100 dark:bg-orange-900/30 text-brand-600 flex items-center justify-center">
-
-                <i class="fa-solid fa-cart-shopping"></i>
-
-              </span>
+              <i
+                class="fa-solid fa-cart-shopping text-brand-600"
+              ></i>
 
               Keranjang
 
@@ -444,7 +419,7 @@
 
             <button
               onclick="clearCart()"
-              class="text-xs text-red-500 hover:text-red-600 font-semibold hover:underline"
+              class="text-xs text-red-500 hover:underline"
             >
               Reset
             </button>
@@ -460,9 +435,9 @@
         </div>
 
 
-
-        <div class="pt-4 border-t border-slate-100 dark:border-slate-700 mt-4 space-y-3">
-
+        <div
+          class="pt-4 border-t border-slate-100 dark:border-slate-700 mt-4 space-y-3"
+        >
 
           <div class="flex justify-between items-center">
 
@@ -484,7 +459,7 @@
             id="btnCheckout"
             onclick="openConfirmModal()"
             disabled
-            class="w-full py-3 bg-brand-600 disabled:bg-slate-300 dark:disabled:bg-slate-700 disabled:cursor-not-allowed hover:bg-brand-700 text-white font-bold text-sm rounded-xl transition shadow-orange flex justify-center items-center gap-2"
+            class="w-full py-3 bg-brand-600 disabled:bg-slate-300 dark:disabled:bg-slate-700 disabled:cursor-not-allowed hover:bg-brand-700 text-white font-bold text-sm rounded-xl transition shadow-md flex justify-center items-center gap-2"
           >
 
             <i class="fa-solid fa-cash-register"></i>
@@ -505,17 +480,17 @@
 
   <!-- TRANSAKSI TERAKHIR -->
 
-  <section class="bg-white dark:bg-slate-800 p-5 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-soft">
+  <section
+    class="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm"
+  >
 
     <div class="flex justify-between items-center mb-3">
 
-      <h3 class="text-sm font-black flex items-center gap-2">
+      <h3 class="text-sm font-bold flex items-center gap-2">
 
-        <span class="w-8 h-8 rounded-lg bg-orange-100 dark:bg-orange-900/30 text-brand-600 flex items-center justify-center">
-
-          <i class="fa-solid fa-clock-rotate-left"></i>
-
-        </span>
+        <i
+          class="fa-solid fa-clock-rotate-left text-brand-600"
+        ></i>
 
         Transaksi Terakhir
 
@@ -524,7 +499,7 @@
 
       <button
         onclick="switchRole('admin')"
-        class="text-xs text-brand-600 hover:underline font-semibold"
+        class="text-xs text-brand-600 hover:underline"
       >
         Dashboard Admin →
       </button>
@@ -532,11 +507,15 @@
     </div>
 
 
-    <div class="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-700">
+    <div
+      class="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-700"
+    >
 
       <table class="w-full text-xs text-left">
 
-        <thead class="bg-orange-50 dark:bg-slate-700/50">
+        <thead
+          class="bg-slate-50 dark:bg-slate-800"
+        >
 
           <tr>
 
@@ -560,6 +539,7 @@
 
         </thead>
 
+
         <tbody id="kasirRecentTable"></tbody>
 
       </table>
@@ -576,16 +556,23 @@
      ADMIN
 ========================================================= -->
 
-<section id="viewAdmin" class="hidden space-y-6">
+<section
+  id="viewAdmin"
+  class="hidden space-y-6"
+>
 
 
-  <!-- ADMIN HEADER -->
+  <!-- HEADER ADMIN -->
 
-  <div class="flex justify-between items-center bg-gradient-to-r from-slate-900 to-slate-800 text-white p-4 rounded-2xl shadow-lg">
+  <div
+    class="flex justify-between items-center bg-slate-900 text-white p-4 rounded-2xl shadow-md"
+  >
 
     <div class="flex items-center gap-3">
 
-      <div class="w-11 h-11 rounded-2xl bg-brand-600 flex items-center justify-center shadow-orange">
+      <div
+        class="w-10 h-10 rounded-xl bg-brand-600 flex items-center justify-center"
+      >
 
         <i class="fa-solid fa-chart-pie"></i>
 
@@ -594,7 +581,7 @@
 
       <div>
 
-        <h2 class="font-black">
+        <h2 class="font-bold">
           Panel Administrator
         </h2>
 
@@ -609,7 +596,7 @@
 
     <button
       onclick="lockAdmin()"
-      class="px-3 py-2 bg-white/10 hover:bg-white/20 text-xs rounded-lg transition"
+      class="px-3 py-1.5 bg-slate-700 hover:bg-slate-600 text-xs rounded-lg"
     >
 
       <i class="fa-solid fa-lock mr-1"></i>
@@ -622,15 +609,17 @@
 
 
 
-  <!-- STATUS -->
+  <!-- STATUS KONEKSI -->
 
-  <section class="bg-white dark:bg-slate-800 p-4 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-soft">
+  <section
+    class="bg-white dark:bg-slate-900 p-4 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm"
+  >
 
     <div class="flex justify-between items-center">
 
       <div>
 
-        <p class="text-xs font-black uppercase text-slate-500">
+        <p class="text-xs font-bold uppercase text-slate-500">
           Google Apps Script
         </p>
 
@@ -643,7 +632,7 @@
 
       <span
         id="urlStatus"
-        class="text-xs font-bold text-amber-600 bg-amber-50 px-2.5 py-1 rounded-lg"
+        class="text-xs font-semibold text-amber-600 bg-amber-50 px-2 py-1 rounded-lg"
       >
         Memeriksa...
       </span>
@@ -658,31 +647,95 @@
 
   <section class="space-y-4">
 
-    <h2 class="text-base font-black flex items-center gap-2">
 
-      <span class="w-8 h-8 rounded-lg bg-orange-100 dark:bg-orange-900/30 text-brand-600 flex items-center justify-center">
+    <!-- JUDUL + FILTER -->
 
-        <i class="fa-solid fa-chart-line"></i>
+    <div
+      class="flex flex-wrap justify-between items-center gap-3"
+    >
 
-      </span>
+      <h2 class="text-base font-bold">
 
-      Analisis Penjualan
+        <i
+          class="fa-solid fa-chart-line text-brand-600 mr-1"
+        ></i>
 
-    </h2>
+        Analisis Penjualan
 
+      </h2>
+
+
+      <div
+        class="flex items-center gap-1 bg-slate-100 dark:bg-slate-800 p-1 rounded-xl"
+      >
+
+        <button
+          onclick="setDashboardFilter('today')"
+          id="filterToday"
+          class="dashboard-filter px-3 py-1.5 rounded-lg text-xs font-semibold transition"
+        >
+          Hari Ini
+        </button>
+
+
+        <button
+          onclick="setDashboardFilter('7days')"
+          id="filter7Days"
+          class="dashboard-filter px-3 py-1.5 rounded-lg text-xs font-semibold transition"
+        >
+          7 Hari
+        </button>
+
+
+        <button
+          onclick="setDashboardFilter('month')"
+          id="filterMonth"
+          class="dashboard-filter px-3 py-1.5 rounded-lg text-xs font-semibold transition"
+        >
+          Bulan Ini
+        </button>
+
+
+        <button
+          onclick="setDashboardFilter('all')"
+          id="filterAll"
+          class="dashboard-filter px-3 py-1.5 rounded-lg text-xs font-semibold transition"
+        >
+          Semua
+        </button>
+
+      </div>
+
+    </div>
+
+
+    <p
+      id="dashboardFilterLabel"
+      class="text-xs text-slate-400 -mt-2"
+    >
+      Menampilkan data hari ini
+    </p>
+
+
+
+    <!-- STATISTIK -->
 
     <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
 
 
-      <div class="bg-white dark:bg-slate-800 p-4 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-soft">
+      <div
+        class="bg-white dark:bg-slate-900 p-4 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm"
+      >
 
-        <span class="text-xs text-slate-500 font-bold uppercase">
+        <span
+          class="text-xs text-slate-500 font-semibold uppercase"
+        >
           Total Omset
         </span>
 
         <p
           id="dashTotalOmset"
-          class="text-lg sm:text-xl font-black mt-1 text-brand-600"
+          class="text-lg sm:text-xl font-black mt-1"
         >
           Rp 0
         </p>
@@ -694,10 +747,13 @@
       </div>
 
 
+      <div
+        class="bg-white dark:bg-slate-900 p-4 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm"
+      >
 
-      <div class="bg-white dark:bg-slate-800 p-4 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-soft">
-
-        <span class="text-xs text-slate-500 font-bold uppercase">
+        <span
+          class="text-xs text-slate-500 font-semibold uppercase"
+        >
           Transaksi
         </span>
 
@@ -715,10 +771,13 @@
       </div>
 
 
+      <div
+        class="bg-white dark:bg-slate-900 p-4 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm"
+      >
 
-      <div class="bg-white dark:bg-slate-800 p-4 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-soft">
-
-        <span class="text-xs text-slate-500 font-bold uppercase">
+        <span
+          class="text-xs text-slate-500 font-semibold uppercase"
+        >
           Item Terjual
         </span>
 
@@ -736,21 +795,27 @@
       </div>
 
 
+      <div
+        class="bg-white dark:bg-slate-900 p-4 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm"
+      >
 
-      <div class="bg-white dark:bg-slate-800 p-4 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-soft">
-
-        <span class="text-xs text-slate-500 font-bold uppercase">
+        <span
+          class="text-xs text-slate-500 font-semibold uppercase"
+        >
           Terlaris
         </span>
 
         <p
           id="dashTopProduct"
-          class="text-sm font-black mt-1 truncate text-brand-600"
+          class="text-sm font-extrabold mt-1 truncate"
         >
           -
         </p>
 
-        <p id="dashTopQty" class="text-[10px] text-slate-400">
+        <p
+          id="dashTopQty"
+          class="text-[10px] text-slate-400"
+        >
           0 porsi
         </p>
 
@@ -760,14 +825,21 @@
 
 
 
+    <!-- GRAFIK -->
+
     <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
 
 
-      <div class="md:col-span-2 bg-white dark:bg-slate-800 p-4 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-soft">
+      <div
+        class="md:col-span-2 bg-white dark:bg-slate-900 p-4 rounded-2xl border border-slate-200 dark:border-slate-700"
+      >
 
-        <h3 class="text-xs font-black uppercase tracking-wider text-slate-500 mb-3">
+        <h3
+          class="text-xs font-bold uppercase tracking-wider text-slate-500 mb-3"
+        >
           Grafik Penjualan Produk
         </h3>
+
 
         <div class="relative h-56">
 
@@ -779,11 +851,18 @@
 
 
 
-      <div class="bg-white dark:bg-slate-800 p-4 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-soft">
+      <!-- BREAKDOWN -->
 
-        <h3 class="text-xs font-black uppercase text-slate-500 mb-4">
+      <div
+        class="bg-white dark:bg-slate-900 p-4 rounded-2xl border border-slate-200 dark:border-slate-700"
+      >
+
+        <h3
+          class="text-xs font-bold uppercase text-slate-500 mb-4"
+        >
           Pangsa Penjualan
         </h3>
+
 
         <div
           id="productBreakdown"
@@ -800,25 +879,27 @@
 
   <!-- RIWAYAT -->
 
-  <section class="bg-white dark:bg-slate-800 p-5 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-soft">
+  <section
+    class="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm"
+  >
 
-    <div class="flex flex-wrap justify-between items-center gap-2 mb-4">
+    <div
+      class="flex flex-wrap justify-between items-center gap-2 mb-4"
+    >
 
       <div>
 
-        <h2 class="text-base font-black flex items-center gap-2">
+        <h2 class="text-base font-bold">
 
-          <span class="w-8 h-8 rounded-lg bg-orange-100 dark:bg-orange-900/30 text-brand-600 flex items-center justify-center">
-
-            <i class="fa-solid fa-database"></i>
-
-          </span>
+          <i
+            class="fa-solid fa-database text-brand-600 mr-1"
+          ></i>
 
           Riwayat Penjualan
 
         </h2>
 
-        <p class="text-xs text-slate-400 mt-1">
+        <p class="text-xs text-slate-400">
           Data dari Google Sheets
         </p>
 
@@ -827,13 +908,14 @@
 
       <div class="flex items-center gap-2">
 
-        <label class="flex items-center gap-2 text-xs">
+        <label
+          class="flex items-center gap-2 text-xs"
+        >
 
           <input
             type="checkbox"
             id="autoRefreshToggle"
             checked
-            class="accent-orange-600"
           >
 
           Otomatis
@@ -850,7 +932,7 @@
 
         <button
           id="btnFetch"
-          class="px-3 py-1.5 bg-orange-50 dark:bg-slate-700 text-brand-600 dark:text-slate-200 text-xs rounded-lg hover:bg-orange-100 transition"
+          class="px-3 py-1.5 bg-slate-100 dark:bg-slate-800 text-xs rounded-lg"
         >
 
           <i class="fa-solid fa-rotate mr-1"></i>
@@ -864,12 +946,15 @@
     </div>
 
 
-
-    <div class="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-700">
+    <div
+      class="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-700"
+    >
 
       <table class="w-full text-xs text-left">
 
-        <thead class="bg-orange-50 dark:bg-slate-700/50">
+        <thead
+          class="bg-slate-50 dark:bg-slate-800"
+        >
 
           <tr>
 
@@ -925,17 +1010,22 @@
 
 <div
   id="confirmModal"
-  class="fixed inset-0 bg-slate-950/70 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden"
+  class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden"
 >
 
-  <div class="bg-white dark:bg-slate-800 rounded-3xl max-w-sm w-full p-6 shadow-2xl space-y-4 border border-orange-100 dark:border-slate-700">
+  <div
+    class="bg-white dark:bg-slate-900 rounded-2xl max-w-sm w-full p-6 shadow-2xl space-y-4"
+  >
 
+    <div
+      class="flex justify-between items-center border-b dark:border-slate-700 pb-3"
+    >
 
-    <div class="flex justify-between items-center border-b pb-3 dark:border-slate-700">
+      <h3 class="font-bold">
 
-      <h3 class="font-black">
-
-        <i class="fa-solid fa-file-invoice-dollar text-brand-600 mr-1"></i>
+        <i
+          class="fa-solid fa-file-invoice-dollar text-brand-600 mr-1"
+        ></i>
 
         Konfirmasi Transaksi
 
@@ -944,7 +1034,7 @@
 
       <button
         onclick="closeConfirmModal()"
-        class="w-8 h-8 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-700 text-xl text-slate-400"
+        class="text-xl text-slate-400"
       >
         ×
       </button>
@@ -954,7 +1044,7 @@
 
     <div
       id="confirmOrderSummary"
-      class="max-h-40 overflow-y-auto space-y-2 text-xs bg-orange-50/60 dark:bg-slate-900/50 p-3 rounded-xl"
+      class="max-h-40 overflow-y-auto space-y-2 text-xs bg-slate-50 dark:bg-slate-800 p-3 rounded-xl"
     ></div>
 
 
@@ -976,15 +1066,18 @@
 
     <div>
 
-      <label class="text-xs font-semibold text-slate-500">
+      <label
+        class="text-xs font-semibold text-slate-500"
+      >
         Uang Dibayar
       </label>
+
 
       <input
         type="number"
         id="inputUangBayar"
         oninput="calculateChange()"
-        class="w-full text-lg font-bold p-2.5 mt-1 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-400"
+        class="w-full text-lg font-bold p-2.5 mt-1 bg-slate-50 dark:bg-slate-800 border dark:border-slate-700 rounded-xl"
       >
 
     </div>
@@ -992,30 +1085,51 @@
 
     <div class="grid grid-cols-3 gap-2">
 
-      <button onclick="setQuickPayment('pas')" class="py-2 bg-slate-100 dark:bg-slate-700 hover:bg-orange-50 dark:hover:bg-slate-600 text-xs rounded-lg">
+      <button
+        onclick="setQuickPayment('pas')"
+        class="py-2 bg-slate-100 dark:bg-slate-800 text-xs rounded-lg"
+      >
         Uang Pas
       </button>
 
-      <button onclick="setQuickPayment(10000)" class="py-2 bg-slate-100 dark:bg-slate-700 hover:bg-orange-50 dark:hover:bg-slate-600 text-xs rounded-lg">
+
+      <button
+        onclick="setQuickPayment(10000)"
+        class="py-2 bg-slate-100 dark:bg-slate-800 text-xs rounded-lg"
+      >
         10.000
       </button>
 
-      <button onclick="setQuickPayment(20000)" class="py-2 bg-slate-100 dark:bg-slate-700 hover:bg-orange-50 dark:hover:bg-slate-600 text-xs rounded-lg">
+
+      <button
+        onclick="setQuickPayment(20000)"
+        class="py-2 bg-slate-100 dark:bg-slate-800 text-xs rounded-lg"
+      >
         20.000
       </button>
 
-      <button onclick="setQuickPayment(50000)" class="py-2 bg-slate-100 dark:bg-slate-700 hover:bg-orange-50 dark:hover:bg-slate-600 text-xs rounded-lg">
+
+      <button
+        onclick="setQuickPayment(50000)"
+        class="py-2 bg-slate-100 dark:bg-slate-800 text-xs rounded-lg"
+      >
         50.000
       </button>
 
-      <button onclick="setQuickPayment(100000)" class="py-2 bg-slate-100 dark:bg-slate-700 hover:bg-orange-50 dark:hover:bg-slate-600 text-xs rounded-lg">
+
+      <button
+        onclick="setQuickPayment(100000)"
+        class="py-2 bg-slate-100 dark:bg-slate-800 text-xs rounded-lg"
+      >
         100.000
       </button>
 
     </div>
 
 
-    <div class="flex justify-between bg-brand-50 dark:bg-brand-950/40 p-3 rounded-xl">
+    <div
+      class="flex justify-between bg-brand-50 dark:bg-brand-950/40 p-3 rounded-xl"
+    >
 
       <span class="font-bold">
         Kembalian
@@ -1035,7 +1149,7 @@
 
       <button
         onclick="closeConfirmModal()"
-        class="py-2.5 bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 rounded-xl text-xs font-semibold"
+        class="py-2.5 bg-slate-100 dark:bg-slate-800 rounded-xl text-xs font-semibold"
       >
         Batal
       </button>
@@ -1044,7 +1158,7 @@
       <button
         id="btnSaveCheckout"
         onclick="checkout()"
-        class="py-2.5 bg-brand-600 hover:bg-brand-700 text-white rounded-xl text-xs font-bold shadow-orange"
+        class="py-2.5 bg-brand-600 hover:bg-brand-700 text-white rounded-xl text-xs font-bold"
       >
 
         <span id="btnSaveText">
@@ -1077,12 +1191,16 @@
 
 <div
   id="receiptModal"
-  class="fixed inset-0 bg-slate-950/70 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden"
+  class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden"
 >
 
-  <div class="bg-white dark:bg-slate-800 rounded-3xl max-w-xs w-full p-6 shadow-2xl text-center space-y-4">
+  <div
+    class="bg-white dark:bg-slate-900 rounded-2xl max-w-xs w-full p-6 shadow-2xl text-center space-y-4"
+  >
 
-    <div class="w-14 h-14 bg-orange-100 dark:bg-orange-900/30 text-brand-600 rounded-2xl flex items-center justify-center mx-auto text-2xl">
+    <div
+      class="w-12 h-12 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center mx-auto text-2xl"
+    >
 
       <i class="fa-solid fa-circle-check"></i>
 
@@ -1091,18 +1209,20 @@
 
     <div>
 
-      <h3 class="font-black">
+      <h3 class="font-bold">
         Transaksi Berhasil!
       </h3>
 
-      <p class="text-xs text-slate-500 mt-1">
+      <p class="text-xs text-slate-500">
         Data berhasil disimpan.
       </p>
 
     </div>
 
 
-    <div class="bg-slate-50 dark:bg-slate-900 p-4 rounded-xl text-left text-xs space-y-2">
+    <div
+      class="bg-slate-50 dark:bg-slate-800 p-4 rounded-xl text-left text-xs space-y-2"
+    >
 
       <div class="flex justify-between">
 
@@ -1130,7 +1250,9 @@
       </div>
 
 
-      <div class="border-t pt-2 flex justify-between font-black text-brand-600">
+      <div
+        class="border-t dark:border-slate-700 pt-2 flex justify-between font-black text-brand-600"
+      >
 
         <span>
           Kembalian
@@ -1147,7 +1269,7 @@
 
     <button
       onclick="closeReceiptModal()"
-      class="w-full py-2.5 bg-brand-600 hover:bg-brand-700 text-white rounded-xl font-bold text-xs shadow-orange"
+      class="w-full py-2.5 bg-brand-600 text-white rounded-xl font-bold text-xs"
     >
       Selesai / Transaksi Baru
     </button>
@@ -1164,20 +1286,23 @@
 
 <div
   id="pinModal"
-  class="fixed inset-0 bg-slate-950/70 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden"
+  class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden"
 >
 
-  <div class="bg-white dark:bg-slate-800 rounded-3xl max-w-xs w-full p-6 shadow-2xl text-center border border-orange-100 dark:border-slate-700">
+  <div
+    class="bg-white dark:bg-slate-900 rounded-2xl max-w-xs w-full p-6 shadow-2xl text-center"
+  >
 
-
-    <div class="w-14 h-14 bg-orange-100 dark:bg-orange-900/30 text-brand-600 rounded-2xl flex items-center justify-center mx-auto text-xl">
+    <div
+      class="w-12 h-12 bg-brand-100 text-brand-600 rounded-full flex items-center justify-center mx-auto text-xl"
+    >
 
       <i class="fa-solid fa-lock"></i>
 
     </div>
 
 
-    <h3 class="font-black mt-3">
+    <h3 class="font-bold mt-3">
       Akses Admin
     </h3>
 
@@ -1198,7 +1323,7 @@
         id="pinInput"
         maxlength="10"
         placeholder="••••"
-        class="w-full text-center text-xl font-bold tracking-widest p-3 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-400"
+        class="w-full text-center text-xl font-bold tracking-widest p-3 bg-slate-50 dark:bg-slate-800 border dark:border-slate-700 rounded-xl"
         required
       >
 
@@ -1216,7 +1341,7 @@
         <button
           type="button"
           onclick="closePinModal()"
-          class="py-2.5 bg-slate-100 dark:bg-slate-700 rounded-xl text-xs font-semibold"
+          class="py-2.5 bg-slate-100 dark:bg-slate-800 rounded-xl text-xs font-semibold"
         >
           Batal
         </button>
@@ -1225,12 +1350,13 @@
         <button
           type="submit"
           id="btnVerifyPin"
-          class="py-2.5 bg-brand-600 hover:bg-brand-700 text-white rounded-xl text-xs font-semibold shadow-orange"
+          class="py-2.5 bg-brand-600 text-white rounded-xl text-xs font-semibold"
         >
 
           <span id="btnPinText">
             Masuk
           </span>
+
 
           <span
             id="btnPinSpinner"
@@ -1284,6 +1410,15 @@ let salesChart = null;
 let syncTimer = null;
 
 let secondsLeft = AUTO_SYNC_INTERVAL;
+
+
+/* =========================================================
+   DASHBOARD FILTER
+========================================================= */
+
+let dashboardFilter = "today";
+
+let allTransactions = [];
 
 
 /* =========================================================
@@ -1403,15 +1538,20 @@ function rupiah(number) {
 
 function toggleTheme() {
 
-  document.documentElement.classList.toggle("dark");
+  document.documentElement
+    .classList.toggle("dark");
+
 
   const isDark =
-    document.documentElement.classList.contains("dark");
+    document.documentElement
+      .classList.contains("dark");
+
 
   themeIcon.className =
     isDark
       ? "fa-solid fa-sun"
       : "fa-solid fa-moon";
+
 
   localStorage.setItem(
     "theme",
@@ -1427,7 +1567,9 @@ function loadTheme() {
     localStorage.getItem("theme") === "dark"
   ) {
 
-    document.documentElement.classList.add("dark");
+    document.documentElement
+      .classList.add("dark");
+
 
     themeIcon.className =
       "fa-solid fa-sun";
@@ -1448,6 +1590,7 @@ function addToCart(nama, harga) {
       item => item.namaProduk === nama
     );
 
+
   if (existing) {
 
     existing.jumlah++;
@@ -1466,6 +1609,7 @@ function addToCart(nama, harga) {
 
   }
 
+
   renderCart();
 
 }
@@ -1475,13 +1619,16 @@ function updateCartQty(index, change) {
 
   if (!cart[index]) return;
 
+
   cart[index].jumlah += change;
+
 
   if (cart[index].jumlah <= 0) {
 
     cart.splice(index, 1);
 
   }
+
 
   renderCart();
 
@@ -1503,21 +1650,14 @@ function renderCart() {
 
     cartList.innerHTML = `
 
-      <div class="text-center py-8">
+      <p class="text-xs text-slate-400 text-center py-8">
 
-        <div class="w-12 h-12 mx-auto rounded-2xl bg-orange-50 dark:bg-orange-950/30 text-orange-300 flex items-center justify-center text-xl mb-2">
+        Keranjang belanja masih kosong.
 
-          <i class="fa-solid fa-cart-shopping"></i>
-
-        </div>
-
-        <p class="text-xs text-slate-400">
-          Keranjang belanja masih kosong.
-        </p>
-
-      </div>
+      </p>
 
     `;
+
 
     cartTotal.innerText = "Rp 0";
 
@@ -1540,12 +1680,15 @@ function renderCart() {
         item.jumlah *
         item.hargaSatuan;
 
+
       total += subtotal;
 
 
       return `
 
-        <div class="flex items-center justify-between p-2.5 bg-orange-50/60 dark:bg-slate-700/50 rounded-xl text-xs border border-orange-100 dark:border-slate-700">
+        <div
+          class="flex items-center justify-between p-2.5 bg-slate-50 dark:bg-slate-800 rounded-xl text-xs"
+        >
 
           <div class="flex-1 pr-2">
 
@@ -1557,7 +1700,7 @@ function renderCart() {
               ${rupiah(item.hargaSatuan)}
             </p>
 
-            <p class="text-[10px] text-brand-600 font-bold">
+            <p class="text-[10px] text-brand-600 font-semibold">
               ${rupiah(subtotal)}
             </p>
 
@@ -1568,18 +1711,20 @@ function renderCart() {
 
             <button
               onclick="updateCartQty(${index},-1)"
-              class="w-6 h-6 rounded-lg bg-white dark:bg-slate-600 hover:bg-orange-100 font-bold"
+              class="w-6 h-6 rounded-lg bg-slate-200 dark:bg-slate-700 font-bold"
             >
               -
             </button>
+
 
             <span class="font-bold px-1">
               ${item.jumlah}
             </span>
 
+
             <button
               onclick="updateCartQty(${index},1)"
-              class="w-6 h-6 rounded-lg bg-white dark:bg-slate-600 hover:bg-orange-100 font-bold"
+              class="w-6 h-6 rounded-lg bg-slate-200 dark:bg-slate-700 font-bold"
             >
               +
             </button>
@@ -1595,8 +1740,10 @@ function renderCart() {
 
   currentTotalCart = total;
 
+
   cartTotal.innerText =
     rupiah(total);
+
 
   btnCheckout.disabled = false;
 
@@ -1618,8 +1765,10 @@ function openConfirmModal() {
       <div class="flex justify-between">
 
         <span class="font-semibold">
+
           ${escapeHtml(item.namaProduk)}
           x${item.jumlah}
+
         </span>
 
         <span>
@@ -1637,14 +1786,17 @@ function openConfirmModal() {
   modalTotalTagihan.innerText =
     rupiah(currentTotalCart);
 
+
   inputUangBayar.value =
     currentTotalCart;
 
+
   calculateChange();
 
-  confirmModal.classList.remove(
-    "hidden"
-  );
+
+  confirmModal
+    .classList
+    .remove("hidden");
 
 
   setTimeout(
@@ -1657,7 +1809,9 @@ function openConfirmModal() {
 
 function closeConfirmModal() {
 
-  confirmModal.classList.add("hidden");
+  confirmModal
+    .classList
+    .add("hidden");
 
 }
 
@@ -1667,10 +1821,13 @@ function calculateChange() {
   const bayar =
     Number(inputUangBayar.value) || 0;
 
+
   currentUangBayar = bayar;
 
+
   currentKembalian =
-    bayar - currentTotalCart;
+    bayar -
+    currentTotalCart;
 
 
   if (currentKembalian < 0) {
@@ -1681,20 +1838,26 @@ function calculateChange() {
         Math.abs(currentKembalian)
       );
 
+
     modalKembalian.className =
       "text-base font-black text-red-500";
 
-    btnSaveCheckout.disabled = true;
+
+    btnSaveCheckout.disabled =
+      true;
 
   } else {
 
     modalKembalian.innerText =
       rupiah(currentKembalian);
 
+
     modalKembalian.className =
       "text-base font-black text-brand-600";
 
-    btnSaveCheckout.disabled = false;
+
+    btnSaveCheckout.disabled =
+      false;
 
   }
 
@@ -1707,6 +1870,7 @@ function setQuickPayment(amount) {
     amount === "pas"
       ? currentTotalCart
       : amount;
+
 
   calculateChange();
 
@@ -1764,8 +1928,10 @@ async function checkout() {
           redirect: "follow",
 
           headers: {
+
             "Content-Type":
               "text/plain;charset=utf-8"
+
           },
 
           body:
@@ -1811,9 +1977,9 @@ async function checkout() {
         );
 
 
-      receiptModal.classList.remove(
-        "hidden"
-      );
+      receiptModal
+        .classList
+        .remove("hidden");
 
 
       showStatus(
@@ -1824,6 +1990,7 @@ async function checkout() {
 
 
       await fetchData(true);
+
 
       resetSyncTimer();
 
@@ -1843,6 +2010,7 @@ async function checkout() {
 
     console.error(error);
 
+
     alert(
       "Koneksi gagal. Pastikan Web App Apps Script sudah dideploy sebagai Web App dan aksesnya dapat dibuka publik."
     );
@@ -1856,9 +2024,7 @@ async function checkout() {
 }
 
 
-function setCheckoutLoading(
-  loading
-) {
+function setCheckoutLoading(loading) {
 
   btnSaveCheckout.disabled =
     loading;
@@ -1866,23 +2032,25 @@ function setCheckoutLoading(
 
   if (loading) {
 
-    btnSaveText.classList.add(
-      "hidden"
-    );
+    btnSaveText
+      .classList
+      .add("hidden");
 
-    btnSaveSpinner.classList.remove(
-      "hidden"
-    );
+
+    btnSaveSpinner
+      .classList
+      .remove("hidden");
 
   } else {
 
-    btnSaveText.classList.remove(
-      "hidden"
-    );
+    btnSaveText
+      .classList
+      .remove("hidden");
 
-    btnSaveSpinner.classList.add(
-      "hidden"
-    );
+
+    btnSaveSpinner
+      .classList
+      .add("hidden");
 
   }
 
@@ -1895,9 +2063,10 @@ function setCheckoutLoading(
 
 function closeReceiptModal() {
 
-  receiptModal.classList.add(
-    "hidden"
-  );
+  receiptModal
+    .classList
+    .add("hidden");
+
 
   clearCart();
 
@@ -1908,9 +2077,7 @@ function closeReceiptModal() {
    FETCH DATA
 ========================================================= */
 
-async function fetchData(
-  silent = false
-) {
+async function fetchData(silent = false) {
 
   try {
 
@@ -1925,7 +2092,9 @@ async function fetchData(
             class="text-center py-6 text-slate-400"
           >
 
-            <i class="fa-solid fa-spinner animate-spin mr-2"></i>
+            <i
+              class="fa-solid fa-spinner animate-spin mr-2"
+            ></i>
 
             Memuat data...
 
@@ -1974,13 +2143,17 @@ async function fetchData(
         : [];
 
 
+    allTransactions =
+      transaksi;
+
+
     renderTableData(
       transaksi
     );
 
-    updateDashboardStats(
-      transaksi
-    );
+
+    updateFilteredDashboard();
+
 
     setConnectionStatus(
       true
@@ -1992,6 +2165,7 @@ async function fetchData(
   } catch (error) {
 
     console.error(error);
+
 
     setConnectionStatus(
       false
@@ -2009,7 +2183,9 @@ async function fetchData(
             class="text-center py-6 text-red-500"
           >
 
-            <i class="fa-solid fa-triangle-exclamation mr-1"></i>
+            <i
+              class="fa-solid fa-triangle-exclamation mr-1"
+            ></i>
 
             Gagal mengambil data Apps Script.
 
@@ -2025,6 +2201,390 @@ async function fetchData(
     return false;
 
   }
+
+}
+
+
+/* =========================================================
+   FILTER DASHBOARD
+========================================================= */
+
+function setDashboardFilter(filter) {
+
+  dashboardFilter =
+    filter;
+
+
+  updateFilterButtons();
+
+  updateFilteredDashboard();
+
+}
+
+
+function updateFilterButtons() {
+
+  const buttons = {
+
+    today:
+      document.getElementById(
+        "filterToday"
+      ),
+
+    "7days":
+      document.getElementById(
+        "filter7Days"
+      ),
+
+    month:
+      document.getElementById(
+        "filterMonth"
+      ),
+
+    all:
+      document.getElementById(
+        "filterAll"
+      )
+
+  };
+
+
+  Object.values(buttons)
+    .forEach(button => {
+
+      if (!button) return;
+
+
+      button.className =
+        "dashboard-filter px-3 py-1.5 rounded-lg text-xs font-semibold transition text-slate-600 dark:text-slate-300 hover:bg-white dark:hover:bg-slate-700";
+
+    });
+
+
+  const active =
+    buttons[
+      dashboardFilter
+    ];
+
+
+  if (active) {
+
+    active.className =
+      "dashboard-filter px-3 py-1.5 rounded-lg bg-white dark:bg-slate-700 text-brand-600 shadow-sm text-xs font-bold transition";
+
+  }
+
+}
+
+
+function getFilteredTransactions() {
+
+  if (
+    !Array.isArray(
+      allTransactions
+    )
+  ) {
+
+    return [];
+
+  }
+
+
+  if (
+    dashboardFilter ===
+    "all"
+  ) {
+
+    return [
+      ...allTransactions
+    ];
+
+  }
+
+
+  const now =
+    new Date();
+
+
+  const startToday =
+    new Date(
+
+      now.getFullYear(),
+
+      now.getMonth(),
+
+      now.getDate(),
+
+      0,
+
+      0,
+
+      0,
+
+      0
+
+    );
+
+
+  if (
+    dashboardFilter ===
+    "today"
+  ) {
+
+    return allTransactions
+      .filter(tx => {
+
+        const date =
+          parseTransactionDate(
+            tx["Tanggal & Waktu"]
+          );
+
+
+        return (
+          date &&
+          date >=
+            startToday
+        );
+
+      });
+
+  }
+
+
+  if (
+    dashboardFilter ===
+    "7days"
+  ) {
+
+    const start7Days =
+      new Date(
+        startToday
+      );
+
+
+    start7Days.setDate(
+      start7Days.getDate() - 6
+    );
+
+
+    return allTransactions
+      .filter(tx => {
+
+        const date =
+          parseTransactionDate(
+            tx["Tanggal & Waktu"]
+          );
+
+
+        return (
+          date &&
+          date >=
+            start7Days
+        );
+
+      });
+
+  }
+
+
+  if (
+    dashboardFilter ===
+    "month"
+  ) {
+
+    const startMonth =
+      new Date(
+
+        now.getFullYear(),
+
+        now.getMonth(),
+
+        1,
+
+        0,
+
+        0,
+
+        0,
+
+        0
+
+      );
+
+
+    return allTransactions
+      .filter(tx => {
+
+        const date =
+          parseTransactionDate(
+            tx["Tanggal & Waktu"]
+          );
+
+
+        return (
+          date &&
+          date >=
+            startMonth
+        );
+
+      });
+
+  }
+
+
+  return [
+    ...allTransactions
+  ];
+
+}
+
+
+function updateFilteredDashboard() {
+
+  const filtered =
+    getFilteredTransactions();
+
+
+  updateDashboardStats(
+    filtered
+  );
+
+
+  updateDashboardFilterLabel();
+
+}
+
+
+function updateDashboardFilterLabel() {
+
+  const label =
+    document.getElementById(
+      "dashboardFilterLabel"
+    );
+
+
+  if (!label) return;
+
+
+  const labels = {
+
+    today:
+      "Menampilkan data hari ini",
+
+    "7days":
+      "Menampilkan data 7 hari terakhir",
+
+    month:
+      "Menampilkan data bulan ini",
+
+    all:
+      "Menampilkan seluruh data transaksi"
+
+  };
+
+
+  label.innerText =
+    labels[
+      dashboardFilter
+    ] ||
+    labels.all;
+
+}
+
+
+function parseTransactionDate(
+  value
+) {
+
+  if (!value) return null;
+
+
+  const date =
+    new Date(value);
+
+
+  if (
+    !isNaN(
+      date.getTime()
+    )
+  ) {
+
+    return date;
+
+  }
+
+
+  const text =
+    String(value)
+      .trim();
+
+
+  const match =
+    text.match(
+      /^(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{4})(?:\s+(\d{1,2}):(\d{2})(?::(\d{2}))?)?$/
+    );
+
+
+  if (!match) {
+
+    return null;
+
+  }
+
+
+  const day =
+    Number(match[1]);
+
+
+  const month =
+    Number(match[2]) - 1;
+
+
+  const year =
+    Number(match[3]);
+
+
+  const hour =
+    Number(
+      match[4] || 0
+    );
+
+
+  const minute =
+    Number(
+      match[5] || 0
+    );
+
+
+  const second =
+    Number(
+      match[6] || 0
+    );
+
+
+  const parsed =
+    new Date(
+
+      year,
+
+      month,
+
+      day,
+
+      hour,
+
+      minute,
+
+      second
+
+    );
+
+
+  return isNaN(
+    parsed.getTime()
+  )
+    ? null
+    : parsed;
 
 }
 
@@ -2070,62 +2630,91 @@ function renderTableData(
 
     `;
 
+
     return;
 
   }
 
 
   const rows =
-    [...transaksi].reverse();
+    [...transaksi]
+      .reverse();
 
 
   dataTable.innerHTML =
     rows.map(tx => `
 
-      <tr class="hover:bg-orange-50/50 dark:hover:bg-slate-700/30">
+      <tr
+        class="hover:bg-slate-50 dark:hover:bg-slate-800/60"
+      >
 
-        <td class="py-2.5 px-3 font-mono text-[11px]">
+        <td
+          class="py-2.5 px-3 font-mono text-[11px]"
+        >
           ${escapeHtml(
             tx["ID Transaksi"] ||
             "-"
           )}
         </td>
 
+
         <td class="py-2.5 px-3">
+
           ${formatDate(
             tx["Tanggal & Waktu"]
           )}
+
         </td>
 
-        <td class="py-2.5 px-3 font-semibold">
+
+        <td
+          class="py-2.5 px-3 font-semibold"
+        >
+
           ${escapeHtml(
             tx["Nama Produk"] ||
             "-"
           )}
+
         </td>
 
-        <td class="py-2.5 px-3 text-center font-bold">
+
+        <td
+          class="py-2.5 px-3 text-center font-bold"
+        >
+
           ${Number(
             tx["Jumlah"] || 0
           )}
+
         </td>
 
-        <td class="py-2.5 px-3 text-right">
+
+        <td
+          class="py-2.5 px-3 text-right"
+        >
+
           ${rupiah(
             Number(
               tx["Harga Satuan"] ||
               0
             )
           )}
+
         </td>
 
-        <td class="py-2.5 px-3 text-right font-bold text-brand-600">
+
+        <td
+          class="py-2.5 px-3 text-right font-bold text-brand-600"
+        >
+
           ${rupiah(
             Number(
               tx["Total Harga"] ||
               0
             )
           )}
+
         </td>
 
       </tr>
@@ -2138,39 +2727,56 @@ function renderTableData(
       .slice(0, 5)
       .map(tx => `
 
-      <tr class="hover:bg-orange-50/50 dark:hover:bg-slate-700/30">
+        <tr>
 
-        <td class="py-2 px-3 text-slate-400 text-[11px]">
-          ${formatDate(
-            tx["Tanggal & Waktu"]
-          )}
-        </td>
+          <td
+            class="py-2 px-3 text-slate-400 text-[11px]"
+          >
 
-        <td class="py-2 px-3 font-medium">
-          ${escapeHtml(
-            tx["Nama Produk"] ||
-            "-"
-          )}
-        </td>
+            ${formatDate(
+              tx["Tanggal & Waktu"]
+            )}
 
-        <td class="py-2 px-3 text-center font-bold">
-          ${Number(
-            tx["Jumlah"] || 0
-          )}
-        </td>
+          </td>
 
-        <td class="py-2 px-3 text-right font-bold text-brand-600">
-          ${rupiah(
-            Number(
-              tx["Total Harga"] ||
-              0
-            )
-          )}
-        </td>
 
-      </tr>
+          <td class="py-2 px-3 font-medium">
 
-    `).join("");
+            ${escapeHtml(
+              tx["Nama Produk"] ||
+              "-"
+            )}
+
+          </td>
+
+
+          <td
+            class="py-2 px-3 text-center font-bold"
+          >
+
+            ${Number(
+              tx["Jumlah"] || 0
+            )}
+
+          </td>
+
+
+          <td
+            class="py-2 px-3 text-right font-bold text-brand-600"
+          >
+
+            ${rupiah(
+              Number(
+                tx["Total Harga"] ||
+                0
+              )
+            )}
+
+          </td>
+
+        </tr>
+
+      `).join("");
 
 }
 
@@ -2198,11 +2804,13 @@ function updateDashboardStats(
         0
       );
 
+
     const qty =
       Number(
         tx["Jumlah"] ||
         0
       );
+
 
     const name =
       tx["Nama Produk"] ||
@@ -2232,6 +2840,7 @@ function updateDashboardStats(
     productSummary[name].qty +=
       qty;
 
+
     productSummary[name].omset +=
       total;
 
@@ -2247,7 +2856,8 @@ function updateDashboardStats(
 
 
   dashTotalItems.innerText =
-    totalItems + " pcs";
+    totalItems +
+    " pcs";
 
 
   let topProduct = "-";
@@ -2280,6 +2890,7 @@ function updateDashboardStats(
   dashTopProduct.innerText =
     topProduct;
 
+
   dashTopQty.innerText =
     topQty +
     " porsi terjual";
@@ -2311,12 +2922,12 @@ function renderChart(
       productSummary
     );
 
+
   const values =
     labels.map(
       key =>
-        productSummary[
-          key
-        ].omset
+        productSummary[key]
+          .omset
     );
 
 
@@ -2324,6 +2935,7 @@ function renderChart(
     document.getElementById(
       "salesChart"
     );
+
 
   const ctx =
     canvas.getContext(
@@ -2338,12 +2950,19 @@ function renderChart(
   }
 
 
+  const isDark =
+    document.documentElement
+      .classList
+      .contains("dark");
+
+
   salesChart =
     new Chart(
       ctx,
       {
 
         type: "bar",
+
 
         data: {
 
@@ -2354,6 +2973,7 @@ function renderChart(
                   "Belum Ada Data"
                 ],
 
+
           datasets: [
 
             {
@@ -2361,19 +2981,18 @@ function renderChart(
               label:
                 "Pendapatan",
 
+
               data:
                 values.length
                   ? values
                   : [0],
 
+
               backgroundColor:
                 "#f97316",
 
-              borderRadius:
-                8,
 
-              hoverBackgroundColor:
-                "#ea580c"
+              borderRadius: 8
 
             }
 
@@ -2389,10 +3008,13 @@ function renderChart(
           maintainAspectRatio:
             false,
 
+
           plugins: {
 
             legend: {
+
               display: false
+
             }
 
           },
@@ -2400,37 +3022,43 @@ function renderChart(
 
           scales: {
 
-            y: {
-
-              beginAtZero:
-                true,
-
-              grid: {
-
-                color:
-                  "rgba(148,163,184,.12)"
-
-              },
+            x: {
 
               ticks: {
+
+                color:
+                  isDark
+                    ? "#cbd5e1"
+                    : "#64748b"
+
+              }
+
+            },
+
+
+            y: {
+
+              beginAtZero: true,
+
+
+              ticks: {
+
+                color:
+                  isDark
+                    ? "#cbd5e1"
+                    : "#64748b",
+
 
                 callback:
                   value =>
                     "Rp " +
                     Number(
                       value
-                    ).toLocaleString(
+                    )
+                    .toLocaleString(
                       "id-ID"
                     )
 
-              }
-
-            },
-
-            x: {
-
-              grid: {
-                display: false
               }
 
             }
@@ -2458,7 +3086,9 @@ function renderBreakdown(
 
     productBreakdown.innerHTML = `
 
-      <p class="text-xs text-slate-400 text-center py-4">
+      <p
+        class="text-xs text-slate-400 text-center py-4"
+      >
         Belum ada data statistik.
       </p>
 
@@ -2470,16 +3100,28 @@ function renderBreakdown(
 
 
   const colors = [
+
     "bg-brand-600",
+
     "bg-amber-500",
+
     "bg-red-500",
-    "bg-yellow-500"
+
+    "bg-blue-500",
+
+    "bg-purple-500"
+
   ];
 
 
   productBreakdown.innerHTML =
     Object.entries(
       productSummary
+    )
+    .sort(
+      (a, b) =>
+        b[1].qty -
+        a[1].qty
     )
     .map(
       ([name, stats], index) => {
@@ -2493,28 +3135,43 @@ function renderBreakdown(
           );
 
 
+        const color =
+          colors[
+            index %
+            colors.length
+          ];
+
+
         return `
 
           <div>
 
-            <div class="flex justify-between text-xs font-semibold mb-1">
+            <div
+              class="flex justify-between text-xs font-semibold mb-1"
+            >
 
               <span>
                 ${escapeHtml(name)}
               </span>
 
-              <span class="text-slate-500">
-                ${stats.qty} pcs
+
+              <span
+                class="text-slate-500"
+              >
+                ${stats.qty}
+                pcs
                 (${percentage}%)
               </span>
 
             </div>
 
 
-            <div class="w-full bg-slate-100 dark:bg-slate-700 h-2 rounded-full overflow-hidden">
+            <div
+              class="w-full bg-slate-100 dark:bg-slate-800 h-2 rounded-full overflow-hidden"
+            >
 
               <div
-                class="${colors[index % colors.length]} h-full rounded-full transition-all"
+                class="${color} h-full rounded-full"
                 style="width:${percentage}%"
               ></div>
 
@@ -2535,9 +3192,7 @@ function renderBreakdown(
    ROLE
 ========================================================= */
 
-function switchRole(
-  role
-) {
+function switchRole(role) {
 
   if (
     role === "admin" &&
@@ -2559,39 +3214,41 @@ function switchRole(
     role === "kasir"
   ) {
 
-    viewKasir.classList.remove(
-      "hidden"
-    );
+    viewKasir
+      .classList
+      .remove("hidden");
 
-    viewAdmin.classList.add(
-      "hidden"
-    );
+
+    viewAdmin
+      .classList
+      .add("hidden");
 
 
     btnRoleKasir.className =
-      "px-3 py-2 rounded-lg bg-white dark:bg-slate-700 text-brand-600 shadow-sm flex items-center gap-1.5 transition";
+      "px-3 py-1.5 rounded-lg bg-white dark:bg-slate-700 text-brand-600 shadow-sm flex items-center gap-1.5";
 
 
     btnRoleAdmin.className =
-      "px-3 py-2 rounded-lg text-slate-600 dark:text-slate-400 flex items-center gap-1.5 transition";
+      "px-3 py-1.5 rounded-lg text-slate-600 dark:text-slate-400 flex items-center gap-1.5";
 
   } else {
 
-    viewKasir.classList.add(
-      "hidden"
-    );
+    viewKasir
+      .classList
+      .add("hidden");
 
-    viewAdmin.classList.remove(
-      "hidden"
-    );
+
+    viewAdmin
+      .classList
+      .remove("hidden");
 
 
     btnRoleAdmin.className =
-      "px-3 py-2 rounded-lg bg-white dark:bg-slate-700 text-brand-600 shadow-sm flex items-center gap-1.5 transition";
+      "px-3 py-1.5 rounded-lg bg-white dark:bg-slate-700 text-brand-600 shadow-sm flex items-center gap-1.5";
 
 
     btnRoleKasir.className =
-      "px-3 py-2 rounded-lg text-slate-600 dark:text-slate-400 flex items-center gap-1.5 transition";
+      "px-3 py-1.5 rounded-lg text-slate-600 dark:text-slate-400 flex items-center gap-1.5";
 
 
     fetchData();
@@ -2607,19 +3264,23 @@ function switchRole(
 
 function openPinModal() {
 
-  pinModal.classList.remove(
-    "hidden"
-  );
+  pinModal
+    .classList
+    .remove("hidden");
 
-  pinInput.value = "";
 
-  pinError.classList.add(
-    "hidden"
-  );
+  pinInput.value =
+    "";
+
+
+  pinError
+    .classList
+    .add("hidden");
 
 
   setTimeout(
-    () => pinInput.focus(),
+    () =>
+      pinInput.focus(),
     100
   );
 
@@ -2628,9 +3289,9 @@ function openPinModal() {
 
 function closePinModal() {
 
-  pinModal.classList.add(
-    "hidden"
-  );
+  pinModal
+    .classList
+    .add("hidden");
 
 }
 
@@ -2649,10 +3310,12 @@ async function verifyAdminPin(e) {
       "btnVerifyPin"
     );
 
+
   const text =
     document.getElementById(
       "btnPinText"
     );
+
 
   const spinner =
     document.getElementById(
@@ -2660,21 +3323,26 @@ async function verifyAdminPin(e) {
     );
 
 
-  btn.disabled = true;
+  btn.disabled =
+    true;
+
 
   text.innerText =
     "Memeriksa...";
 
-  spinner.classList.remove(
-    "hidden"
-  );
+
+  spinner
+    .classList
+    .remove("hidden");
 
 
   try {
 
     const response =
       await fetch(
+
         `${APP_SCRIPT_URL}?action=verifyPin&pin=${encodeURIComponent(enteredPin)}`,
+
         {
 
           method: "GET",
@@ -2682,6 +3350,7 @@ async function verifyAdminPin(e) {
           redirect: "follow"
 
         }
+
       );
 
 
@@ -2696,7 +3365,9 @@ async function verifyAdminPin(e) {
       isAdminUnlocked =
         true;
 
+
       closePinModal();
+
 
       switchRole(
         "admin"
@@ -2707,9 +3378,11 @@ async function verifyAdminPin(e) {
       pinError.innerText =
         "PIN Admin salah.";
 
-      pinError.classList.remove(
-        "hidden"
-      );
+
+      pinError
+        .classList
+        .remove("hidden");
+
 
       pinInput.select();
 
@@ -2728,7 +3401,9 @@ async function verifyAdminPin(e) {
       isAdminUnlocked =
         true;
 
+
       closePinModal();
+
 
       switchRole(
         "admin"
@@ -2739,9 +3414,10 @@ async function verifyAdminPin(e) {
       pinError.innerText =
         "Gagal terhubung ke Apps Script.";
 
-      pinError.classList.remove(
-        "hidden"
-      );
+
+      pinError
+        .classList
+        .remove("hidden");
 
     }
 
@@ -2750,12 +3426,14 @@ async function verifyAdminPin(e) {
     btn.disabled =
       false;
 
+
     text.innerText =
       "Masuk";
 
-    spinner.classList.add(
-      "hidden"
-    );
+
+    spinner
+      .classList
+      .add("hidden");
 
   }
 
@@ -2766,6 +3444,7 @@ function lockAdmin() {
 
   isAdminUnlocked =
     false;
+
 
   switchRole(
     "kasir"
@@ -2785,7 +3464,8 @@ function setConnectionStatus(
   if (connected) {
 
     urlStatus.className =
-      "text-xs font-bold text-emerald-600 bg-emerald-50 px-2.5 py-1 rounded-lg";
+      "text-xs font-semibold text-emerald-600 bg-emerald-50 px-2 py-1 rounded-lg";
+
 
     urlStatus.innerText =
       "✓ Terhubung";
@@ -2793,7 +3473,8 @@ function setConnectionStatus(
   } else {
 
     urlStatus.className =
-      "text-xs font-bold text-red-600 bg-red-50 px-2.5 py-1 rounded-lg";
+      "text-xs font-semibold text-red-600 bg-red-50 px-2 py-1 rounded-lg";
+
 
     urlStatus.innerText =
       "✕ Tidak Terhubung";
@@ -2843,6 +3524,7 @@ function startAutoSyncTimer() {
           secondsLeft =
             AUTO_SYNC_INTERVAL;
 
+
           await fetchData(
             true
           );
@@ -2868,7 +3550,8 @@ function stopAutoSyncTimer() {
       syncTimer
     );
 
-    syncTimer = null;
+    syncTimer =
+      null;
 
   }
 
@@ -2895,6 +3578,7 @@ autoRefreshToggle.addEventListener(
     } else {
 
       stopAutoSyncTimer();
+
 
       syncCountdown.innerText =
         "(Off)";
@@ -2937,44 +3621,79 @@ function showStatus(
 
 
   alertBox.classList.remove(
+
     "hidden",
+
     "bg-emerald-100",
+
     "text-emerald-700",
+
     "bg-red-100",
+
     "text-red-700"
+
   );
 
 
   if (
-    type === "success"
+    type ===
+    "success"
   ) {
 
     alertBox.classList.add(
-      "bg-orange-100",
-      "text-orange-700"
+
+      "bg-emerald-100",
+
+      "text-emerald-700"
+
     );
 
+
     alertBox.innerHTML =
-      `<i class="fa-solid fa-circle-check"></i> ${escapeHtml(message)}`;
+      `
+
+        <i
+          class="fa-solid fa-circle-check"
+        ></i>
+
+        ${escapeHtml(
+          message
+        )}
+
+      `;
 
   } else {
 
     alertBox.classList.add(
+
       "bg-red-100",
+
       "text-red-700"
+
     );
 
+
     alertBox.innerHTML =
-      `<i class="fa-solid fa-circle-xmark"></i> ${escapeHtml(message)}`;
+      `
+
+        <i
+          class="fa-solid fa-circle-xmark"
+        ></i>
+
+        ${escapeHtml(
+          message
+        )}
+
+      `;
 
   }
 
 
   setTimeout(
     () =>
-      alertBox.classList.add(
-        "hidden"
-      ),
+      alertBox
+        .classList
+        .add("hidden"),
     5000
   );
 
@@ -2994,19 +3713,17 @@ function formatDate(
 
 
   const date =
-    new Date(
+    parseTransactionDate(
       dateString
     );
 
 
-  if (
-    isNaN(
-      date.getTime()
-    )
-  ) {
+  if (!date) {
 
     return escapeHtml(
-      String(dateString)
+      String(
+        dateString
+      )
     );
 
   }
@@ -3043,26 +3760,31 @@ function escapeHtml(
   return String(
     value ?? ""
   )
-  .replace(
-    /&/g,
-    "&amp;"
-  )
-  .replace(
-    /</g,
-    "&lt;"
-  )
-  .replace(
-    />/g,
-    "&gt;"
-  )
-  .replace(
-    /"/g,
-    "&quot;"
-  )
-  .replace(
-    /'/g,
-    "&#039;"
-  );
+
+    .replace(
+      /&/g,
+      "&amp;"
+    )
+
+    .replace(
+      /</g,
+      "&lt;"
+    )
+
+    .replace(
+      />/g,
+      "&gt;"
+    )
+
+    .replace(
+      /"/g,
+      "&quot;"
+    )
+
+    .replace(
+      /'/g,
+      "&#039;"
+    );
 
 }
 
@@ -3077,15 +3799,25 @@ window.addEventListener(
 
     loadTheme();
 
+
     renderCart();
+
 
     setConnectionStatus(
       false
     );
 
+
+    updateFilterButtons();
+
+
+    updateDashboardFilterLabel();
+
+
     await fetchData(
       true
     );
+
 
     startAutoSyncTimer();
 
