@@ -216,7 +216,7 @@
             </thead>
             <tbody id="kasirRecentTable" class="divide-y divide-slate-100 dark:divide-slate-700">
               <tr>
-                <td colspan="3" class="text-center py-4 text-slate-400">Belum ada transaksi recorded.</td>
+                <td colspan="3" class="text-center py-4 text-slate-400">Belum ada transaksi.</td>
               </tr>
             </tbody>
           </table>
@@ -244,7 +244,7 @@
         </button>
       </div>
 
-      <!-- Config Web App URL (DIPERBARUI DENGAN VALIDASI SULIT/GANTI URL) -->
+      <!-- Config Web App URL -->
       <section class="bg-white dark:bg-slate-800 p-4 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm space-y-2">
         <div class="flex items-center justify-between">
           <label for="webAppUrl" class="text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400 flex items-center gap-1.5">
@@ -278,7 +278,7 @@
             <i class="fa-solid fa-trash-can"></i> Hapus
           </button>
         </div>
-        <p id="urlNotice" class="text-[11px] text-slate-400">Ganti URL kapan saja lalu klik "Simpan & Tes URL" untuk memverifikasi ulang koneksi.</p>
+        <p id="urlNotice" class="text-[11px] text-slate-400">Ganti URL kapan saja lalu klik "Simpan & Tes URL". URL hanya akan tersimpan jika validasi berhasil.</p>
       </section>
 
       <!-- DASHBOARD STATS -->
@@ -552,7 +552,7 @@
       const url = localStorage.getItem('appScriptUrl');
 
       if (!url) {
-        showAlert("URL Google Apps Script belum dikonfigurasi atau salah! Silakan atur di Mode Admin.", "error");
+        showAlert("URL Google Apps Script belum tersimpan atau salah! Silakan atur di Mode Admin.", "error");
         switchRole('admin');
         return;
       }
@@ -617,10 +617,9 @@
       statusAlert.classList.add('hidden');
     }
 
-    // Fetch Data from Google Sheets
-    async function fetchData(silent = false) {
-      const url = localStorage.getItem('appScriptUrl');
-      if (!url) {
+    // UJI KONEKSI DENGAN URL TERLALU SPESIFIK
+    async function fetchDataWithUrl(testUrl, silent = false) {
+      if (!testUrl) {
         updateUrlStatus('not_set');
         return false;
       }
@@ -630,7 +629,7 @@
       }
 
       try {
-        const res = await fetch(url);
+        const res = await fetch(testUrl);
         const data = await res.json();
 
         if (data.status === 'success' && Array.isArray(data.transaksi)) {
@@ -639,15 +638,21 @@
           updateUrlStatus('valid');
           return true;
         } else {
-          throw new Error("Respon tidak valid");
+          throw new Error("Format respon tidak sesuai");
         }
       } catch (err) {
         if (!silent) {
-          dataTable.innerHTML = `<tr><td colspan="3" class="text-center py-6 text-red-500">Gagal terhubung ke URL Google Sheets! Mohon periksa kembali URL Anda.</td></tr>`;
+          dataTable.innerHTML = `<tr><td colspan="3" class="text-center py-6 text-red-500">Gagal terhubung ke URL! Silakan periksa kembali URL Anda.</td></tr>`;
         }
         updateUrlStatus('invalid');
         return false;
       }
+    }
+
+    // FETCH DATA DENGAN URL YANG SUDAH TERSIMPAN
+    async function fetchData(silent = false) {
+      const savedUrl = localStorage.getItem('appScriptUrl');
+      return await fetchDataWithUrl(savedUrl, silent);
     }
 
     function renderTableData(transaksi) {
@@ -871,7 +876,7 @@
       startAutoSyncTimer();
     }
 
-    // UPDATE STATUS INDIKATOR URL
+    // INDIKATOR TAMPILAN STATUS URL
     function updateUrlStatus(state) {
       if (state === 'valid') {
         urlStatus.className = "text-xs font-semibold text-emerald-600 dark:text-emerald-400 flex items-center gap-1 bg-emerald-50 dark:bg-emerald-950/60 px-2 py-0.5 rounded-lg border border-emerald-200 dark:border-emerald-800";
@@ -885,10 +890,11 @@
       }
     }
 
-    // AKSI TOMBOL SIMPAN & UJI KONEKSI URL
+    // SIMPAN & TES URL (HANYA SIMPAN BILA VALID)
     btnSaveUrl.addEventListener('click', async () => {
-      const val = webAppUrlInput.value.trim();
-      if (!val) {
+      const inputUrl = webAppUrlInput.value.trim();
+      
+      if (!inputUrl) {
         alert("Silakan masukkan URL Google Apps Script terlebih dahulu!");
         return;
       }
@@ -896,24 +902,26 @@
       btnSaveUrl.disabled = true;
       btnSaveUrlText.innerText = "Menguji Koneksi...";
 
-      // Simpan sementara ke localStorage
-      localStorage.setItem('appScriptUrl', val);
-
-      // Tes koneksi
-      const isSuccess = await fetchData();
+      // Skenario: Uji koneksi DULU ke URL baru tersebut
+      const isSuccess = await fetchDataWithUrl(inputUrl);
 
       btnSaveUrl.disabled = false;
       btnSaveUrlText.innerText = "Simpan & Tes URL";
 
       if (isSuccess) {
-        alert("URL Berhasil Disimpan dan Terhubung dengan Baik!");
+        // PERUBAHAN UTAMA: HANYA DISIMPAN BILA TES BERHASIL
+        localStorage.setItem('appScriptUrl', inputUrl);
+        alert("✅ URL Valid! Berhasil disimpan dan terhubung.");
         resetSyncTimer();
       } else {
-        alert("URL yang Anda masukkan salah atau tidak dapat diakses! Silakan periksa kembali URL Google Apps Script Anda.");
+        // BILA SALAH/GAGAL: Hapus URL dari memori browser & batalkan penyimpanan
+        localStorage.removeItem('appScriptUrl');
+        updateUrlStatus('invalid');
+        alert("❌ URL Tidak Valid atau Salah!\n\nLink TIDAK DISIMPAN. Silakan periksa kembali URL Google Apps Script Anda.");
       }
     });
 
-    // AKSI TOMBOL HAPUS URL
+    // HAPUS URL
     btnResetUrl.addEventListener('click', () => {
       if (confirm("Apakah Anda yakin ingin menghapus URL Google Apps Script?")) {
         localStorage.removeItem('appScriptUrl');
