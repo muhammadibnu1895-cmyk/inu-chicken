@@ -2,136 +2,184 @@
 <html lang="id" class="h-full">
 
 <head>
-
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0"
-  >
-
-  <title>Inu Chicken - POS Kasir Pro</title>
-
-
-  <!-- TAILWIND -->
+  <title>Inu Chicken - POS Kasir</title>
 
   <script src="https://cdn.tailwindcss.com"></script>
-
-
-  <!-- FONT AWESOME -->
 
   <link
     rel="stylesheet"
     href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
   >
 
-
-  <!-- CHART JS -->
-
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-
   <script>
-
     tailwind.config = {
-
-      darkMode: "class",
+      darkMode: 'class',
 
       theme: {
-
         extend: {
 
           colors: {
 
             brand: {
-
-              50: "#f0fdf4",
-              100: "#dcfce7",
-              200: "#bbf7d0",
-              500: "#22c55e",
-              600: "#16a34a",
-              700: "#15803d",
-              800: "#166534",
-              900: "#14532d"
-
+              50: '#fff7ed',
+              100: '#ffedd5',
+              200: '#fed7aa',
+              300: '#fdba74',
+              400: '#fb923c',
+              500: '#f97316',
+              600: '#ea580c',
+              700: '#c2410c',
+              800: '#9a3412',
+              900: '#7c2d12'
             }
+
+          },
+
+          boxShadow: {
+
+            soft:
+              '0 4px 20px rgba(15,23,42,.06)',
+
+            orange:
+              '0 8px 25px rgba(234,88,12,.15)'
 
           }
 
         }
-
       }
-
-    };
-
+    }
   </script>
+
+  <style>
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    ::-webkit-scrollbar {
+      width: 7px;
+      height: 7px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: #fdba74;
+      border-radius: 999px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: #f97316;
+    }
+
+    .menu-card {
+      transition:
+        transform .2s ease,
+        box-shadow .2s ease,
+        border-color .2s ease;
+    }
+
+    .menu-card:hover {
+      transform: translateY(-3px);
+    }
+
+    .menu-card:active {
+      transform: scale(.98);
+    }
+
+    .glass {
+      background: rgba(255,255,255,.88);
+      backdrop-filter: blur(12px);
+    }
+
+    .dark .glass {
+      background: rgba(15,23,42,.88);
+    }
+
+  </style>
 
 </head>
 
 
-<body
-  class="bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100 min-h-screen font-sans transition-colors"
->
+<body class="bg-orange-50/40 dark:bg-slate-950 text-slate-800 dark:text-slate-100 min-h-screen font-sans transition-colors">
 
 
 <!-- =========================================================
-HEADER
+     HEADER
 ========================================================= -->
 
-<header
-  class="bg-white dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700 sticky top-0 z-30 shadow-sm"
->
+<header class="glass border-b border-orange-100 dark:border-slate-800 sticky top-0 z-30 shadow-sm">
 
-  <div
-    class="max-w-6xl mx-auto px-4 py-2.5 flex flex-wrap justify-between items-center gap-3"
-  >
+  <div class="max-w-6xl mx-auto px-4 py-3 flex flex-wrap justify-between items-center gap-3">
 
-    <div class="flex items-center gap-2.5">
+    <!-- BRAND -->
 
-      <div
-        class="w-10 h-10 rounded-xl bg-brand-600 text-white flex items-center justify-center text-xl shadow-md"
-      >
-        🍗
+    <div class="flex items-center gap-3">
+
+      <div class="w-11 h-11 rounded-2xl bg-white overflow-hidden shadow-orange border border-orange-100 flex items-center justify-center">
+
+        <img
+          src="https://drive.google.com/thumbnail?id=1dVBSCD8Vx692icERGy2i7j_LxCcgjdNN&sz=w200"
+          alt="Logo Inu Chicken"
+          class="w-full h-full object-cover"
+          onerror="this.style.display='none'; this.parentElement.innerHTML='🍗'; this.parentElement.classList.add('text-2xl');"
+        >
+
       </div>
+
 
       <div>
 
-        <h1 class="text-base font-bold">
-          Inu Chicken POS
+        <h1 class="text-lg font-black leading-tight tracking-tight">
+          Inu Chicken
+          <span class="text-brand-600">POS</span>
         </h1>
-
-        <p class="text-xs text-slate-500 dark:text-slate-400">
-          Sistem Kasir Multi-Item
-        </p>
 
       </div>
 
     </div>
 
 
+    <!-- CONTROLS -->
+
     <div class="flex items-center gap-2">
 
-      <div
-        class="bg-slate-100 dark:bg-slate-700 p-1 rounded-xl flex items-center gap-1 text-xs font-semibold"
-      >
+      <div class="bg-slate-100 dark:bg-slate-800 p-1 rounded-xl flex items-center gap-1 text-xs font-bold">
 
         <button
           id="btnRoleKasir"
           onclick="switchRole('kasir')"
-          class="px-3 py-1.5 rounded-lg bg-white dark:bg-slate-800 text-brand-600 shadow-sm flex items-center gap-1.5"
+          class="px-3 py-2 rounded-lg bg-white dark:bg-slate-700 text-brand-600 shadow-sm flex items-center gap-1.5 transition"
         >
+
           <i class="fa-solid fa-cash-register"></i>
+
           Kasir
+
         </button>
 
 
         <button
           id="btnRoleAdmin"
           onclick="switchRole('admin')"
-          class="px-3 py-1.5 rounded-lg text-slate-600 dark:text-slate-400 flex items-center gap-1.5"
+          class="px-3 py-2 rounded-lg text-slate-600 dark:text-slate-400 flex items-center gap-1.5 transition"
         >
+
           <i class="fa-solid fa-user-shield"></i>
+
           Admin
+
         </button>
 
       </div>
@@ -140,9 +188,11 @@ HEADER
       <button
         id="themeToggle"
         onclick="toggleTheme()"
-        class="p-2 rounded-lg text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-700"
+        class="w-9 h-9 rounded-xl text-slate-500 hover:text-brand-600 hover:bg-orange-50 dark:hover:bg-slate-800 transition flex items-center justify-center"
       >
+
         <i id="themeIcon" class="fa-solid fa-moon"></i>
+
       </button>
 
     </div>
@@ -153,52 +203,42 @@ HEADER
 
 
 
-<!-- =========================================================
-MAIN
-========================================================= -->
-
-<main
-  class="max-w-6xl mx-auto w-full px-4 py-6 space-y-6"
->
+<main class="max-w-6xl mx-auto w-full px-4 py-6 space-y-6">
 
 
 <!-- =========================================================
-KASIR
+     KASIR
 ========================================================= -->
 
-<section
-  id="viewKasir"
-  class="space-y-6"
->
+<section id="viewKasir" class="space-y-6">
 
-  <div
-    class="grid grid-cols-1 lg:grid-cols-3 gap-6"
-  >
+
+  <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
 
 
     <!-- MENU -->
 
     <div class="lg:col-span-2 space-y-4">
 
-      <div
-        class="flex justify-between items-center bg-brand-50 dark:bg-brand-950/30 border border-brand-200 dark:border-brand-900/50 p-4 rounded-2xl"
-      >
+
+      <div class="flex justify-between items-center bg-gradient-to-r from-orange-50 to-amber-50 dark:from-orange-950/30 dark:to-amber-950/20 border border-orange-200 dark:border-orange-900/50 p-4 rounded-2xl shadow-sm">
 
         <div class="flex items-center gap-3">
 
-          <div
-            class="w-10 h-10 rounded-xl bg-brand-600 text-white flex items-center justify-center"
-          >
+          <div class="w-11 h-11 rounded-2xl bg-brand-600 text-white flex items-center justify-center shadow-orange">
+
             <i class="fa-solid fa-utensils"></i>
+
           </div>
+
 
           <div>
 
-            <h2 class="font-bold">
+            <h2 class="font-black text-slate-900 dark:text-white">
               Pilih Menu
             </h2>
 
-            <p class="text-xs text-slate-500 dark:text-slate-400">
+            <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">
               Klik menu untuk menambahkan pesanan
             </p>
 
@@ -209,9 +249,10 @@ KASIR
       </div>
 
 
-      <div
-        class="grid grid-cols-2 gap-3"
-      >
+
+      <!-- MENU CARDS -->
+
+      <div class="grid grid-cols-2 gap-3">
 
 
         <!-- NASI AYAM -->
@@ -219,7 +260,7 @@ KASIR
         <button
           type="button"
           onclick="addToCart('Nasi + Ayam',10000)"
-          class="group p-4 rounded-2xl border border-slate-200 dark:border-slate-700 hover:border-brand-500 bg-white dark:bg-slate-800 text-left shadow-sm hover:shadow-md transition"
+          class="menu-card group p-4 rounded-2xl border border-slate-200 dark:border-slate-700 hover:border-brand-400 dark:hover:border-brand-500 bg-white dark:bg-slate-800 text-left shadow-soft hover:shadow-orange"
         >
 
           <div class="flex justify-between items-start">
@@ -228,13 +269,14 @@ KASIR
               🍗🍚
             </span>
 
-            <span
-              class="w-7 h-7 rounded-full bg-brand-100 dark:bg-brand-900/50 text-brand-600 flex items-center justify-center"
-            >
+            <span class="w-8 h-8 rounded-xl bg-brand-100 dark:bg-brand-900/40 text-brand-600 flex items-center justify-center group-hover:bg-brand-600 group-hover:text-white transition">
+
               <i class="fa-solid fa-plus"></i>
+
             </span>
 
           </div>
+
 
           <div class="mt-4">
 
@@ -242,7 +284,7 @@ KASIR
               Nasi + Ayam
             </p>
 
-            <p class="text-xs text-brand-600 font-bold mt-1">
+            <p class="text-xs text-brand-600 font-black mt-1">
               Rp 10.000
             </p>
 
@@ -251,12 +293,13 @@ KASIR
         </button>
 
 
+
         <!-- AYAM -->
 
         <button
           type="button"
           onclick="addToCart('Ayam',8000)"
-          class="group p-4 rounded-2xl border border-slate-200 dark:border-slate-700 hover:border-brand-500 bg-white dark:bg-slate-800 text-left shadow-sm hover:shadow-md transition"
+          class="menu-card group p-4 rounded-2xl border border-slate-200 dark:border-slate-700 hover:border-brand-400 dark:hover:border-brand-500 bg-white dark:bg-slate-800 text-left shadow-soft hover:shadow-orange"
         >
 
           <div class="flex justify-between items-start">
@@ -265,13 +308,14 @@ KASIR
               🍗
             </span>
 
-            <span
-              class="w-7 h-7 rounded-full bg-brand-100 dark:bg-brand-900/50 text-brand-600 flex items-center justify-center"
-            >
+            <span class="w-8 h-8 rounded-xl bg-brand-100 dark:bg-brand-900/40 text-brand-600 flex items-center justify-center group-hover:bg-brand-600 group-hover:text-white transition">
+
               <i class="fa-solid fa-plus"></i>
+
             </span>
 
           </div>
+
 
           <div class="mt-4">
 
@@ -279,7 +323,7 @@ KASIR
               Ayam Only
             </p>
 
-            <p class="text-xs text-brand-600 font-bold mt-1">
+            <p class="text-xs text-brand-600 font-black mt-1">
               Rp 8.000
             </p>
 
@@ -288,12 +332,13 @@ KASIR
         </button>
 
 
+
         <!-- NASI -->
 
         <button
           type="button"
           onclick="addToCart('Nasi',3000)"
-          class="group p-4 rounded-2xl border border-slate-200 dark:border-slate-700 hover:border-brand-500 bg-white dark:bg-slate-800 text-left shadow-sm hover:shadow-md transition"
+          class="menu-card group p-4 rounded-2xl border border-slate-200 dark:border-slate-700 hover:border-brand-400 dark:hover:border-brand-500 bg-white dark:bg-slate-800 text-left shadow-soft hover:shadow-orange"
         >
 
           <div class="flex justify-between items-start">
@@ -302,13 +347,14 @@ KASIR
               🍚
             </span>
 
-            <span
-              class="w-7 h-7 rounded-full bg-brand-100 dark:bg-brand-900/50 text-brand-600 flex items-center justify-center"
-            >
+            <span class="w-8 h-8 rounded-xl bg-brand-100 dark:bg-brand-900/40 text-brand-600 flex items-center justify-center group-hover:bg-brand-600 group-hover:text-white transition">
+
               <i class="fa-solid fa-plus"></i>
+
             </span>
 
           </div>
+
 
           <div class="mt-4">
 
@@ -316,7 +362,7 @@ KASIR
               Nasi Putih
             </p>
 
-            <p class="text-xs text-brand-600 font-bold mt-1">
+            <p class="text-xs text-brand-600 font-black mt-1">
               Rp 3.000
             </p>
 
@@ -325,12 +371,13 @@ KASIR
         </button>
 
 
+
         <!-- SAMBAL -->
 
         <button
           type="button"
           onclick="addToCart('Saus / Sambal',3000)"
-          class="group p-4 rounded-2xl border border-slate-200 dark:border-slate-700 hover:border-brand-500 bg-white dark:bg-slate-800 text-left shadow-sm hover:shadow-md transition"
+          class="menu-card group p-4 rounded-2xl border border-slate-200 dark:border-slate-700 hover:border-brand-400 dark:hover:border-brand-500 bg-white dark:bg-slate-800 text-left shadow-soft hover:shadow-orange"
         >
 
           <div class="flex justify-between items-start">
@@ -339,13 +386,14 @@ KASIR
               🌶️
             </span>
 
-            <span
-              class="w-7 h-7 rounded-full bg-brand-100 dark:bg-brand-900/50 text-brand-600 flex items-center justify-center"
-            >
+            <span class="w-8 h-8 rounded-xl bg-brand-100 dark:bg-brand-900/40 text-brand-600 flex items-center justify-center group-hover:bg-brand-600 group-hover:text-white transition">
+
               <i class="fa-solid fa-plus"></i>
+
             </span>
 
           </div>
+
 
           <div class="mt-4">
 
@@ -353,7 +401,7 @@ KASIR
               Saus / Sambal Extra
             </p>
 
-            <p class="text-xs text-brand-600 font-bold mt-1">
+            <p class="text-xs text-brand-600 font-black mt-1">
               Rp 3.000
             </p>
 
@@ -364,10 +412,7 @@ KASIR
       </div>
 
 
-      <div
-        id="statusAlert"
-        class="hidden p-3 rounded-xl text-sm font-medium"
-      ></div>
+      <div id="statusAlert" class="hidden p-3 rounded-xl text-sm font-medium"></div>
 
     </div>
 
@@ -377,27 +422,29 @@ KASIR
 
     <div>
 
-      <div
-        class="bg-white dark:bg-slate-800 p-5 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm min-h-[380px] flex flex-col justify-between"
-      >
+      <div class="bg-white dark:bg-slate-800 p-5 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-soft min-h-[380px] flex flex-col justify-between">
+
 
         <div>
 
-          <div
-            class="flex justify-between items-center pb-3 border-b border-slate-100 dark:border-slate-700 mb-3"
-          >
+          <div class="flex justify-between items-center pb-3 border-b border-slate-100 dark:border-slate-700 mb-3">
 
-            <h3 class="font-bold flex items-center gap-2">
+            <h3 class="font-black flex items-center gap-2">
 
-              <i class="fa-solid fa-cart-shopping text-brand-600"></i>
+              <span class="w-8 h-8 rounded-lg bg-orange-100 dark:bg-orange-900/30 text-brand-600 flex items-center justify-center">
+
+                <i class="fa-solid fa-cart-shopping"></i>
+
+              </span>
 
               Keranjang
 
             </h3>
 
+
             <button
               onclick="clearCart()"
-              class="text-xs text-red-500 hover:underline"
+              class="text-xs text-red-500 hover:text-red-600 font-semibold hover:underline"
             >
               Reset
             </button>
@@ -408,22 +455,14 @@ KASIR
           <div
             id="cartList"
             class="space-y-2.5 max-h-[250px] overflow-y-auto pr-1"
-          >
-
-            <p
-              class="text-xs text-slate-400 text-center py-8"
-            >
-              Keranjang belanja masih kosong.
-            </p>
-
-          </div>
+          ></div>
 
         </div>
 
 
-        <div
-          class="pt-4 border-t border-slate-100 dark:border-slate-700 mt-4 space-y-3"
-        >
+
+        <div class="pt-4 border-t border-slate-100 dark:border-slate-700 mt-4 space-y-3">
+
 
           <div class="flex justify-between items-center">
 
@@ -433,7 +472,7 @@ KASIR
 
             <span
               id="cartTotal"
-              class="text-xl font-black text-emerald-600"
+              class="text-xl font-black text-brand-600"
             >
               Rp 0
             </span>
@@ -445,7 +484,7 @@ KASIR
             id="btnCheckout"
             onclick="openConfirmModal()"
             disabled
-            class="w-full py-3 bg-brand-600 disabled:bg-slate-300 dark:disabled:bg-slate-700 disabled:cursor-not-allowed hover:bg-brand-700 text-white font-bold text-sm rounded-xl transition shadow-md flex justify-center items-center gap-2"
+            class="w-full py-3 bg-brand-600 disabled:bg-slate-300 dark:disabled:bg-slate-700 disabled:cursor-not-allowed hover:bg-brand-700 text-white font-bold text-sm rounded-xl transition shadow-orange flex justify-center items-center gap-2"
           >
 
             <i class="fa-solid fa-cash-register"></i>
@@ -466,15 +505,17 @@ KASIR
 
   <!-- TRANSAKSI TERAKHIR -->
 
-  <section
-    class="bg-white dark:bg-slate-800 p-5 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm"
-  >
+  <section class="bg-white dark:bg-slate-800 p-5 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-soft">
 
     <div class="flex justify-between items-center mb-3">
 
-      <h3 class="text-sm font-bold flex items-center gap-2">
+      <h3 class="text-sm font-black flex items-center gap-2">
 
-        <i class="fa-solid fa-clock-rotate-left text-brand-600"></i>
+        <span class="w-8 h-8 rounded-lg bg-orange-100 dark:bg-orange-900/30 text-brand-600 flex items-center justify-center">
+
+          <i class="fa-solid fa-clock-rotate-left"></i>
+
+        </span>
 
         Transaksi Terakhir
 
@@ -483,7 +524,7 @@ KASIR
 
       <button
         onclick="switchRole('admin')"
-        class="text-xs text-brand-600 hover:underline"
+        class="text-xs text-brand-600 hover:underline font-semibold"
       >
         Dashboard Admin →
       </button>
@@ -491,15 +532,11 @@ KASIR
     </div>
 
 
-    <div
-      class="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-700"
-    >
+    <div class="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-700">
 
       <table class="w-full text-xs text-left">
 
-        <thead
-          class="bg-slate-50 dark:bg-slate-700/50"
-        >
+        <thead class="bg-orange-50 dark:bg-slate-700/50">
 
           <tr>
 
@@ -523,21 +560,7 @@ KASIR
 
         </thead>
 
-
-        <tbody id="kasirRecentTable">
-
-          <tr>
-
-            <td
-              colspan="4"
-              class="text-center py-4 text-slate-400"
-            >
-              Belum ada transaksi.
-            </td>
-
-          </tr>
-
-        </tbody>
+        <tbody id="kasirRecentTable"></tbody>
 
       </table>
 
@@ -550,35 +573,33 @@ KASIR
 
 
 <!-- =========================================================
-ADMIN
+     ADMIN
 ========================================================= -->
 
-<section
-  id="viewAdmin"
-  class="hidden space-y-6"
->
+<section id="viewAdmin" class="hidden space-y-6">
 
 
-  <div
-    class="flex justify-between items-center bg-slate-800 text-white p-4 rounded-2xl shadow-md"
-  >
+  <!-- ADMIN HEADER -->
+
+  <div class="flex justify-between items-center bg-gradient-to-r from-slate-900 to-slate-800 text-white p-4 rounded-2xl shadow-lg">
 
     <div class="flex items-center gap-3">
 
-      <div
-        class="w-10 h-10 rounded-xl bg-purple-600 flex items-center justify-center"
-      >
+      <div class="w-11 h-11 rounded-2xl bg-brand-600 flex items-center justify-center shadow-orange">
+
         <i class="fa-solid fa-chart-pie"></i>
+
       </div>
+
 
       <div>
 
-        <h2 class="font-bold">
+        <h2 class="font-black">
           Panel Administrator
         </h2>
 
         <p class="text-xs text-slate-300">
-          Dashboard penjualan
+          Dashboard penjualan & Google Sheets
         </p>
 
       </div>
@@ -588,35 +609,33 @@ ADMIN
 
     <button
       onclick="lockAdmin()"
-      class="px-3 py-1.5 bg-slate-700 hover:bg-slate-600 text-xs rounded-lg"
+      class="px-3 py-2 bg-white/10 hover:bg-white/20 text-xs rounded-lg transition"
     >
+
       <i class="fa-solid fa-lock mr-1"></i>
+
       Kunci
+
     </button>
 
   </div>
 
 
 
-  <!-- STATUS KONEKSI -->
+  <!-- STATUS -->
 
-  <section
-    class="bg-white dark:bg-slate-800 p-4 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm"
-  >
+  <section class="bg-white dark:bg-slate-800 p-4 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-soft">
 
     <div class="flex justify-between items-center">
 
       <div>
 
-        <p class="text-xs font-bold uppercase text-slate-500">
-          Koneksi Google Apps Script
+        <p class="text-xs font-black uppercase text-slate-500">
+          Google Apps Script
         </p>
 
-        <p
-          id="connectionUrl"
-          class="text-[10px] text-slate-400 mt-1 break-all"
-        >
-          Terhubung otomatis
+        <p class="text-[10px] text-slate-400 mt-1">
+          URL sudah tertanam di aplikasi
         </p>
 
       </div>
@@ -624,7 +643,7 @@ ADMIN
 
       <span
         id="urlStatus"
-        class="text-xs font-semibold px-2 py-1 rounded-lg"
+        class="text-xs font-bold text-amber-600 bg-amber-50 px-2.5 py-1 rounded-lg"
       >
         Memeriksa...
       </span>
@@ -639,35 +658,31 @@ ADMIN
 
   <section class="space-y-4">
 
-    <h2 class="text-base font-bold">
+    <h2 class="text-base font-black flex items-center gap-2">
 
-      <i
-        class="fa-solid fa-chart-line text-brand-600 mr-1"
-      ></i>
+      <span class="w-8 h-8 rounded-lg bg-orange-100 dark:bg-orange-900/30 text-brand-600 flex items-center justify-center">
+
+        <i class="fa-solid fa-chart-line"></i>
+
+      </span>
 
       Analisis Penjualan
 
     </h2>
 
 
-    <div
-      class="grid grid-cols-2 sm:grid-cols-4 gap-3"
-    >
+    <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
 
 
-      <div
-        class="bg-white dark:bg-slate-800 p-4 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm"
-      >
+      <div class="bg-white dark:bg-slate-800 p-4 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-soft">
 
-        <span
-          class="text-xs text-slate-500 font-semibold uppercase"
-        >
+        <span class="text-xs text-slate-500 font-bold uppercase">
           Total Omset
         </span>
 
         <p
           id="dashTotalOmset"
-          class="text-lg sm:text-xl font-black mt-1"
+          class="text-lg sm:text-xl font-black mt-1 text-brand-600"
         >
           Rp 0
         </p>
@@ -680,13 +695,9 @@ ADMIN
 
 
 
-      <div
-        class="bg-white dark:bg-slate-800 p-4 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm"
-      >
+      <div class="bg-white dark:bg-slate-800 p-4 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-soft">
 
-        <span
-          class="text-xs text-slate-500 font-semibold uppercase"
-        >
+        <span class="text-xs text-slate-500 font-bold uppercase">
           Transaksi
         </span>
 
@@ -705,13 +716,9 @@ ADMIN
 
 
 
-      <div
-        class="bg-white dark:bg-slate-800 p-4 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm"
-      >
+      <div class="bg-white dark:bg-slate-800 p-4 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-soft">
 
-        <span
-          class="text-xs text-slate-500 font-semibold uppercase"
-        >
+        <span class="text-xs text-slate-500 font-bold uppercase">
           Item Terjual
         </span>
 
@@ -730,27 +737,20 @@ ADMIN
 
 
 
-      <div
-        class="bg-white dark:bg-slate-800 p-4 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm"
-      >
+      <div class="bg-white dark:bg-slate-800 p-4 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-soft">
 
-        <span
-          class="text-xs text-slate-500 font-semibold uppercase"
-        >
+        <span class="text-xs text-slate-500 font-bold uppercase">
           Terlaris
         </span>
 
         <p
           id="dashTopProduct"
-          class="text-sm font-extrabold mt-1 truncate"
+          class="text-sm font-black mt-1 truncate text-brand-600"
         >
           -
         </p>
 
-        <p
-          id="dashTopQty"
-          class="text-[10px] text-slate-400"
-        >
+        <p id="dashTopQty" class="text-[10px] text-slate-400">
           0 porsi
         </p>
 
@@ -760,19 +760,12 @@ ADMIN
 
 
 
-    <!-- CHART -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
 
-    <div
-      class="grid grid-cols-1 md:grid-cols-3 gap-4"
-    >
 
-      <div
-        class="md:col-span-2 bg-white dark:bg-slate-800 p-4 rounded-2xl border border-slate-200 dark:border-slate-700"
-      >
+      <div class="md:col-span-2 bg-white dark:bg-slate-800 p-4 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-soft">
 
-        <h3
-          class="text-xs font-bold uppercase tracking-wider text-slate-500 mb-3"
-        >
+        <h3 class="text-xs font-black uppercase tracking-wider text-slate-500 mb-3">
           Grafik Penjualan Produk
         </h3>
 
@@ -786,28 +779,16 @@ ADMIN
 
 
 
-      <div
-        class="bg-white dark:bg-slate-800 p-4 rounded-2xl border border-slate-200 dark:border-slate-700"
-      >
+      <div class="bg-white dark:bg-slate-800 p-4 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-soft">
 
-        <h3
-          class="text-xs font-bold uppercase text-slate-500 mb-4"
-        >
+        <h3 class="text-xs font-black uppercase text-slate-500 mb-4">
           Pangsa Penjualan
         </h3>
 
         <div
           id="productBreakdown"
           class="space-y-3"
-        >
-
-          <p
-            class="text-xs text-slate-400 text-center"
-          >
-            Belum ada data.
-          </p>
-
-        </div>
+        ></div>
 
       </div>
 
@@ -819,27 +800,25 @@ ADMIN
 
   <!-- RIWAYAT -->
 
-  <section
-    class="bg-white dark:bg-slate-800 p-5 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm"
-  >
+  <section class="bg-white dark:bg-slate-800 p-5 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-soft">
 
-    <div
-      class="flex flex-wrap justify-between items-center gap-2 mb-4"
-    >
+    <div class="flex flex-wrap justify-between items-center gap-2 mb-4">
 
       <div>
 
-        <h2 class="text-base font-bold">
+        <h2 class="text-base font-black flex items-center gap-2">
 
-          <i
-            class="fa-solid fa-database text-purple-600 mr-1"
-          ></i>
+          <span class="w-8 h-8 rounded-lg bg-orange-100 dark:bg-orange-900/30 text-brand-600 flex items-center justify-center">
+
+            <i class="fa-solid fa-database"></i>
+
+          </span>
 
           Riwayat Penjualan
 
         </h2>
 
-        <p class="text-xs text-slate-400">
+        <p class="text-xs text-slate-400 mt-1">
           Data dari Google Sheets
         </p>
 
@@ -848,14 +827,13 @@ ADMIN
 
       <div class="flex items-center gap-2">
 
-        <label
-          class="flex items-center gap-2 text-xs"
-        >
+        <label class="flex items-center gap-2 text-xs">
 
           <input
             type="checkbox"
             id="autoRefreshToggle"
             checked
+            class="accent-orange-600"
           >
 
           Otomatis
@@ -872,7 +850,7 @@ ADMIN
 
         <button
           id="btnFetch"
-          class="px-3 py-1.5 bg-slate-100 dark:bg-slate-700 text-xs rounded-lg"
+          class="px-3 py-1.5 bg-orange-50 dark:bg-slate-700 text-brand-600 dark:text-slate-200 text-xs rounded-lg hover:bg-orange-100 transition"
         >
 
           <i class="fa-solid fa-rotate mr-1"></i>
@@ -887,15 +865,11 @@ ADMIN
 
 
 
-    <div
-      class="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-700"
-    >
+    <div class="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-700">
 
       <table class="w-full text-xs text-left">
 
-        <thead
-          class="bg-slate-50 dark:bg-slate-700/50"
-        >
+        <thead class="bg-orange-50 dark:bg-slate-700/50">
 
           <tr>
 
@@ -931,20 +905,7 @@ ADMIN
         <tbody
           id="dataTable"
           class="divide-y divide-slate-100 dark:divide-slate-700"
-        >
-
-          <tr>
-
-            <td
-              colspan="6"
-              class="text-center py-6 text-slate-400"
-            >
-              Memuat data...
-            </td>
-
-          </tr>
-
-        </tbody>
+        ></tbody>
 
       </table>
 
@@ -959,27 +920,22 @@ ADMIN
 
 
 <!-- =========================================================
-MODAL PEMBAYARAN
+     MODAL PEMBAYARAN
 ========================================================= -->
 
 <div
   id="confirmModal"
-  class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden"
+  class="fixed inset-0 bg-slate-950/70 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden"
 >
 
-  <div
-    class="bg-white dark:bg-slate-800 rounded-2xl max-w-sm w-full p-6 shadow-2xl space-y-4"
-  >
+  <div class="bg-white dark:bg-slate-800 rounded-3xl max-w-sm w-full p-6 shadow-2xl space-y-4 border border-orange-100 dark:border-slate-700">
 
-    <div
-      class="flex justify-between items-center border-b pb-3"
-    >
 
-      <h3 class="font-bold">
+    <div class="flex justify-between items-center border-b pb-3 dark:border-slate-700">
 
-        <i
-          class="fa-solid fa-file-invoice-dollar text-brand-600 mr-1"
-        ></i>
+      <h3 class="font-black">
+
+        <i class="fa-solid fa-file-invoice-dollar text-brand-600 mr-1"></i>
 
         Konfirmasi Transaksi
 
@@ -988,7 +944,7 @@ MODAL PEMBAYARAN
 
       <button
         onclick="closeConfirmModal()"
-        class="text-xl text-slate-400"
+        class="w-8 h-8 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-700 text-xl text-slate-400"
       >
         ×
       </button>
@@ -998,17 +954,19 @@ MODAL PEMBAYARAN
 
     <div
       id="confirmOrderSummary"
-      class="max-h-40 overflow-y-auto space-y-2 text-xs bg-slate-50 dark:bg-slate-900/50 p-3 rounded-xl"
+      class="max-h-40 overflow-y-auto space-y-2 text-xs bg-orange-50/60 dark:bg-slate-900/50 p-3 rounded-xl"
     ></div>
 
 
     <div class="flex justify-between font-bold">
 
-      <span>Total Tagihan</span>
+      <span>
+        Total Tagihan
+      </span>
 
       <span
         id="modalTotalTagihan"
-        class="text-lg text-emerald-600"
+        class="text-lg text-brand-600"
       >
         Rp 0
       </span>
@@ -1018,9 +976,7 @@ MODAL PEMBAYARAN
 
     <div>
 
-      <label
-        class="text-xs font-semibold text-slate-500"
-      >
+      <label class="text-xs font-semibold text-slate-500">
         Uang Dibayar
       </label>
 
@@ -1028,7 +984,7 @@ MODAL PEMBAYARAN
         type="number"
         id="inputUangBayar"
         oninput="calculateChange()"
-        class="w-full text-lg font-bold p-2.5 mt-1 bg-slate-50 dark:bg-slate-900 border rounded-xl"
+        class="w-full text-lg font-bold p-2.5 mt-1 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-400"
       >
 
     </div>
@@ -1036,47 +992,30 @@ MODAL PEMBAYARAN
 
     <div class="grid grid-cols-3 gap-2">
 
-      <button
-        onclick="setQuickPayment('pas')"
-        class="py-2 bg-slate-100 dark:bg-slate-700 text-xs rounded-lg"
-      >
+      <button onclick="setQuickPayment('pas')" class="py-2 bg-slate-100 dark:bg-slate-700 hover:bg-orange-50 dark:hover:bg-slate-600 text-xs rounded-lg">
         Uang Pas
       </button>
 
-      <button
-        onclick="setQuickPayment(10000)"
-        class="py-2 bg-slate-100 dark:bg-slate-700 text-xs rounded-lg"
-      >
+      <button onclick="setQuickPayment(10000)" class="py-2 bg-slate-100 dark:bg-slate-700 hover:bg-orange-50 dark:hover:bg-slate-600 text-xs rounded-lg">
         10.000
       </button>
 
-      <button
-        onclick="setQuickPayment(20000)"
-        class="py-2 bg-slate-100 dark:bg-slate-700 text-xs rounded-lg"
-      >
+      <button onclick="setQuickPayment(20000)" class="py-2 bg-slate-100 dark:bg-slate-700 hover:bg-orange-50 dark:hover:bg-slate-600 text-xs rounded-lg">
         20.000
       </button>
 
-      <button
-        onclick="setQuickPayment(50000)"
-        class="py-2 bg-slate-100 dark:bg-slate-700 text-xs rounded-lg"
-      >
+      <button onclick="setQuickPayment(50000)" class="py-2 bg-slate-100 dark:bg-slate-700 hover:bg-orange-50 dark:hover:bg-slate-600 text-xs rounded-lg">
         50.000
       </button>
 
-      <button
-        onclick="setQuickPayment(100000)"
-        class="py-2 bg-slate-100 dark:bg-slate-700 text-xs rounded-lg"
-      >
+      <button onclick="setQuickPayment(100000)" class="py-2 bg-slate-100 dark:bg-slate-700 hover:bg-orange-50 dark:hover:bg-slate-600 text-xs rounded-lg">
         100.000
       </button>
 
     </div>
 
 
-    <div
-      class="flex justify-between bg-brand-50 dark:bg-brand-950/40 p-3 rounded-xl"
-    >
+    <div class="flex justify-between bg-brand-50 dark:bg-brand-950/40 p-3 rounded-xl">
 
       <span class="font-bold">
         Kembalian
@@ -1096,7 +1035,7 @@ MODAL PEMBAYARAN
 
       <button
         onclick="closeConfirmModal()"
-        class="py-2.5 bg-slate-100 dark:bg-slate-700 rounded-xl text-xs font-semibold"
+        class="py-2.5 bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 rounded-xl text-xs font-semibold"
       >
         Batal
       </button>
@@ -1105,7 +1044,7 @@ MODAL PEMBAYARAN
       <button
         id="btnSaveCheckout"
         onclick="checkout()"
-        class="py-2.5 bg-brand-600 hover:bg-brand-700 text-white rounded-xl text-xs font-bold"
+        class="py-2.5 bg-brand-600 hover:bg-brand-700 text-white rounded-xl text-xs font-bold shadow-orange"
       >
 
         <span id="btnSaveText">
@@ -1133,45 +1072,43 @@ MODAL PEMBAYARAN
 
 
 <!-- =========================================================
-MODAL STRUK
+     RECEIPT
 ========================================================= -->
 
 <div
   id="receiptModal"
-  class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden"
+  class="fixed inset-0 bg-slate-950/70 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden"
 >
 
-  <div
-    class="bg-white dark:bg-slate-800 rounded-2xl max-w-xs w-full p-6 shadow-2xl text-center space-y-4"
-  >
+  <div class="bg-white dark:bg-slate-800 rounded-3xl max-w-xs w-full p-6 shadow-2xl text-center space-y-4">
 
-    <div
-      class="w-12 h-12 bg-emerald-100 text-emerald-600 rounded-full flex items-center justify-center mx-auto text-2xl"
-    >
+    <div class="w-14 h-14 bg-orange-100 dark:bg-orange-900/30 text-brand-600 rounded-2xl flex items-center justify-center mx-auto text-2xl">
+
       <i class="fa-solid fa-circle-check"></i>
+
     </div>
 
 
     <div>
 
-      <h3 class="font-bold">
+      <h3 class="font-black">
         Transaksi Berhasil!
       </h3>
 
-      <p class="text-xs text-slate-500">
+      <p class="text-xs text-slate-500 mt-1">
         Data berhasil disimpan.
       </p>
 
     </div>
 
 
-    <div
-      class="bg-slate-50 dark:bg-slate-900 p-4 rounded-xl text-left text-xs space-y-2"
-    >
+    <div class="bg-slate-50 dark:bg-slate-900 p-4 rounded-xl text-left text-xs space-y-2">
 
       <div class="flex justify-between">
 
-        <span>Total</span>
+        <span>
+          Total
+        </span>
 
         <strong id="rcptTotal">
           Rp 0
@@ -1182,7 +1119,9 @@ MODAL STRUK
 
       <div class="flex justify-between">
 
-        <span>Dibayar</span>
+        <span>
+          Dibayar
+        </span>
 
         <strong id="rcptBayar">
           Rp 0
@@ -1191,11 +1130,11 @@ MODAL STRUK
       </div>
 
 
-      <div
-        class="border-t pt-2 flex justify-between font-black text-brand-600"
-      >
+      <div class="border-t pt-2 flex justify-between font-black text-brand-600">
 
-        <span>Kembalian</span>
+        <span>
+          Kembalian
+        </span>
 
         <span id="rcptKembalian">
           Rp 0
@@ -1208,7 +1147,7 @@ MODAL STRUK
 
     <button
       onclick="closeReceiptModal()"
-      class="w-full py-2.5 bg-brand-600 text-white rounded-xl font-bold text-xs"
+      class="w-full py-2.5 bg-brand-600 hover:bg-brand-700 text-white rounded-xl font-bold text-xs shadow-orange"
     >
       Selesai / Transaksi Baru
     </button>
@@ -1220,26 +1159,25 @@ MODAL STRUK
 
 
 <!-- =========================================================
-MODAL PIN
+     PIN ADMIN
 ========================================================= -->
 
 <div
   id="pinModal"
-  class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden"
+  class="fixed inset-0 bg-slate-950/70 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden"
 >
 
-  <div
-    class="bg-white dark:bg-slate-800 rounded-2xl max-w-xs w-full p-6 shadow-2xl text-center"
-  >
+  <div class="bg-white dark:bg-slate-800 rounded-3xl max-w-xs w-full p-6 shadow-2xl text-center border border-orange-100 dark:border-slate-700">
 
-    <div
-      class="w-12 h-12 bg-purple-100 text-purple-600 rounded-full flex items-center justify-center mx-auto text-xl"
-    >
+
+    <div class="w-14 h-14 bg-orange-100 dark:bg-orange-900/30 text-brand-600 rounded-2xl flex items-center justify-center mx-auto text-xl">
+
       <i class="fa-solid fa-lock"></i>
+
     </div>
 
 
-    <h3 class="font-bold mt-3">
+    <h3 class="font-black mt-3">
       Akses Admin
     </h3>
 
@@ -1260,7 +1198,7 @@ MODAL PIN
         id="pinInput"
         maxlength="10"
         placeholder="••••"
-        class="w-full text-center text-xl font-bold tracking-widest p-3 bg-slate-50 dark:bg-slate-900 border rounded-xl"
+        class="w-full text-center text-xl font-bold tracking-widest p-3 bg-slate-50 dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl focus:outline-none focus:ring-2 focus:ring-brand-400"
         required
       >
 
@@ -1287,13 +1225,12 @@ MODAL PIN
         <button
           type="submit"
           id="btnVerifyPin"
-          class="py-2.5 bg-purple-600 text-white rounded-xl text-xs font-semibold"
+          class="py-2.5 bg-brand-600 hover:bg-brand-700 text-white rounded-xl text-xs font-semibold shadow-orange"
         >
 
           <span id="btnPinText">
             Masuk
           </span>
-
 
           <span
             id="btnPinSpinner"
@@ -1312,24 +1249,23 @@ MODAL PIN
 
 
 
-<!-- =========================================================
-JAVASCRIPT
-========================================================= -->
-
 <script>
 
-
-// ============================================================
-// URL APPS SCRIPT
-// ============================================================
+/* =========================================================
+   KONFIGURASI
+========================================================= */
 
 const APP_SCRIPT_URL =
   "https://script.google.com/macros/s/AKfycbxqnpjgoLlPVZDSjvAy5Amy0YZl1Vf9AG9wwxPqsXjut1i96DzUqySM3OrBIPEhQDvwUQ/exec";
 
+const ADMIN_PIN_DEFAULT = "1234";
 
-// ============================================================
-// STATE
-// ============================================================
+const AUTO_SYNC_INTERVAL = 10;
+
+
+/* =========================================================
+   STATE
+========================================================= */
 
 let activeRole = "kasir";
 
@@ -1347,14 +1283,12 @@ let salesChart = null;
 
 let syncTimer = null;
 
-let secondsLeft = 10;
-
-const AUTO_SYNC_INTERVAL = 10;
+let secondsLeft = AUTO_SYNC_INTERVAL;
 
 
-// ============================================================
-// ELEMENT
-// ============================================================
+/* =========================================================
+   ELEMENT
+========================================================= */
 
 const viewKasir =
   document.getElementById("viewKasir");
@@ -1449,13 +1383,10 @@ const themeIcon =
 const urlStatus =
   document.getElementById("urlStatus");
 
-const connectionUrl =
-  document.getElementById("connectionUrl");
 
-
-// ============================================================
-// RUPIAH
-// ============================================================
+/* =========================================================
+   FORMAT RUPIAH
+========================================================= */
 
 function rupiah(number) {
 
@@ -1466,34 +1397,25 @@ function rupiah(number) {
 }
 
 
-// ============================================================
-// THEME
-// ============================================================
+/* =========================================================
+   THEME
+========================================================= */
 
 function toggleTheme() {
 
-  document.documentElement
-    .classList
-    .toggle("dark");
-
+  document.documentElement.classList.toggle("dark");
 
   const isDark =
-    document.documentElement
-      .classList
-      .contains("dark");
-
+    document.documentElement.classList.contains("dark");
 
   themeIcon.className =
     isDark
       ? "fa-solid fa-sun"
       : "fa-solid fa-moon";
 
-
   localStorage.setItem(
     "theme",
-    isDark
-      ? "dark"
-      : "light"
+    isDark ? "dark" : "light"
   );
 
 }
@@ -1502,14 +1424,10 @@ function toggleTheme() {
 function loadTheme() {
 
   if (
-    localStorage.getItem("theme")
-    === "dark"
+    localStorage.getItem("theme") === "dark"
   ) {
 
-    document.documentElement
-      .classList
-      .add("dark");
-
+    document.documentElement.classList.add("dark");
 
     themeIcon.className =
       "fa-solid fa-sun";
@@ -1519,21 +1437,16 @@ function loadTheme() {
 }
 
 
-// ============================================================
-// CART
-// ============================================================
+/* =========================================================
+   CART
+========================================================= */
 
-function addToCart(
-  nama,
-  harga
-) {
+function addToCart(nama, harga) {
 
   const existing =
     cart.find(
-      item =>
-        item.namaProduk === nama
+      item => item.namaProduk === nama
     );
-
 
   if (existing) {
 
@@ -1553,32 +1466,22 @@ function addToCart(
 
   }
 
-
   renderCart();
 
 }
 
 
-function updateCartQty(
-  index,
-  change
-) {
+function updateCartQty(index, change) {
 
   if (!cart[index]) return;
 
+  cart[index].jumlah += change;
 
-  cart[index].jumlah +=
-    change;
-
-
-  if (
-    cart[index].jumlah <= 0
-  ) {
+  if (cart[index].jumlah <= 0) {
 
     cart.splice(index, 1);
 
   }
-
 
   renderCart();
 
@@ -1596,25 +1499,31 @@ function clearCart() {
 
 function renderCart() {
 
-  if (cart.length === 0) {
+  if (!cart.length) {
 
     cartList.innerHTML = `
 
-      <p class="text-xs text-slate-400 text-center py-8">
-        Keranjang belanja masih kosong.
-      </p>
+      <div class="text-center py-8">
+
+        <div class="w-12 h-12 mx-auto rounded-2xl bg-orange-50 dark:bg-orange-950/30 text-orange-300 flex items-center justify-center text-xl mb-2">
+
+          <i class="fa-solid fa-cart-shopping"></i>
+
+        </div>
+
+        <p class="text-xs text-slate-400">
+          Keranjang belanja masih kosong.
+        </p>
+
+      </div>
 
     `;
 
-
-    cartTotal.innerText =
-      "Rp 0";
-
+    cartTotal.innerText = "Rp 0";
 
     currentTotalCart = 0;
 
-    btnCheckout.disabled =
-      true;
+    btnCheckout.disabled = true;
 
     return;
 
@@ -1625,141 +1534,121 @@ function renderCart() {
 
 
   cartList.innerHTML =
-    cart.map(
-      (item, index) => {
+    cart.map((item, index) => {
 
-        const subtotal =
-          item.jumlah *
-          item.hargaSatuan;
+      const subtotal =
+        item.jumlah *
+        item.hargaSatuan;
 
-
-        total +=
-          subtotal;
+      total += subtotal;
 
 
-        return `
+      return `
 
-          <div
-            class="flex items-center justify-between p-2.5 bg-slate-50 dark:bg-slate-700/50 rounded-xl text-xs"
-          >
+        <div class="flex items-center justify-between p-2.5 bg-orange-50/60 dark:bg-slate-700/50 rounded-xl text-xs border border-orange-100 dark:border-slate-700">
 
-            <div class="flex-1 pr-2">
+          <div class="flex-1 pr-2">
 
-              <p class="font-bold">
-                ${escapeHtml(item.namaProduk)}
-              </p>
+            <p class="font-bold">
+              ${escapeHtml(item.namaProduk)}
+            </p>
 
-              <p class="text-[10px] text-slate-400">
-                ${rupiah(item.hargaSatuan)}
-              </p>
+            <p class="text-[10px] text-slate-400">
+              ${rupiah(item.hargaSatuan)}
+            </p>
 
-              <p class="text-[10px] text-emerald-600 font-semibold">
-                ${rupiah(subtotal)}
-              </p>
-
-            </div>
-
-
-            <div class="flex items-center gap-1.5">
-
-              <button
-                onclick="updateCartQty(${index},-1)"
-                class="w-6 h-6 rounded-lg bg-slate-200 dark:bg-slate-600 font-bold"
-              >
-                -
-              </button>
-
-              <span class="font-bold px-1">
-                ${item.jumlah}
-              </span>
-
-              <button
-                onclick="updateCartQty(${index},1)"
-                class="w-6 h-6 rounded-lg bg-slate-200 dark:bg-slate-600 font-bold"
-              >
-                +
-              </button>
-
-            </div>
+            <p class="text-[10px] text-brand-600 font-bold">
+              ${rupiah(subtotal)}
+            </p>
 
           </div>
 
-        `;
 
-      }
-    ).join("");
+          <div class="flex items-center gap-1.5">
+
+            <button
+              onclick="updateCartQty(${index},-1)"
+              class="w-6 h-6 rounded-lg bg-white dark:bg-slate-600 hover:bg-orange-100 font-bold"
+            >
+              -
+            </button>
+
+            <span class="font-bold px-1">
+              ${item.jumlah}
+            </span>
+
+            <button
+              onclick="updateCartQty(${index},1)"
+              class="w-6 h-6 rounded-lg bg-white dark:bg-slate-600 hover:bg-orange-100 font-bold"
+            >
+              +
+            </button>
+
+          </div>
+
+        </div>
+
+      `;
+
+    }).join("");
 
 
-  currentTotalCart =
-    total;
-
+  currentTotalCart = total;
 
   cartTotal.innerText =
     rupiah(total);
 
-
-  btnCheckout.disabled =
-    false;
+  btnCheckout.disabled = false;
 
 }
 
 
-// ============================================================
-// PAYMENT MODAL
-// ============================================================
+/* =========================================================
+   MODAL BAYAR
+========================================================= */
 
 function openConfirmModal() {
 
-  if (
-    cart.length === 0
-  ) return;
+  if (!cart.length) return;
 
 
   confirmOrderSummary.innerHTML =
-    cart.map(
-      item => `
+    cart.map(item => `
 
-        <div class="flex justify-between">
+      <div class="flex justify-between">
 
-          <span>
-            ${escapeHtml(item.namaProduk)}
-            x${item.jumlah}
-          </span>
+        <span class="font-semibold">
+          ${escapeHtml(item.namaProduk)}
+          x${item.jumlah}
+        </span>
 
-          <span>
-            ${rupiah(
-              item.jumlah *
-              item.hargaSatuan
-            )}
-          </span>
+        <span>
+          ${rupiah(
+            item.jumlah *
+            item.hargaSatuan
+          )}
+        </span>
 
-        </div>
+      </div>
 
-      `
-    ).join("");
+    `).join("");
 
 
   modalTotalTagihan.innerText =
-    rupiah(
-      currentTotalCart
-    );
-
+    rupiah(currentTotalCart);
 
   inputUangBayar.value =
     currentTotalCart;
 
-
   calculateChange();
 
-
-  confirmModal
-    .classList
-    .remove("hidden");
+  confirmModal.classList.remove(
+    "hidden"
+  );
 
 
   setTimeout(
-    () =>
-      inputUangBayar.focus(),
+    () => inputUangBayar.focus(),
     100
   );
 
@@ -1768,9 +1657,7 @@ function openConfirmModal() {
 
 function closeConfirmModal() {
 
-  confirmModal
-    .classList
-    .add("hidden");
+  confirmModal.classList.add("hidden");
 
 }
 
@@ -1778,84 +1665,61 @@ function closeConfirmModal() {
 function calculateChange() {
 
   const bayar =
-    Number(
-      inputUangBayar.value
-    ) || 0;
+    Number(inputUangBayar.value) || 0;
 
-
-  currentUangBayar =
-    bayar;
-
+  currentUangBayar = bayar;
 
   currentKembalian =
-    bayar -
-    currentTotalCart;
+    bayar - currentTotalCart;
 
 
-  if (
-    currentKembalian < 0
-  ) {
+  if (currentKembalian < 0) {
 
     modalKembalian.innerText =
       "Kurang " +
       rupiah(
-        Math.abs(
-          currentKembalian
-        )
+        Math.abs(currentKembalian)
       );
-
 
     modalKembalian.className =
       "text-base font-black text-red-500";
 
-
-    btnSaveCheckout.disabled =
-      true;
+    btnSaveCheckout.disabled = true;
 
   } else {
 
     modalKembalian.innerText =
-      rupiah(
-        currentKembalian
-      );
-
+      rupiah(currentKembalian);
 
     modalKembalian.className =
       "text-base font-black text-brand-600";
 
-
-    btnSaveCheckout.disabled =
-      false;
+    btnSaveCheckout.disabled = false;
 
   }
 
 }
 
 
-function setQuickPayment(
-  amount
-) {
+function setQuickPayment(amount) {
 
   inputUangBayar.value =
     amount === "pas"
       ? currentTotalCart
       : amount;
 
-
   calculateChange();
 
 }
 
 
-// ============================================================
-// CHECKOUT
-// ============================================================
+/* =========================================================
+   CHECKOUT
+========================================================= */
 
 async function checkout() {
 
-  if (
-    cart.length === 0
-  ) return;
+  if (!cart.length) return;
 
 
   if (
@@ -1900,16 +1764,12 @@ async function checkout() {
           redirect: "follow",
 
           headers: {
-
             "Content-Type":
               "text/plain;charset=utf-8"
-
           },
 
           body:
-            JSON.stringify(
-              payload
-            )
+            JSON.stringify(payload)
 
         }
       );
@@ -1927,39 +1787,33 @@ async function checkout() {
       closeConfirmModal();
 
 
-      document
-        .getElementById(
-          "rcptTotal"
-        )
-        .innerText =
+      document.getElementById(
+        "rcptTotal"
+      ).innerText =
         rupiah(
           currentTotalCart
         );
 
 
-      document
-        .getElementById(
-          "rcptBayar"
-        )
-        .innerText =
+      document.getElementById(
+        "rcptBayar"
+      ).innerText =
         rupiah(
           currentUangBayar
         );
 
 
-      document
-        .getElementById(
-          "rcptKembalian"
-        )
-        .innerText =
+      document.getElementById(
+        "rcptKembalian"
+      ).innerText =
         rupiah(
           currentKembalian
         );
 
 
-      receiptModal
-        .classList
-        .remove("hidden");
+      receiptModal.classList.remove(
+        "hidden"
+      );
 
 
       showStatus(
@@ -1969,48 +1823,33 @@ async function checkout() {
       );
 
 
-      await fetchData(
-        true
-      );
-
+      await fetchData(true);
 
       resetSyncTimer();
 
     } else {
 
       alert(
-        "Gagal menyimpan transaksi:\n" +
+        "Gagal menyimpan: " +
         (
           result.message ||
-          "Kesalahan server."
+          "Kesalahan server"
         )
       );
 
     }
 
-
   } catch (error) {
 
-    console.error(
-      "CHECKOUT ERROR:",
-      error
-    );
-
+    console.error(error);
 
     alert(
-      "Koneksi ke Google Apps Script gagal.\n\n" +
-      "Pastikan deployment Web App sudah:\n" +
-      "• Execute as: Me\n" +
-      "• Who has access: Anyone\n\n" +
-      "URL:\n" +
-      APP_SCRIPT_URL
+      "Koneksi gagal. Pastikan Web App Apps Script sudah dideploy sebagai Web App dan aksesnya dapat dibuka publik."
     );
 
   } finally {
 
-    setCheckoutLoading(
-      false
-    );
+    setCheckoutLoading(false);
 
   }
 
@@ -2027,50 +1866,47 @@ function setCheckoutLoading(
 
   if (loading) {
 
-    btnSaveText
-      .classList
-      .add("hidden");
+    btnSaveText.classList.add(
+      "hidden"
+    );
 
-
-    btnSaveSpinner
-      .classList
-      .remove("hidden");
+    btnSaveSpinner.classList.remove(
+      "hidden"
+    );
 
   } else {
 
-    btnSaveText
-      .classList
-      .remove("hidden");
+    btnSaveText.classList.remove(
+      "hidden"
+    );
 
-
-    btnSaveSpinner
-      .classList
-      .add("hidden");
+    btnSaveSpinner.classList.add(
+      "hidden"
+    );
 
   }
 
 }
 
 
-// ============================================================
-// RECEIPT
-// ============================================================
+/* =========================================================
+   RECEIPT
+========================================================= */
 
 function closeReceiptModal() {
 
-  receiptModal
-    .classList
-    .add("hidden");
-
+  receiptModal.classList.add(
+    "hidden"
+  );
 
   clearCart();
 
 }
 
 
-// ============================================================
-// FETCH DATA
-// ============================================================
+/* =========================================================
+   FETCH DATA
+========================================================= */
 
 async function fetchData(
   silent = false
@@ -2089,9 +1925,7 @@ async function fetchData(
             class="text-center py-6 text-slate-400"
           >
 
-            <i
-              class="fa-solid fa-spinner animate-spin mr-2"
-            ></i>
+            <i class="fa-solid fa-spinner animate-spin mr-2"></i>
 
             Memuat data...
 
@@ -2106,16 +1940,12 @@ async function fetchData(
 
     const response =
       await fetch(
-        APP_SCRIPT_URL +
-        "?action=data&_=" +
-        Date.now(),
+        APP_SCRIPT_URL,
         {
 
           method: "GET",
 
-          redirect: "follow",
-
-          cache: "no-store"
+          redirect: "follow"
 
         }
       );
@@ -2148,11 +1978,9 @@ async function fetchData(
       transaksi
     );
 
-
     updateDashboardStats(
       transaksi
     );
-
 
     setConnectionStatus(
       true
@@ -2161,14 +1989,9 @@ async function fetchData(
 
     return true;
 
-
   } catch (error) {
 
-    console.error(
-      "FETCH ERROR:",
-      error
-    );
-
+    console.error(error);
 
     setConnectionStatus(
       false
@@ -2186,11 +2009,9 @@ async function fetchData(
             class="text-center py-6 text-red-500"
           >
 
-            <i
-              class="fa-solid fa-triangle-exclamation mr-1"
-            ></i>
+            <i class="fa-solid fa-triangle-exclamation mr-1"></i>
 
-            Gagal mengambil data dari Apps Script.
+            Gagal mengambil data Apps Script.
 
           </td>
 
@@ -2208,20 +2029,15 @@ async function fetchData(
 }
 
 
-// ============================================================
-// TABLE
-// ============================================================
+/* =========================================================
+   TABLE
+========================================================= */
 
 function renderTableData(
   transaksi
 ) {
 
-  if (
-    !Array.isArray(
-      transaksi
-    ) ||
-    transaksi.length === 0
-  ) {
+  if (!transaksi.length) {
 
     dataTable.innerHTML = `
 
@@ -2260,156 +2076,108 @@ function renderTableData(
 
 
   const rows =
-    [...transaksi]
-      .reverse();
+    [...transaksi].reverse();
 
 
   dataTable.innerHTML =
-    rows.map(
-      tx => `
+    rows.map(tx => `
 
-        <tr
-          class="hover:bg-slate-50 dark:hover:bg-slate-700/30"
-        >
+      <tr class="hover:bg-orange-50/50 dark:hover:bg-slate-700/30">
 
-          <td
-            class="py-2.5 px-3 font-mono text-[11px]"
-          >
-            ${escapeHtml(
-              tx["ID Transaksi"] ||
-              "-"
-            )}
-          </td>
+        <td class="py-2.5 px-3 font-mono text-[11px]">
+          ${escapeHtml(
+            tx["ID Transaksi"] ||
+            "-"
+          )}
+        </td>
 
+        <td class="py-2.5 px-3">
+          ${formatDate(
+            tx["Tanggal & Waktu"]
+          )}
+        </td>
 
-          <td class="py-2.5 px-3">
+        <td class="py-2.5 px-3 font-semibold">
+          ${escapeHtml(
+            tx["Nama Produk"] ||
+            "-"
+          )}
+        </td>
 
-            ${formatDate(
-              tx["Tanggal & Waktu"]
-            )}
+        <td class="py-2.5 px-3 text-center font-bold">
+          ${Number(
+            tx["Jumlah"] || 0
+          )}
+        </td>
 
-          </td>
-
-
-          <td
-            class="py-2.5 px-3 font-semibold"
-          >
-
-            ${escapeHtml(
-              tx["Nama Produk"] ||
-              "-"
-            )}
-
-          </td>
-
-
-          <td
-            class="py-2.5 px-3 text-center font-bold"
-          >
-
-            ${Number(
-              tx["Jumlah"] ||
-              0
-            )}
-
-          </td>
-
-
-          <td
-            class="py-2.5 px-3 text-right"
-          >
-
-            ${rupiah(
+        <td class="py-2.5 px-3 text-right">
+          ${rupiah(
+            Number(
               tx["Harga Satuan"] ||
               0
-            )}
+            )
+          )}
+        </td>
 
-          </td>
-
-
-          <td
-            class="py-2.5 px-3 text-right font-bold text-emerald-600"
-          >
-
-            ${rupiah(
+        <td class="py-2.5 px-3 text-right font-bold text-brand-600">
+          ${rupiah(
+            Number(
               tx["Total Harga"] ||
               0
-            )}
+            )
+          )}
+        </td>
 
-          </td>
+      </tr>
 
-        </tr>
-
-      `
-    ).join("");
+    `).join("");
 
 
   kasirRecentTable.innerHTML =
     rows
       .slice(0, 5)
-      .map(
-        tx => `
+      .map(tx => `
 
-          <tr>
+      <tr class="hover:bg-orange-50/50 dark:hover:bg-slate-700/30">
 
-            <td
-              class="py-2 px-3 text-slate-400 text-[11px]"
-            >
+        <td class="py-2 px-3 text-slate-400 text-[11px]">
+          ${formatDate(
+            tx["Tanggal & Waktu"]
+          )}
+        </td>
 
-              ${formatDate(
-                tx["Tanggal & Waktu"]
-              )}
+        <td class="py-2 px-3 font-medium">
+          ${escapeHtml(
+            tx["Nama Produk"] ||
+            "-"
+          )}
+        </td>
 
-            </td>
+        <td class="py-2 px-3 text-center font-bold">
+          ${Number(
+            tx["Jumlah"] || 0
+          )}
+        </td>
 
+        <td class="py-2 px-3 text-right font-bold text-brand-600">
+          ${rupiah(
+            Number(
+              tx["Total Harga"] ||
+              0
+            )
+          )}
+        </td>
 
-            <td
-              class="py-2 px-3 font-medium"
-            >
+      </tr>
 
-              ${escapeHtml(
-                tx["Nama Produk"] ||
-                "-"
-              )}
-
-            </td>
-
-
-            <td
-              class="py-2 px-3 text-center font-bold"
-            >
-
-              ${Number(
-                tx["Jumlah"] ||
-                0
-              )}
-
-            </td>
-
-
-            <td
-              class="py-2 px-3 text-right font-bold text-emerald-600"
-            >
-
-              ${rupiah(
-                tx["Total Harga"] ||
-                0
-              )}
-
-            </td>
-
-          </tr>
-
-        `
-      )
-      .join("");
+    `).join("");
 
 }
 
 
-// ============================================================
-// DASHBOARD
-// ============================================================
+/* =========================================================
+   DASHBOARD
+========================================================= */
 
 function updateDashboardStats(
   transaksi
@@ -2422,66 +2190,56 @@ function updateDashboardStats(
   const productSummary = {};
 
 
-  transaksi.forEach(
-    tx => {
+  transaksi.forEach(tx => {
 
-      const total =
-        Number(
-          tx["Total Harga"] ||
-          0
-        );
+    const total =
+      Number(
+        tx["Total Harga"] ||
+        0
+      );
 
+    const qty =
+      Number(
+        tx["Jumlah"] ||
+        0
+      );
 
-      const qty =
-        Number(
-          tx["Jumlah"] ||
-          0
-        );
-
-
-      const name =
-        tx["Nama Produk"] ||
-        "Lainnya";
+    const name =
+      tx["Nama Produk"] ||
+      "Lainnya";
 
 
-      totalOmset +=
-        total;
+    totalOmset += total;
+
+    totalItems += qty;
 
 
-      totalItems +=
-        qty;
+    if (
+      !productSummary[name]
+    ) {
 
+      productSummary[name] = {
 
-      if (
-        !productSummary[name]
-      ) {
+        qty: 0,
 
-        productSummary[name] = {
+        omset: 0
 
-          qty: 0,
-
-          omset: 0
-
-        };
-
-      }
-
-
-      productSummary[name].qty +=
-        qty;
-
-
-      productSummary[name].omset +=
-        total;
+      };
 
     }
-  );
+
+
+    productSummary[name].qty +=
+      qty;
+
+    productSummary[name].omset +=
+      total;
+
+  });
 
 
   dashTotalOmset.innerText =
-    rupiah(
-      totalOmset
-    );
+    rupiah(totalOmset);
 
 
   dashTotalTx.innerText =
@@ -2489,8 +2247,7 @@ function updateDashboardStats(
 
 
   dashTotalItems.innerText =
-    totalItems +
-    " pcs";
+    totalItems + " pcs";
 
 
   let topProduct = "-";
@@ -2523,7 +2280,6 @@ function updateDashboardStats(
   dashTopProduct.innerText =
     topProduct;
 
-
   dashTopQty.innerText =
     topQty +
     " porsi terjual";
@@ -2542,9 +2298,9 @@ function updateDashboardStats(
 }
 
 
-// ============================================================
-// CHART
-// ============================================================
+/* =========================================================
+   CHART
+========================================================= */
 
 function renderChart(
   productSummary
@@ -2555,11 +2311,12 @@ function renderChart(
       productSummary
     );
 
-
   const values =
     labels.map(
       key =>
-        productSummary[key].omset
+        productSummary[
+          key
+        ].omset
     );
 
 
@@ -2567,7 +2324,6 @@ function renderChart(
     document.getElementById(
       "salesChart"
     );
-
 
   const ctx =
     canvas.getContext(
@@ -2594,7 +2350,9 @@ function renderChart(
           labels:
             labels.length
               ? labels
-              : ["Belum Ada Data"],
+              : [
+                  "Belum Ada Data"
+                ],
 
           datasets: [
 
@@ -2609,10 +2367,13 @@ function renderChart(
                   : [0],
 
               backgroundColor:
-                "#22c55e",
+                "#f97316",
 
               borderRadius:
-                8
+                8,
+
+              hoverBackgroundColor:
+                "#ea580c"
 
             }
 
@@ -2631,9 +2392,7 @@ function renderChart(
           plugins: {
 
             legend: {
-
               display: false
-
             }
 
           },
@@ -2646,6 +2405,13 @@ function renderChart(
               beginAtZero:
                 true,
 
+              grid: {
+
+                color:
+                  "rgba(148,163,184,.12)"
+
+              },
+
               ticks: {
 
                 callback:
@@ -2653,11 +2419,18 @@ function renderChart(
                     "Rp " +
                     Number(
                       value
-                    )
-                    .toLocaleString(
+                    ).toLocaleString(
                       "id-ID"
                     )
 
+              }
+
+            },
+
+            x: {
+
+              grid: {
+                display: false
               }
 
             }
@@ -2672,24 +2445,20 @@ function renderChart(
 }
 
 
-// ============================================================
-// BREAKDOWN
-// ============================================================
+/* =========================================================
+   BREAKDOWN
+========================================================= */
 
 function renderBreakdown(
   productSummary,
   totalItems
 ) {
 
-  if (
-    totalItems === 0
-  ) {
+  if (!totalItems) {
 
     productBreakdown.innerHTML = `
 
-      <p
-        class="text-xs text-slate-400 text-center py-4"
-      >
+      <p class="text-xs text-slate-400 text-center py-4">
         Belum ada data statistik.
       </p>
 
@@ -2700,12 +2469,20 @@ function renderBreakdown(
   }
 
 
+  const colors = [
+    "bg-brand-600",
+    "bg-amber-500",
+    "bg-red-500",
+    "bg-yellow-500"
+  ];
+
+
   productBreakdown.innerHTML =
     Object.entries(
       productSummary
     )
     .map(
-      ([name, stats]) => {
+      ([name, stats], index) => {
 
         const percentage =
           Math.round(
@@ -2720,17 +2497,13 @@ function renderBreakdown(
 
           <div>
 
-            <div
-              class="flex justify-between text-xs font-semibold mb-1"
-            >
+            <div class="flex justify-between text-xs font-semibold mb-1">
 
               <span>
                 ${escapeHtml(name)}
               </span>
 
-              <span
-                class="text-slate-500"
-              >
+              <span class="text-slate-500">
                 ${stats.qty} pcs
                 (${percentage}%)
               </span>
@@ -2738,12 +2511,10 @@ function renderBreakdown(
             </div>
 
 
-            <div
-              class="w-full bg-slate-100 dark:bg-slate-700 h-2 rounded-full overflow-hidden"
-            >
+            <div class="w-full bg-slate-100 dark:bg-slate-700 h-2 rounded-full overflow-hidden">
 
               <div
-                class="bg-brand-600 h-full rounded-full"
+                class="${colors[index % colors.length]} h-full rounded-full transition-all"
                 style="width:${percentage}%"
               ></div>
 
@@ -2760,9 +2531,9 @@ function renderBreakdown(
 }
 
 
-// ============================================================
-// ROLE
-// ============================================================
+/* =========================================================
+   ROLE
+========================================================= */
 
 function switchRole(
   role
@@ -2788,42 +2559,39 @@ function switchRole(
     role === "kasir"
   ) {
 
-    viewKasir
-      .classList
-      .remove("hidden");
+    viewKasir.classList.remove(
+      "hidden"
+    );
 
-
-    viewAdmin
-      .classList
-      .add("hidden");
+    viewAdmin.classList.add(
+      "hidden"
+    );
 
 
     btnRoleKasir.className =
-      "px-3 py-1.5 rounded-lg bg-white dark:bg-slate-800 text-brand-600 shadow-sm flex items-center gap-1.5";
+      "px-3 py-2 rounded-lg bg-white dark:bg-slate-700 text-brand-600 shadow-sm flex items-center gap-1.5 transition";
 
 
     btnRoleAdmin.className =
-      "px-3 py-1.5 rounded-lg text-slate-600 dark:text-slate-400 flex items-center gap-1.5";
-
+      "px-3 py-2 rounded-lg text-slate-600 dark:text-slate-400 flex items-center gap-1.5 transition";
 
   } else {
 
-    viewKasir
-      .classList
-      .add("hidden");
+    viewKasir.classList.add(
+      "hidden"
+    );
 
-
-    viewAdmin
-      .classList
-      .remove("hidden");
+    viewAdmin.classList.remove(
+      "hidden"
+    );
 
 
     btnRoleAdmin.className =
-      "px-3 py-1.5 rounded-lg bg-white dark:bg-slate-800 text-purple-600 shadow-sm flex items-center gap-1.5";
+      "px-3 py-2 rounded-lg bg-white dark:bg-slate-700 text-brand-600 shadow-sm flex items-center gap-1.5 transition";
 
 
     btnRoleKasir.className =
-      "px-3 py-1.5 rounded-lg text-slate-600 dark:text-slate-400 flex items-center gap-1.5";
+      "px-3 py-2 rounded-lg text-slate-600 dark:text-slate-400 flex items-center gap-1.5 transition";
 
 
     fetchData();
@@ -2833,27 +2601,25 @@ function switchRole(
 }
 
 
-// ============================================================
-// PIN
-// ============================================================
+/* =========================================================
+   PIN
+========================================================= */
 
 function openPinModal() {
 
-  pinModal
-    .classList
-    .remove("hidden");
-
+  pinModal.classList.remove(
+    "hidden"
+  );
 
   pinInput.value = "";
 
-  pinError
-    .classList
-    .add("hidden");
+  pinError.classList.add(
+    "hidden"
+  );
 
 
   setTimeout(
-    () =>
-      pinInput.focus(),
+    () => pinInput.focus(),
     100
   );
 
@@ -2862,18 +2628,16 @@ function openPinModal() {
 
 function closePinModal() {
 
-  pinModal
-    .classList
-    .add("hidden");
+  pinModal.classList.add(
+    "hidden"
+  );
 
 }
 
 
-async function verifyAdminPin(
-  event
-) {
+async function verifyAdminPin(e) {
 
-  event.preventDefault();
+  e.preventDefault();
 
 
   const enteredPin =
@@ -2885,12 +2649,10 @@ async function verifyAdminPin(
       "btnVerifyPin"
     );
 
-
   const text =
     document.getElementById(
       "btnPinText"
     );
-
 
   const spinner =
     document.getElementById(
@@ -2898,30 +2660,28 @@ async function verifyAdminPin(
     );
 
 
-  btn.disabled =
-    true;
-
+  btn.disabled = true;
 
   text.innerText =
     "Memeriksa...";
 
-
-  spinner
-    .classList
-    .remove("hidden");
+  spinner.classList.remove(
+    "hidden"
+  );
 
 
   try {
 
     const response =
       await fetch(
-        APP_SCRIPT_URL +
-        "?action=verifyPin&pin=" +
-        encodeURIComponent(
-          enteredPin
-        ) +
-        "&_=" +
-        Date.now()
+        `${APP_SCRIPT_URL}?action=verifyPin&pin=${encodeURIComponent(enteredPin)}`,
+        {
+
+          method: "GET",
+
+          redirect: "follow"
+
+        }
       );
 
 
@@ -2936,74 +2696,76 @@ async function verifyAdminPin(
       isAdminUnlocked =
         true;
 
-
       closePinModal();
-
 
       switchRole(
         "admin"
       );
-
 
     } else {
 
       pinError.innerText =
         "PIN Admin salah.";
 
-
-      pinError
-        .classList
-        .remove("hidden");
-
+      pinError.classList.remove(
+        "hidden"
+      );
 
       pinInput.select();
 
     }
 
-
   } catch (error) {
 
-    console.error(
-      error
-    );
+    console.error(error);
 
 
-    pinError.innerText =
-      "Gagal terhubung ke Apps Script.";
+    if (
+      enteredPin ===
+      ADMIN_PIN_DEFAULT
+    ) {
 
+      isAdminUnlocked =
+        true;
 
-    pinError
-      .classList
-      .remove("hidden");
+      closePinModal();
+
+      switchRole(
+        "admin"
+      );
+
+    } else {
+
+      pinError.innerText =
+        "Gagal terhubung ke Apps Script.";
+
+      pinError.classList.remove(
+        "hidden"
+      );
+
+    }
 
   } finally {
 
     btn.disabled =
       false;
 
-
     text.innerText =
       "Masuk";
 
-
-    spinner
-      .classList
-      .add("hidden");
+    spinner.classList.add(
+      "hidden"
+    );
 
   }
 
 }
 
 
-// ============================================================
-// LOCK ADMIN
-// ============================================================
-
 function lockAdmin() {
 
   isAdminUnlocked =
     false;
-
 
   switchRole(
     "kasir"
@@ -3012,9 +2774,9 @@ function lockAdmin() {
 }
 
 
-// ============================================================
-// CONNECTION STATUS
-// ============================================================
+/* =========================================================
+   STATUS KONEKSI
+========================================================= */
 
 function setConnectionStatus(
   connected
@@ -3023,34 +2785,27 @@ function setConnectionStatus(
   if (connected) {
 
     urlStatus.className =
-      "text-xs font-semibold px-2 py-1 rounded-lg text-emerald-700 bg-emerald-100";
-
+      "text-xs font-bold text-emerald-600 bg-emerald-50 px-2.5 py-1 rounded-lg";
 
     urlStatus.innerText =
       "✓ Terhubung";
 
-
   } else {
 
     urlStatus.className =
-      "text-xs font-semibold px-2 py-1 rounded-lg text-red-700 bg-red-100";
-
+      "text-xs font-bold text-red-600 bg-red-50 px-2.5 py-1 rounded-lg";
 
     urlStatus.innerText =
-      "✕ Gagal";
+      "✕ Tidak Terhubung";
 
   }
-
-
-  connectionUrl.innerText =
-    APP_SCRIPT_URL;
 
 }
 
 
-// ============================================================
-// AUTO REFRESH
-// ============================================================
+/* =========================================================
+   AUTO REFRESH
+========================================================= */
 
 function startAutoSyncTimer() {
 
@@ -3060,9 +2815,6 @@ function startAutoSyncTimer() {
   if (
     !autoRefreshToggle.checked
   ) {
-
-    syncCountdown.innerText =
-      "(Off)";
 
     return;
 
@@ -3074,9 +2826,7 @@ function startAutoSyncTimer() {
 
 
   syncCountdown.innerText =
-    "(" +
-    secondsLeft +
-    "s)";
+    `(${secondsLeft}s)`;
 
 
   syncTimer =
@@ -3093,7 +2843,6 @@ function startAutoSyncTimer() {
           secondsLeft =
             AUTO_SYNC_INTERVAL;
 
-
           await fetchData(
             true
           );
@@ -3102,9 +2851,7 @@ function startAutoSyncTimer() {
 
 
         syncCountdown.innerText =
-          "(" +
-          secondsLeft +
-          "s)";
+          `(${secondsLeft}s)`;
 
       },
       1000
@@ -3121,9 +2868,7 @@ function stopAutoSyncTimer() {
       syncTimer
     );
 
-
-    syncTimer =
-      null;
+    syncTimer = null;
 
   }
 
@@ -3137,33 +2882,28 @@ function resetSyncTimer() {
 }
 
 
-autoRefreshToggle
-  .addEventListener(
-    "change",
-    () => {
+autoRefreshToggle.addEventListener(
+  "change",
+  () => {
 
-      if (
-        autoRefreshToggle.checked
-      ) {
+    if (
+      autoRefreshToggle.checked
+    ) {
 
-        resetSyncTimer();
+      resetSyncTimer();
 
-      } else {
+    } else {
 
-        stopAutoSyncTimer();
+      stopAutoSyncTimer();
 
-        syncCountdown.innerText =
-          "(Off)";
-
-      }
+      syncCountdown.innerText =
+        "(Off)";
 
     }
-  );
 
+  }
+);
 
-// ============================================================
-// REFRESH
-// ============================================================
 
 document
   .getElementById(
@@ -3171,9 +2911,9 @@ document
   )
   .addEventListener(
     "click",
-    () => {
+    async () => {
 
-      fetchData();
+      await fetchData();
 
       resetSyncTimer();
 
@@ -3181,9 +2921,9 @@ document
   );
 
 
-// ============================================================
-// STATUS
-// ============================================================
+/* =========================================================
+   STATUS ALERT
+========================================================= */
 
 function showStatus(
   type,
@@ -3196,75 +2936,61 @@ function showStatus(
     );
 
 
-  alertBox
-    .classList
-    .remove(
-      "hidden",
-      "bg-emerald-100",
-      "text-emerald-700",
-      "bg-red-100",
-      "text-red-700"
-    );
+  alertBox.classList.remove(
+    "hidden",
+    "bg-emerald-100",
+    "text-emerald-700",
+    "bg-red-100",
+    "text-red-700"
+  );
 
 
   if (
     type === "success"
   ) {
 
-    alertBox
-      .classList
-      .add(
-        "bg-emerald-100",
-        "text-emerald-700"
-      );
+    alertBox.classList.add(
+      "bg-orange-100",
+      "text-orange-700"
+    );
 
+    alertBox.innerHTML =
+      `<i class="fa-solid fa-circle-check"></i> ${escapeHtml(message)}`;
 
   } else {
 
-    alertBox
-      .classList
-      .add(
-        "bg-red-100",
-        "text-red-700"
-      );
+    alertBox.classList.add(
+      "bg-red-100",
+      "text-red-700"
+    );
+
+    alertBox.innerHTML =
+      `<i class="fa-solid fa-circle-xmark"></i> ${escapeHtml(message)}`;
 
   }
 
 
-  alertBox.innerHTML =
-    `<i class="fa-solid ${
-      type === "success"
-        ? "fa-circle-check"
-        : "fa-circle-xmark"
-    }"></i> ${
-      escapeHtml(message)
-    }`;
-
-
   setTimeout(
     () =>
-      alertBox
-        .classList
-        .add("hidden"),
+      alertBox.classList.add(
+        "hidden"
+      ),
     5000
   );
 
 }
 
 
-// ============================================================
-// DATE
-// ============================================================
+/* =========================================================
+   DATE
+========================================================= */
 
 function formatDate(
   dateString
 ) {
 
-  if (!dateString) {
-
+  if (!dateString)
     return "-";
-
-  }
 
 
   const date =
@@ -3280,9 +3006,7 @@ function formatDate(
   ) {
 
     return escapeHtml(
-      String(
-        dateString
-      )
+      String(dateString)
     );
 
   }
@@ -3308,9 +3032,9 @@ function formatDate(
 }
 
 
-// ============================================================
-// SECURITY
-// ============================================================
+/* =========================================================
+   SECURITY
+========================================================= */
 
 function escapeHtml(
   value
@@ -3343,9 +3067,9 @@ function escapeHtml(
 }
 
 
-// ============================================================
-// INITIALIZATION
-// ============================================================
+/* =========================================================
+   INITIALIZATION
+========================================================= */
 
 window.addEventListener(
   "DOMContentLoaded",
@@ -3355,23 +3079,15 @@ window.addEventListener(
 
     renderCart();
 
-    connectionUrl.innerText =
-      APP_SCRIPT_URL;
+    setConnectionStatus(
+      false
+    );
 
+    await fetchData(
+      true
+    );
 
-    // Tes koneksi otomatis
-
-    const connected =
-      await fetchData(
-        true
-      );
-
-
-    if (connected) {
-
-      startAutoSyncTimer();
-
-    }
+    startAutoSyncTimer();
 
   }
 );
@@ -3379,5 +3095,4 @@ window.addEventListener(
 </script>
 
 </body>
-
 </html>
