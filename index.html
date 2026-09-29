@@ -3,14 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>PosKasir Pro - Apps Script Integrated</title>
-  <!-- Tailwind CSS CDN -->
+  <title>Inu Chicken - PosKasir Pro</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <!-- FontAwesome Icons -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <!-- Chart.js CDN -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
   <script>
     tailwind.config = {
       darkMode: 'class',
@@ -32,21 +28,19 @@
 </head>
 <body class="bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100 min-h-screen flex flex-col font-sans transition-colors duration-200">
 
-  <!-- Header Application -->
+  <!-- Header -->
   <header class="bg-white dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700 sticky top-0 z-20 shadow-sm">
     <div class="max-w-5xl mx-auto px-4 py-2.5 flex flex-wrap justify-between items-center gap-3">
-      <!-- App Brand -->
       <div class="flex items-center gap-2.5">
         <div class="w-9 h-9 rounded-xl bg-brand-600 text-white flex items-center justify-center font-bold text-lg shadow-md shadow-brand-500/20">
-          <i class="fa-solid fa-store"></i>
+          🍗
         </div>
         <div>
-          <h1 class="text-base font-bold leading-tight">PosKasir Pro</h1>
+          <h1 class="text-base font-bold leading-tight">Inu Chicken POS</h1>
           <p class="text-xs text-slate-500 dark:text-slate-400">Sistem Kasir & Laporan</p>
         </div>
       </div>
       
-      <!-- Role Switcher & Dark Mode -->
       <div class="flex items-center gap-2">
         <div class="bg-slate-100 dark:bg-slate-700/70 p-1 rounded-xl flex items-center gap-1 text-xs font-semibold">
           <button id="btnRoleKasir" onclick="switchRole('kasir')" class="px-3 py-1.5 rounded-lg transition-all flex items-center gap-1.5 bg-white dark:bg-slate-800 text-brand-600 dark:text-brand-400 shadow-sm">
@@ -84,7 +78,7 @@
         </span>
       </div>
 
-      <!-- Form Input Penjualan Kasir -->
+      <!-- Form Penjualan -->
       <section class="bg-white dark:bg-slate-800 p-5 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm">
         <form id="salesForm" class="space-y-5">
           
@@ -96,7 +90,7 @@
                 type="button" 
                 class="menu-option group relative p-3 rounded-xl border-2 border-brand-500 bg-brand-50/50 dark:bg-brand-950/20 text-left transition duration-150 flex flex-col justify-between"
                 data-name="Nasi + Ayam" 
-                data-price="10000"
+                data-price="20000"
               >
                 <div class="flex justify-between items-start">
                   <span class="text-2xl">🍗🍚</span>
@@ -104,7 +98,7 @@
                 </div>
                 <div class="mt-3">
                   <p class="font-bold text-xs sm:text-sm text-slate-900 dark:text-white leading-tight">Nasi + Ayam</p>
-                  <p class="text-xs text-brand-700 dark:text-brand-400 font-semibold mt-0.5">Rp 10.000</p>
+                  <p class="text-xs text-brand-700 dark:text-brand-400 font-semibold mt-0.5">Rp 20.000</p>
                 </div>
               </button>
 
@@ -112,7 +106,7 @@
                 type="button" 
                 class="menu-option group relative p-3 rounded-xl border-2 border-slate-200 dark:border-slate-700 hover:border-brand-300 text-left transition duration-150 flex flex-col justify-between"
                 data-name="Ayam" 
-                data-price="8000"
+                data-price="15000"
               >
                 <div class="flex justify-between items-start">
                   <span class="text-2xl">🍗</span>
@@ -120,7 +114,7 @@
                 </div>
                 <div class="mt-3">
                   <p class="font-bold text-xs sm:text-sm text-slate-900 dark:text-white leading-tight">Ayam</p>
-                  <p class="text-xs text-slate-500 dark:text-slate-400 font-semibold mt-0.5">Rp 8.000</p>
+                  <p class="text-xs text-slate-500 dark:text-slate-400 font-semibold mt-0.5">Rp 15.000</p>
                 </div>
               </button>
 
@@ -128,7 +122,7 @@
                 type="button" 
                 class="menu-option group relative p-3 rounded-xl border-2 border-slate-200 dark:border-slate-700 hover:border-brand-300 text-left transition duration-150 flex flex-col justify-between"
                 data-name="Nasi" 
-                data-price="3000"
+                data-price="5000"
               >
                 <div class="flex justify-between items-start">
                   <span class="text-2xl">🍚</span>
@@ -136,7 +130,7 @@
                 </div>
                 <div class="mt-3">
                   <p class="font-bold text-xs sm:text-sm text-slate-900 dark:text-white leading-tight">Nasi</p>
-                  <p class="text-xs text-slate-500 dark:text-slate-400 font-semibold mt-0.5">Rp 3.000</p>
+                  <p class="text-xs text-slate-500 dark:text-slate-400 font-semibold mt-0.5">Rp 5.000</p>
                 </div>
               </button>
 
@@ -177,13 +171,13 @@
 
             <div>
               <label class="block text-xs font-semibold uppercase text-slate-500 dark:text-slate-400 mb-1">Harga Satuan (Rp)</label>
-              <input type="number" id="hargaSatuan" min="0" value="10000" required readonly class="w-full h-11 px-3 bg-slate-100 dark:bg-slate-900/50 border border-slate-300 dark:border-slate-600 rounded-xl font-medium text-slate-800 dark:text-white focus:outline-none cursor-not-allowed">
+              <input type="number" id="hargaSatuan" min="0" value="20000" required readonly class="w-full h-11 px-3 bg-slate-100 dark:bg-slate-900/50 border border-slate-300 dark:border-slate-600 rounded-xl font-medium text-slate-800 dark:text-white focus:outline-none cursor-not-allowed">
             </div>
           </div>
 
           <div class="p-4 bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800/60 rounded-xl flex justify-between items-center">
             <span class="text-sm font-semibold text-emerald-800 dark:text-emerald-300">Total Tagihan:</span>
-            <span id="totalDisplay" class="text-2xl font-black text-emerald-700 dark:text-emerald-400">Rp 10.000</span>
+            <span id="totalDisplay" class="text-2xl font-black text-emerald-700 dark:text-emerald-400">Rp 20.000</span>
           </div>
 
           <button type="submit" id="btnSubmit" class="w-full py-3.5 bg-brand-600 hover:bg-brand-700 active:scale-[0.99] text-white font-bold text-base rounded-xl transition shadow-lg shadow-brand-600/20 flex justify-center items-center gap-2">
@@ -210,6 +204,7 @@
           <table class="w-full text-xs text-left text-slate-600 dark:text-slate-300">
             <thead class="text-xs uppercase bg-slate-50 dark:bg-slate-700/50 text-slate-500 dark:text-slate-400 border-b border-slate-200 dark:border-slate-700">
               <tr>
+                <th class="py-2.5 px-3">Waktu</th>
                 <th class="py-2.5 px-3">Produk</th>
                 <th class="py-2.5 px-3 text-center">Qty</th>
                 <th class="py-2.5 px-3 text-right">Total</th>
@@ -217,7 +212,7 @@
             </thead>
             <tbody id="kasirRecentTable" class="divide-y divide-slate-100 dark:divide-slate-700">
               <tr>
-                <td colspan="3" class="text-center py-4 text-slate-400">Belum ada transaksi.</td>
+                <td colspan="4" class="text-center py-4 text-slate-400">Belum ada transaksi.</td>
               </tr>
             </tbody>
           </table>
@@ -280,7 +275,6 @@
           </button>
         </div>
         
-        <!-- Debug Console Output Box -->
         <div id="debugLog" class="hidden mt-2 p-3 bg-slate-900 text-green-400 font-mono text-[11px] rounded-xl overflow-x-auto max-h-32 leading-relaxed border border-slate-700"></div>
       </section>
 
@@ -390,14 +384,17 @@
           <table class="w-full text-xs text-left text-slate-600 dark:text-slate-300">
             <thead class="text-xs uppercase bg-slate-50 dark:bg-slate-700/50 text-slate-500 dark:text-slate-400 border-b border-slate-200 dark:border-slate-700">
               <tr>
+                <th class="py-3 px-3">ID TRX</th>
+                <th class="py-3 px-3">Tanggal / Waktu</th>
                 <th class="py-3 px-3">Produk</th>
                 <th class="py-3 px-3 text-center">Qty</th>
+                <th class="py-3 px-3 text-right">Harga Satuan</th>
                 <th class="py-3 px-3 text-right">Total</th>
               </tr>
             </thead>
             <tbody id="dataTable" class="divide-y divide-slate-100 dark:divide-slate-700">
               <tr>
-                <td colspan="3" class="text-center py-6 text-slate-400">
+                <td colspan="6" class="text-center py-6 text-slate-400">
                   Klik "Refresh" untuk memuat data dari Google Sheets.
                 </td>
               </tr>
@@ -410,7 +407,7 @@
 
   </main>
 
-  <!-- PIN Modal for Admin Authentication -->
+  <!-- PIN Modal -->
   <div id="pinModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
     <div class="bg-white dark:bg-slate-800 rounded-2xl max-w-xs w-full p-6 shadow-2xl border border-slate-200 dark:border-slate-700 space-y-4 text-center">
       <div class="w-12 h-12 bg-purple-100 dark:bg-purple-950/60 text-purple-600 dark:text-purple-400 rounded-full flex items-center justify-center mx-auto text-xl">
@@ -443,12 +440,10 @@
   </div>
 
   <script>
-    // System State Variables
     let activeRole = 'kasir';
     let isAdminUnlocked = false;
     const DEFAULT_PIN = '1234';
 
-    // DOM Elements
     const viewKasir = document.getElementById('viewKasir');
     const viewAdmin = document.getElementById('viewAdmin');
     const btnRoleKasir = document.getElementById('btnRoleKasir');
@@ -466,14 +461,12 @@
     const themeIcon = document.getElementById('themeIcon');
     const debugLog = document.getElementById('debugLog');
 
-    // Auto Refresh Elements
     const autoRefreshToggle = document.getElementById('autoRefreshToggle');
     const syncCountdown = document.getElementById('syncCountdown');
     const AUTO_SYNC_INTERVAL = 10;
     let secondsLeft = AUTO_SYNC_INTERVAL;
     let syncTimer = null;
 
-    // Form Elements
     const salesForm = document.getElementById('salesForm');
     const menuOptions = document.querySelectorAll('.menu-option');
     const namaProdukInput = document.getElementById('namaProduk');
@@ -487,12 +480,10 @@
     const btnSpinner = document.getElementById('btnSpinner');
     const statusAlert = document.getElementById('statusAlert');
 
-    // Data Table Elements
     const btnFetch = document.getElementById('btnFetch');
     const dataTable = document.getElementById('dataTable');
     const kasirRecentTable = document.getElementById('kasirRecentTable');
 
-    // Dashboard Elements
     const dashTotalOmset = document.getElementById('dashTotalOmset');
     const dashTotalTx = document.getElementById('dashTotalTx');
     const dashTotalItems = document.getElementById('dashTotalItems');
@@ -501,7 +492,6 @@
     const productBreakdown = document.getElementById('productBreakdown');
     let salesChart = null;
 
-    // Menu Card Selection Handler
     menuOptions.forEach(card => {
       card.addEventListener('click', () => {
         menuOptions.forEach(opt => {
@@ -525,7 +515,6 @@
       });
     });
 
-    // Qty Adjusters
     btnMinus.addEventListener('click', () => {
       let val = parseInt(jumlahInput.value) || 1;
       if (val > 1) {
@@ -550,7 +539,6 @@
       totalDisplay.innerText = "Rp " + total.toLocaleString('id-ID');
     }
 
-    // Submit Transaction (POST Request)
     salesForm.addEventListener('submit', async (e) => {
       e.preventDefault();
       const url = localStorage.getItem('appScriptUrl');
@@ -627,7 +615,6 @@
       debugLog.innerHTML = `[${new Date().toLocaleTimeString()}] ${msg}`;
     }
 
-    // UJI KONEKSI DENGAN URL MENGGUNAKAN GET & REDIRECT FOLLOW
     async function fetchDataWithUrl(testUrl, silent = false) {
       if (!testUrl) {
         updateUrlStatus('not_set');
@@ -635,7 +622,7 @@
       }
 
       if (!silent) {
-        dataTable.innerHTML = `<tr><td colspan="3" class="text-center py-6 text-slate-400"><i class="fa-solid fa-spinner animate-spin mr-2"></i> Memuat data dari Google Sheets...</td></tr>`;
+        dataTable.innerHTML = `<tr><td colspan="6" class="text-center py-6 text-slate-400"><i class="fa-solid fa-spinner animate-spin mr-2"></i> Memuat data dari Google Sheets...</td></tr>`;
       }
 
       try {
@@ -649,7 +636,8 @@
         logDebug("Respon diterima: " + JSON.stringify(data));
 
         if (data.status === 'success') {
-          const listTransaksi = Array.isArray(data.transaksi) ? data.transaksi : [];
+          // BACA PEMBARUAN PROPERTI "DATA" DARI KELUARAN APPS SCRIPT
+          const listTransaksi = Array.isArray(data.data) ? data.data : (Array.isArray(data.transaksi) ? data.transaksi : []);
           renderTableData(listTransaksi);
           updateDashboardStats(listTransaksi);
           updateUrlStatus('valid');
@@ -660,23 +648,33 @@
       } catch (err) {
         logDebug("ERROR: " + err.message);
         if (!silent) {
-          dataTable.innerHTML = `<tr><td colspan="3" class="text-center py-6 text-red-500 font-semibold"><i class="fa-solid fa-triangle-exclamation mr-1"></i> URL tidak dapat diakses! Pastikan 'Who has access' diatur ke 'Anyone'.</td></tr>`;
+          dataTable.innerHTML = `<tr><td colspan="6" class="text-center py-6 text-red-500 font-semibold"><i class="fa-solid fa-triangle-exclamation mr-1"></i> URL tidak dapat diakses! Pastikan 'Who has access' diatur ke 'Anyone'.</td></tr>`;
         }
         updateUrlStatus('invalid');
         return false;
       }
     }
 
-    // FETCH DATA DENGAN URL TERSIMPAN
     async function fetchData(silent = false) {
       const savedUrl = localStorage.getItem('appScriptUrl');
       return await fetchDataWithUrl(savedUrl, silent);
     }
 
+    function formatDate(dateStr) {
+      if (!dateStr) return "-";
+      try {
+        const d = new Date(dateStr);
+        if (isNaN(d.getTime())) return dateStr;
+        return d.toLocaleDateString('id-ID', { day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' });
+      } catch (e) {
+        return dateStr;
+      }
+    }
+
     function renderTableData(transaksi) {
       if (!transaksi || transaksi.length === 0) {
-        dataTable.innerHTML = `<tr><td colspan="3" class="text-center py-6 text-slate-400">Belum ada transaksi di Google Sheets.</td></tr>`;
-        kasirRecentTable.innerHTML = `<tr><td colspan="3" class="text-center py-4 text-slate-400">Belum ada transaksi.</td></tr>`;
+        dataTable.innerHTML = `<tr><td colspan="6" class="text-center py-6 text-slate-400">Belum ada transaksi di Google Sheets.</td></tr>`;
+        kasirRecentTable.innerHTML = `<tr><td colspan="4" class="text-center py-4 text-slate-400">Belum ada transaksi.</td></tr>`;
         return;
       }
 
@@ -684,14 +682,18 @@
 
       dataTable.innerHTML = rows.map(tx => `
         <tr class="hover:bg-slate-50 dark:hover:bg-slate-700/30 transition">
+          <td class="py-2.5 px-3 font-mono text-[11px] text-slate-500">${tx["ID Transaksi"] || '-'}</td>
+          <td class="py-2.5 px-3 text-slate-500">${formatDate(tx["Tanggal & Waktu"])}</td>
           <td class="py-2.5 px-3 font-semibold text-slate-800 dark:text-slate-100">${tx["Nama Produk"] || '-'}</td>
           <td class="py-2.5 px-3 text-center font-bold">${tx["Jumlah"] || 0}</td>
+          <td class="py-2.5 px-3 text-right">Rp ${(Number(tx["Harga Satuan"]) || 0).toLocaleString('id-ID')}</td>
           <td class="py-2.5 px-3 text-right font-extrabold text-emerald-600 dark:text-emerald-400">Rp ${(Number(tx["Total Harga"]) || 0).toLocaleString('id-ID')}</td>
         </tr>
       `).join('');
 
       kasirRecentTable.innerHTML = rows.slice(0, 5).map(tx => `
         <tr class="hover:bg-slate-50 dark:hover:bg-slate-700/30 transition">
+          <td class="py-2 px-3 text-slate-400 text-[11px]">${formatDate(tx["Tanggal & Waktu"])}</td>
           <td class="py-2 px-3 font-medium">${tx["Nama Produk"] || '-'}</td>
           <td class="py-2 px-3 text-center font-bold">${tx["Jumlah"] || 0}</td>
           <td class="py-2 px-3 text-right font-bold text-emerald-600 dark:text-emerald-400">Rp ${(Number(tx["Total Harga"]) || 0).toLocaleString('id-ID')}</td>
@@ -801,7 +803,6 @@
       }).join('');
     }
 
-    // Event Listeners & Modals
     btnFetch.addEventListener('click', () => {
       fetchData();
       resetSyncTimer();
@@ -866,7 +867,6 @@
       switchRole('kasir');
     }
 
-    // Auto Refresh Synchronizer
     function startAutoSyncTimer() {
       stopAutoSyncTimer();
       if (!autoRefreshToggle.checked) return;
@@ -896,7 +896,6 @@
       startAutoSyncTimer();
     }
 
-    // URL Status Label UI Changer
     function updateUrlStatus(state) {
       if (state === 'valid') {
         urlStatus.className = "text-xs font-semibold text-emerald-600 dark:text-emerald-400 flex items-center gap-1 bg-emerald-50 dark:bg-emerald-950/60 px-2 py-0.5 rounded-lg border border-emerald-200 dark:border-emerald-800";
@@ -910,7 +909,6 @@
       }
     }
 
-    // SIMPAN & TES URL
     btnSaveUrl.addEventListener('click', async () => {
       const inputUrl = webAppUrlInput.value.trim();
       
@@ -934,11 +932,10 @@
       } else {
         localStorage.removeItem('appScriptUrl');
         updateUrlStatus('invalid');
-        alert("❌ URL Gagal Diakses!\n\nLihat kotak log hitam di bawah kolom URL untuk melihat detail respon/error.");
+        alert("❌ URL Gagal Diakses!");
       }
     });
 
-    // Hapus/Reset URL
     btnResetUrl.addEventListener('click', () => {
       if (confirm("Apakah Anda yakin ingin menghapus URL Google Apps Script dari memori?")) {
         localStorage.removeItem('appScriptUrl');
@@ -946,8 +943,8 @@
         debugLog.classList.add('hidden');
         updateUrlStatus('not_set');
         stopAutoSyncTimer();
-        dataTable.innerHTML = `<tr><td colspan="3" class="text-center py-6 text-slate-400">Silakan masukkan URL Google Apps Script di atas.</td></tr>`;
-        kasirRecentTable.innerHTML = `<tr><td colspan="3" class="text-center py-4 text-slate-400">Belum ada data.</td></tr>`;
+        dataTable.innerHTML = `<tr><td colspan="6" class="text-center py-6 text-slate-400">Silakan masukkan URL Google Apps Script di atas.</td></tr>`;
+        kasirRecentTable.innerHTML = `<tr><td colspan="4" class="text-center py-4 text-slate-400">Belum ada data.</td></tr>`;
       }
     });
 
@@ -960,7 +957,6 @@
       }
     });
 
-    // App Initialization
     window.addEventListener('DOMContentLoaded', () => {
       const savedUrl = localStorage.getItem('appScriptUrl');
       if (savedUrl) {
