@@ -172,12 +172,11 @@
               <button 
                 type="button" 
                 id="btnCheckout" 
-                onclick="checkout()" 
+                onclick="openConfirmModal()" 
                 disabled
                 class="w-full py-3 bg-brand-600 disabled:bg-slate-300 dark:disabled:bg-slate-700 disabled:cursor-not-allowed hover:bg-brand-700 active:scale-[0.99] text-white font-bold text-sm rounded-xl transition shadow-md shadow-brand-600/20 flex justify-center items-center gap-2"
               >
-                <span id="btnCheckoutText"><i class="fa-solid fa-paper-plane mr-1"></i> Simpan Transaksi</span>
-                <span id="btnCheckoutSpinner" class="hidden animate-spin rounded-full h-4 w-4 border-2 border-white border-t-transparent"></span>
+                <span><i class="fa-solid fa-cash-register mr-1"></i> Proses Bayar</span>
               </button>
             </div>
           </div>
@@ -401,6 +400,107 @@
 
   </main>
 
+  <!-- POPUP 1: KONFIRMASI TRANSAKSI & PEMBAYARAN -->
+  <div id="confirmModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+    <div class="bg-white dark:bg-slate-800 rounded-2xl max-w-sm w-full p-6 shadow-2xl border border-slate-200 dark:border-slate-700 space-y-4">
+      <div class="flex justify-between items-center border-b border-slate-100 dark:border-slate-700 pb-3">
+        <h3 class="font-bold text-slate-900 dark:text-white text-base flex items-center gap-2">
+          <i class="fa-solid fa-file-invoice-dollar text-brand-600"></i> Konfirmasi Transaksi
+        </h3>
+        <button onclick="closeConfirmModal()" class="text-slate-400 hover:text-slate-600 text-lg">&times;</button>
+      </div>
+
+      <!-- Ringkasan Items -->
+      <div id="confirmOrderSummary" class="max-h-40 overflow-y-auto space-y-2 text-xs bg-slate-50 dark:bg-slate-900/50 p-3 rounded-xl border border-slate-100 dark:border-slate-700">
+      </div>
+
+      <!-- Total & Input Uang Pas / Bayar -->
+      <div class="space-y-3 pt-1">
+        <div class="flex justify-between items-center text-sm font-bold text-slate-900 dark:text-white">
+          <span>Total Tagihan:</span>
+          <span id="modalTotalTagihan" class="text-lg text-emerald-600 dark:text-emerald-400 font-black">Rp 0</span>
+        </div>
+
+        <div>
+          <label class="text-xs font-semibold text-slate-500 dark:text-slate-400 block mb-1">
+            Uang Dibayar (Rp):
+          </label>
+          <input 
+            type="number" 
+            id="inputUangBayar" 
+            placeholder="0" 
+            oninput="calculateChange()"
+            class="w-full text-lg font-bold p-2.5 bg-slate-50 dark:bg-slate-900 border border-slate-300 dark:border-slate-600 rounded-xl focus:ring-2 focus:ring-brand-500 focus:outline-none dark:text-white"
+          />
+        </div>
+
+        <!-- Uang Pas Quick Buttons -->
+        <div class="grid grid-cols-3 gap-2">
+          <button type="button" onclick="setQuickPayment('pas')" class="py-1 px-2 bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 text-xs font-semibold rounded-lg">Uang Pas</button>
+          <button type="button" onclick="setQuickPayment(10000)" class="py-1 px-2 bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 text-xs font-semibold rounded-lg">10.000</button>
+          <button type="button" onclick="setQuickPayment(20000)" class="py-1 px-2 bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 text-xs font-semibold rounded-lg">20.000</button>
+          <button type="button" onclick="setQuickPayment(50000)" class="py-1 px-2 bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 text-xs font-semibold rounded-lg">50.000</button>
+          <button type="button" onclick="setQuickPayment(100000)" class="py-1 px-2 bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 text-xs font-semibold rounded-lg">100.000</button>
+        </div>
+
+        <div class="flex justify-between items-center text-sm font-bold bg-brand-50 dark:bg-brand-950/40 p-3 rounded-xl border border-brand-200 dark:border-brand-900/50">
+          <span class="text-slate-700 dark:text-slate-300">Kembalian:</span>
+          <span id="modalKembalian" class="text-base font-black text-brand-600 dark:text-brand-400">Rp 0</span>
+        </div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="grid grid-cols-2 gap-2 pt-2">
+        <button type="button" onclick="closeConfirmModal()" class="py-2.5 bg-slate-100 dark:bg-slate-700 hover:bg-slate-200 text-slate-700 dark:text-slate-200 font-semibold text-xs rounded-xl transition">
+          Batal
+        </button>
+        <button 
+          type="button" 
+          id="btnSaveCheckout" 
+          onclick="checkout()" 
+          class="py-2.5 bg-brand-600 hover:bg-brand-700 active:scale-[0.99] text-white font-bold text-xs rounded-xl transition shadow-md shadow-brand-600/20 flex justify-center items-center gap-1.5"
+        >
+          <span id="btnSaveText"><i class="fa-solid fa-check mr-1"></i> Simpan Transaksi</span>
+          <span id="btnSaveSpinner" class="hidden animate-spin rounded-full h-3.5 w-3.5 border-2 border-white border-t-transparent"></span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+
+  <!-- POPUP 2: SUCCESS & KEMBALIAN (STRUK) -->
+  <div id="receiptModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
+    <div class="bg-white dark:bg-slate-800 rounded-2xl max-w-xs w-full p-6 shadow-2xl border border-slate-200 dark:border-slate-700 text-center space-y-4">
+      <div class="w-12 h-12 bg-emerald-100 dark:bg-emerald-950/60 text-emerald-600 dark:text-emerald-400 rounded-full flex items-center justify-center mx-auto text-2xl">
+        <i class="fa-solid fa-circle-check"></i>
+      </div>
+      <div>
+        <h3 class="text-base font-bold text-slate-900 dark:text-white">Transaksi Berhasil!</h3>
+        <p class="text-xs text-slate-500 dark:text-slate-400 mt-0.5">Data tersimpan ke Google Sheets</p>
+      </div>
+
+      <div class="bg-slate-50 dark:bg-slate-900/60 p-4 rounded-xl border border-slate-200 dark:border-slate-700 text-left space-y-2 text-xs">
+        <div class="flex justify-between text-slate-500">
+          <span>Total Belanja:</span>
+          <span id="rcptTotal" class="font-bold text-slate-800 dark:text-slate-200">Rp 0</span>
+        </div>
+        <div class="flex justify-between text-slate-500">
+          <span>Uang Dibayar:</span>
+          <span id="rcptBayar" class="font-bold text-slate-800 dark:text-slate-200">Rp 0</span>
+        </div>
+        <div class="border-t border-slate-200 dark:border-slate-700 pt-2 flex justify-between text-sm font-black text-brand-600 dark:text-brand-400">
+          <span>Kembalian:</span>
+          <span id="rcptKembalian">Rp 0</span>
+        </div>
+      </div>
+
+      <button type="button" onclick="closeReceiptModal()" class="w-full py-2.5 bg-brand-600 hover:bg-brand-700 text-white font-bold text-xs rounded-xl transition shadow-md shadow-brand-600/20">
+        Selesai / Transaksi Baru
+      </button>
+    </div>
+  </div>
+
+
   <!-- PIN Modal -->
   <div id="pinModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
     <div class="bg-white dark:bg-slate-800 rounded-2xl max-w-xs w-full p-6 shadow-2xl border border-slate-200 dark:border-slate-700 space-y-4 text-center">
@@ -438,6 +538,9 @@
     let activeRole = 'kasir';
     let isAdminUnlocked = false;
     let cart = [];
+    let currentTotalCart = 0;
+    let currentUangBayar = 0;
+    let currentKembalian = 0;
 
     const viewKasir = document.getElementById('viewKasir');
     const viewAdmin = document.getElementById('viewAdmin');
@@ -449,6 +552,20 @@
     const btnVerifyPin = document.getElementById('btnVerifyPin');
     const btnPinText = document.getElementById('btnPinText');
     const btnPinSpinner = document.getElementById('btnPinSpinner');
+
+    const confirmModal = document.getElementById('confirmModal');
+    const confirmOrderSummary = document.getElementById('confirmOrderSummary');
+    const modalTotalTagihan = document.getElementById('modalTotalTagihan');
+    const inputUangBayar = document.getElementById('inputUangBayar');
+    const modalKembalian = document.getElementById('modalKembalian');
+    const btnSaveCheckout = document.getElementById('btnSaveCheckout');
+    const btnSaveText = document.getElementById('btnSaveText');
+    const btnSaveSpinner = document.getElementById('btnSaveSpinner');
+
+    const receiptModal = document.getElementById('receiptModal');
+    const rcptTotal = document.getElementById('rcptTotal');
+    const rcptBayar = document.getElementById('rcptBayar');
+    const rcptKembalian = document.getElementById('rcptKembalian');
 
     const webAppUrlInput = document.getElementById('webAppUrl');
     const btnSaveUrl = document.getElementById('btnSaveUrl');
@@ -467,8 +584,6 @@
     const cartList = document.getElementById('cartList');
     const cartTotal = document.getElementById('cartTotal');
     const btnCheckout = document.getElementById('btnCheckout');
-    const btnCheckoutText = document.getElementById('btnCheckoutText');
-    const btnCheckoutSpinner = document.getElementById('btnCheckoutSpinner');
     const statusAlert = document.getElementById('statusAlert');
 
     const btnFetch = document.getElementById('btnFetch');
@@ -517,6 +632,7 @@
       if (cart.length === 0) {
         cartList.innerHTML = `<p class="text-xs text-slate-400 text-center py-8">Keranjang belanja masih kosong.</p>`;
         cartTotal.innerText = "Rp 0";
+        currentTotalCart = 0;
         btnCheckout.disabled = true;
         return;
       }
@@ -540,8 +656,70 @@
         `;
       }).join('');
 
+      currentTotalCart = total;
       cartTotal.innerText = "Rp " + total.toLocaleString('id-ID');
       btnCheckout.disabled = false;
+    }
+
+    // MODAL KONFIRMASI & KEMBALIAN
+    function openConfirmModal() {
+      if (cart.length === 0) return;
+
+      confirmOrderSummary.innerHTML = cart.map(item => `
+        <div class="flex justify-between items-center">
+          <span class="font-semibold text-slate-800 dark:text-slate-200">${item.namaProduk} x${item.jumlah}</span>
+          <span class="text-slate-500">Rp ${(item.jumlah * item.hargaSatuan).toLocaleString('id-ID')}</span>
+        </div>
+      `).join('');
+
+      modalTotalTagihan.innerText = "Rp " + currentTotalCart.toLocaleString('id-ID');
+      inputUangBayar.value = currentTotalCart;
+      calculateChange();
+
+      confirmModal.classList.remove('hidden');
+      setTimeout(() => inputUangBayar.focus(), 100);
+    }
+
+    function closeConfirmModal() {
+      confirmModal.classList.add('hidden');
+    }
+
+    function calculateChange() {
+      const bayar = Number(inputUangBayar.value) || 0;
+      currentUangBayar = bayar;
+      const kembalian = bayar - currentTotalCart;
+      currentKembalian = kembalian;
+
+      if (kembalian < 0) {
+        modalKembalian.innerText = "Kurang Rp " + Math.abs(kembalian).toLocaleString('id-ID');
+        modalKembalian.className = "text-base font-black text-red-500";
+        btnSaveCheckout.disabled = true;
+      } else {
+        modalKembalian.innerText = "Rp " + kembalian.toLocaleString('id-ID');
+        modalKembalian.className = "text-base font-black text-brand-600 dark:text-brand-400";
+        btnSaveCheckout.disabled = false;
+      }
+    }
+
+    function setQuickPayment(amount) {
+      if (amount === 'pas') {
+        inputUangBayar.value = currentTotalCart;
+      } else {
+        inputUangBayar.value = amount;
+      }
+      calculateChange();
+    }
+
+    function openReceiptModal() {
+      rcptTotal.innerText = "Rp " + currentTotalCart.toLocaleString('id-ID');
+      rcptBayar.innerText = "Rp " + currentUangBayar.toLocaleString('id-ID');
+      rcptKembalian.innerText = "Rp " + currentKembalian.toLocaleString('id-ID');
+      receiptModal.classList.remove('hidden');
+    }
+
+    function closeReceiptModal() {
+      receiptModal.classList.add('hidden');
+      clearCart();
     }
 
     // CHECKOUT SIMPAN PENJUALAN
@@ -550,13 +728,13 @@
 
       const url = localStorage.getItem('appScriptUrl');
       if (!url) {
-        showAlert("URL Google Apps Script belum tersimpan! Buka Mode Admin untuk menyimpannya.", "error");
+        alert("URL Google Apps Script belum tersimpan! Buka Mode Admin untuk menyimpannya.");
         switchRole('admin');
+        closeConfirmModal();
         return;
       }
 
       setLoading(true);
-      hideAlert();
 
       const payload = { items: cart };
 
@@ -572,15 +750,15 @@
         const result = await response.json();
 
         if (result.status === 'success') {
-          showAlert("Transaksi berhasil disimpan ke Google Sheets!", "success");
-          clearCart();
+          closeConfirmModal();
+          openReceiptModal();
           fetchData(true);
           resetSyncTimer();
         } else {
-          showAlert("Gagal menyimpan: " + (result.message || "Terjadi kesalahan pada server Google"), "error");
+          alert("Gagal menyimpan: " + (result.message || "Terjadi kesalahan server"));
         }
       } catch (err) {
-        showAlert("Koneksi gagal. Pastikan URL Google Apps Script diset dengan akses 'Anyone'!", "error");
+        alert("Koneksi gagal. Pastikan URL Google Apps Script diset dengan akses 'Anyone'!");
       } finally {
         setLoading(false);
       }
@@ -588,29 +766,14 @@
 
     function setLoading(isLoading) {
       if (isLoading) {
-        btnCheckout.disabled = true;
-        btnCheckoutText.classList.add('hidden');
-        btnCheckoutSpinner.classList.remove('hidden');
+        btnSaveCheckout.disabled = true;
+        btnSaveText.classList.add('hidden');
+        btnSaveSpinner.classList.remove('hidden');
       } else {
-        btnCheckout.disabled = cart.length === 0;
-        btnCheckoutText.classList.remove('hidden');
-        btnCheckoutSpinner.classList.add('hidden');
+        btnSaveCheckout.disabled = false;
+        btnSaveText.classList.remove('hidden');
+        btnSaveSpinner.classList.add('hidden');
       }
-    }
-
-    function showAlert(msg, type) {
-      statusAlert.classList.remove('hidden', 'bg-red-100', 'text-red-800', 'bg-emerald-100', 'text-emerald-800');
-      if (type === 'error') {
-        statusAlert.classList.add('bg-red-100', 'text-red-800');
-        statusAlert.innerHTML = `<i class="fa-solid fa-circle-exclamation"></i> ${msg}`;
-      } else {
-        statusAlert.classList.add('bg-emerald-100', 'text-emerald-800');
-        statusAlert.innerHTML = `<i class="fa-solid fa-circle-check"></i> ${msg}`;
-      }
-    }
-
-    function hideAlert() {
-      statusAlert.classList.add('hidden');
     }
 
     async function fetchDataWithUrl(testUrl, silent = false) {
