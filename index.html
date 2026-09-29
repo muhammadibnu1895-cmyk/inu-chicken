@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Inu Chicken - PosKasir Pro</title>
+  <title>Inu Chicken - POS Kasir Pro</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -80,9 +80,10 @@
           </div>
 
           <div class="grid grid-cols-2 sm:grid-cols-2 gap-3">
+            <!-- Menu 1: Nasi + Ayam (Rp 10.000) -->
             <button 
               type="button" 
-              onclick="addToCart('Nasi + Ayam', 20000)"
+              onclick="addToCart('Nasi + Ayam', 10000)"
               class="group relative p-4 rounded-2xl border border-slate-200 dark:border-slate-700 hover:border-brand-500 bg-white dark:bg-slate-800 text-left transition duration-150 shadow-sm hover:shadow-md flex flex-col justify-between"
             >
               <div class="flex justify-between items-start">
@@ -91,13 +92,14 @@
               </div>
               <div class="mt-4">
                 <p class="font-bold text-sm text-slate-900 dark:text-white">Nasi + Ayam</p>
-                <p class="text-xs text-brand-600 dark:text-brand-400 font-bold mt-0.5">Rp 20.000</p>
+                <p class="text-xs text-brand-600 dark:text-brand-400 font-bold mt-0.5">Rp 10.000</p>
               </div>
             </button>
 
+            <!-- Menu 2: Ayam (Rp 8.000) -->
             <button 
               type="button" 
-              onclick="addToCart('Ayam', 15000)"
+              onclick="addToCart('Ayam', 8000)"
               class="group relative p-4 rounded-2xl border border-slate-200 dark:border-slate-700 hover:border-brand-500 bg-white dark:bg-slate-800 text-left transition duration-150 shadow-sm hover:shadow-md flex flex-col justify-between"
             >
               <div class="flex justify-between items-start">
@@ -106,13 +108,14 @@
               </div>
               <div class="mt-4">
                 <p class="font-bold text-sm text-slate-900 dark:text-white">Ayam Only</p>
-                <p class="text-xs text-brand-600 dark:text-brand-400 font-bold mt-0.5">Rp 15.000</p>
+                <p class="text-xs text-brand-600 dark:text-brand-400 font-bold mt-0.5">Rp 8.000</p>
               </div>
             </button>
 
+            <!-- Menu 3: Nasi Putih (Rp 3.000) -->
             <button 
               type="button" 
-              onclick="addToCart('Nasi', 5000)"
+              onclick="addToCart('Nasi', 3000)"
               class="group relative p-4 rounded-2xl border border-slate-200 dark:border-slate-700 hover:border-brand-500 bg-white dark:bg-slate-800 text-left transition duration-150 shadow-sm hover:shadow-md flex flex-col justify-between"
             >
               <div class="flex justify-between items-start">
@@ -121,10 +124,11 @@
               </div>
               <div class="mt-4">
                 <p class="font-bold text-sm text-slate-900 dark:text-white">Nasi Putih</p>
-                <p class="text-xs text-brand-600 dark:text-brand-400 font-bold mt-0.5">Rp 5.000</p>
+                <p class="text-xs text-brand-600 dark:text-brand-400 font-bold mt-0.5">Rp 3.000</p>
               </div>
             </button>
 
+            <!-- Menu 4: Saus / Sambal Extra (Rp 3.000) -->
             <button 
               type="button" 
               onclick="addToCart('Saus / Sambal', 3000)"
@@ -150,7 +154,7 @@
                 <h3 class="font-bold text-slate-900 dark:text-white flex items-center gap-2">
                   <i class="fa-solid fa-cart-shopping text-brand-600"></i> Keranjang
                 </h3>
-                <button onclick="clearCart()" class="text-xs text-red-500 hover:underline">Riset</button>
+                <button onclick="clearCart()" class="text-xs text-red-500 hover:underline">Reset</button>
               </div>
 
               <!-- List Keranjang -->
