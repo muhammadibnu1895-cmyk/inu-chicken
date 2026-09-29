@@ -32,6 +32,7 @@
 </head>
 <body class="bg-slate-50 dark:bg-slate-900 text-slate-800 dark:text-slate-100 min-h-screen flex flex-col font-sans transition-colors duration-200">
 
+  <!-- Header Application -->
   <header class="bg-white dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700 sticky top-0 z-20 shadow-sm">
     <div class="max-w-5xl mx-auto px-4 py-2.5 flex flex-wrap justify-between items-center gap-3">
       <!-- App Brand -->
@@ -195,7 +196,7 @@
         <div id="statusAlert" class="hidden mt-4 p-3.5 rounded-xl text-sm font-medium flex items-center gap-2"></div>
       </section>
 
-      <!-- Transaksi Terakhir -->
+      <!-- Transaksi Terakhir Kasir -->
       <section class="bg-white dark:bg-slate-800 p-5 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm">
         <div class="flex justify-between items-center mb-3">
           <h3 class="text-sm font-bold text-slate-800 dark:text-slate-200 flex items-center gap-2">
@@ -278,7 +279,7 @@
             <i class="fa-solid fa-trash-can"></i> Hapus
           </button>
         </div>
-        <p id="urlNotice" class="text-[11px] text-slate-400">Ganti URL kapan saja lalu klik "Simpan & Tes URL". URL hanya akan tersimpan jika validasi berhasil.</p>
+        <p id="urlNotice" class="text-[11px] text-slate-400">Ganti URL kapan saja lalu klik "Simpan & Tes URL". URL hanya akan tersimpan jika koneksi berhasil dinyatakan valid.</p>
       </section>
 
       <!-- DASHBOARD STATS -->
@@ -440,7 +441,7 @@
   </div>
 
   <script>
-    // System State
+    // System State Variables
     let activeRole = 'kasir';
     let isAdminUnlocked = false;
     const DEFAULT_PIN = '1234';
@@ -497,7 +498,7 @@
     const productBreakdown = document.getElementById('productBreakdown');
     let salesChart = null;
 
-    // Selection Handler for Menu Cards
+    // Menu Card Selection Handler
     menuOptions.forEach(card => {
       card.addEventListener('click', () => {
         menuOptions.forEach(opt => {
@@ -521,7 +522,7 @@
       });
     });
 
-    // Qty Counter Buttons
+    // Qty Adjusters
     btnMinus.addEventListener('click', () => {
       let val = parseInt(jumlahInput.value) || 1;
       if (val > 1) {
@@ -546,13 +547,13 @@
       totalDisplay.innerText = "Rp " + total.toLocaleString('id-ID');
     }
 
-    // Submit Transaction
+    // Submit Transaction (POST Request)
     salesForm.addEventListener('submit', async (e) => {
       e.preventDefault();
       const url = localStorage.getItem('appScriptUrl');
 
       if (!url) {
-        showAlert("URL Google Apps Script belum tersimpan atau salah! Silakan atur di Mode Admin.", "error");
+        showAlert("URL Google Apps Script belum tersimpan atau tidak valid! Buka Mode Admin untuk menyimpannya.", "error");
         switchRole('admin');
         return;
       }
@@ -570,6 +571,7 @@
         const response = await fetch(url, {
           method: 'POST',
           mode: 'cors',
+          redirect: 'follow',
           headers: { 'Content-Type': 'text/plain;charset=utf-8' },
           body: JSON.stringify(payload)
         });
@@ -577,14 +579,14 @@
         const result = await response.json();
 
         if (result.status === 'success') {
-          showAlert("Transaksi berhasil disimpan!", "success");
+          showAlert("Transaksi berhasil disimpan ke Google Sheets!", "success");
           fetchData(true);
           resetSyncTimer();
         } else {
-          showAlert("Gagal: " + (result.message || "Terjadi kesalahan"), "error");
+          showAlert("Gagal menyimpan: " + (result.message || "Terjadi kesalahan pada server Google"), "error");
         }
       } catch (err) {
-        showAlert("Gagal menyimpan. Pastikan URL Google Apps Script benar!", "error");
+        showAlert("Koneksi gagal. Pastikan URL Google Apps Script diset dengan akses 'Anyone'!", "error");
       } finally {
         setLoading(false);
       }
@@ -617,7 +619,7 @@
       statusAlert.classList.add('hidden');
     }
 
-    // UJI KONEKSI DENGAN URL TERLALU SPESIFIK
+    // UJI KONEKSI DENGAN URL MENGGUNAKAN GET & REDIRECT FOLLOW
     async function fetchDataWithUrl(testUrl, silent = false) {
       if (!testUrl) {
         updateUrlStatus('not_set');
@@ -625,11 +627,15 @@
       }
 
       if (!silent) {
-        dataTable.innerHTML = `<tr><td colspan="3" class="text-center py-6 text-slate-400"><i class="fa-solid fa-spinner animate-spin mr-2"></i> Memuat data...</td></tr>`;
+        dataTable.innerHTML = `<tr><td colspan="3" class="text-center py-6 text-slate-400"><i class="fa-solid fa-spinner animate-spin mr-2"></i> Memuat data dari Google Sheets...</td></tr>`;
       }
 
       try {
-        const res = await fetch(testUrl);
+        const res = await fetch(testUrl, {
+          method: 'GET',
+          redirect: 'follow'
+        });
+        
         const data = await res.json();
 
         if (data.status === 'success' && Array.isArray(data.transaksi)) {
@@ -638,18 +644,18 @@
           updateUrlStatus('valid');
           return true;
         } else {
-          throw new Error("Format respon tidak sesuai");
+          throw new Error("Format data JSON tidak valid");
         }
       } catch (err) {
         if (!silent) {
-          dataTable.innerHTML = `<tr><td colspan="3" class="text-center py-6 text-red-500">Gagal terhubung ke URL! Silakan periksa kembali URL Anda.</td></tr>`;
+          dataTable.innerHTML = `<tr><td colspan="3" class="text-center py-6 text-red-500 font-semibold"><i class="fa-solid fa-triangle-exclamation mr-1"></i> URL tidak dapat diakses! Pastikan 'Who has access' diatur ke 'Anyone'.</td></tr>`;
         }
         updateUrlStatus('invalid');
         return false;
       }
     }
 
-    // FETCH DATA DENGAN URL YANG SUDAH TERSIMPAN
+    // FETCH DATA DENGAN URL TERSIMPAN
     async function fetchData(silent = false) {
       const savedUrl = localStorage.getItem('appScriptUrl');
       return await fetchDataWithUrl(savedUrl, silent);
@@ -657,7 +663,7 @@
 
     function renderTableData(transaksi) {
       if (transaksi.length === 0) {
-        dataTable.innerHTML = `<tr><td colspan="3" class="text-center py-6 text-slate-400">Belum ada transaksi.</td></tr>`;
+        dataTable.innerHTML = `<tr><td colspan="3" class="text-center py-6 text-slate-400">Belum ada transaksi di Google Sheets.</td></tr>`;
         kasirRecentTable.innerHTML = `<tr><td colspan="3" class="text-center py-4 text-slate-400">Belum ada transaksi.</td></tr>`;
         return;
       }
@@ -781,7 +787,7 @@
       }).join('');
     }
 
-    // Event Listeners
+    // Event Listeners & Modals
     btnFetch.addEventListener('click', () => {
       fetchData();
       resetSyncTimer();
@@ -846,7 +852,7 @@
       switchRole('kasir');
     }
 
-    // Auto Sync Timer
+    // Auto Refresh Synchronizer
     function startAutoSyncTimer() {
       stopAutoSyncTimer();
       if (!autoRefreshToggle.checked) return;
@@ -876,7 +882,7 @@
       startAutoSyncTimer();
     }
 
-    // INDIKATOR TAMPILAN STATUS URL
+    // URL Status Label UI Changer
     function updateUrlStatus(state) {
       if (state === 'valid') {
         urlStatus.className = "text-xs font-semibold text-emerald-600 dark:text-emerald-400 flex items-center gap-1 bg-emerald-50 dark:bg-emerald-950/60 px-2 py-0.5 rounded-lg border border-emerald-200 dark:border-emerald-800";
@@ -890,40 +896,37 @@
       }
     }
 
-    // SIMPAN & TES URL (HANYA SIMPAN BILA VALID)
+    // SIMPAN & TES URL (HANYA SIMPAN APABILA KONEKSI TES BERHASIL)
     btnSaveUrl.addEventListener('click', async () => {
       const inputUrl = webAppUrlInput.value.trim();
       
       if (!inputUrl) {
-        alert("Silakan masukkan URL Google Apps Script terlebih dahulu!");
+        alert("Masukkan URL Google Apps Script Web App terlebih dahulu!");
         return;
       }
 
       btnSaveUrl.disabled = true;
       btnSaveUrlText.innerText = "Menguji Koneksi...";
 
-      // Skenario: Uji koneksi DULU ke URL baru tersebut
       const isSuccess = await fetchDataWithUrl(inputUrl);
 
       btnSaveUrl.disabled = false;
       btnSaveUrlText.innerText = "Simpan & Tes URL";
 
       if (isSuccess) {
-        // PERUBAHAN UTAMA: HANYA DISIMPAN BILA TES BERHASIL
         localStorage.setItem('appScriptUrl', inputUrl);
-        alert("✅ URL Valid! Berhasil disimpan dan terhubung.");
+        alert("✅ Koneksi Berhasil! URL Google Apps Script tersimpan otomatis.");
         resetSyncTimer();
       } else {
-        // BILA SALAH/GAGAL: Hapus URL dari memori browser & batalkan penyimpanan
         localStorage.removeItem('appScriptUrl');
         updateUrlStatus('invalid');
-        alert("❌ URL Tidak Valid atau Salah!\n\nLink TIDAK DISIMPAN. Silakan periksa kembali URL Google Apps Script Anda.");
+        alert("❌ URL Gagal Diakses!\n\nPastikan di Google Apps Script:\n1. Access level diset ke 'Anyone'\n2. Melakukan deployment versi baru (New version)\n3. URL berakhiran /exec");
       }
     });
 
-    // HAPUS URL
+    // Hapus/Reset URL
     btnResetUrl.addEventListener('click', () => {
-      if (confirm("Apakah Anda yakin ingin menghapus URL Google Apps Script?")) {
+      if (confirm("Apakah Anda yakin ingin menghapus URL Google Apps Script dari memori?")) {
         localStorage.removeItem('appScriptUrl');
         webAppUrlInput.value = "";
         updateUrlStatus('not_set');
@@ -942,7 +945,7 @@
       }
     });
 
-    // On App Load
+    // App Initialization
     window.addEventListener('DOMContentLoaded', () => {
       const savedUrl = localStorage.getItem('appScriptUrl');
       if (savedUrl) {
