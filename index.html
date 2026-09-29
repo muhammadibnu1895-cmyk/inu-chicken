@@ -275,7 +275,7 @@
           </button>
         </div>
         
-        <div id="debugLog" class="hidden mt-2 p-3 bg-slate-900 text-green-400 font-mono text-[11px] rounded-xl overflow-x-auto max-h-32 leading-relaxed border border-slate-700"></div>
+        <div id="debugLog" class="hidden"></div>
       </section>
 
       <!-- DASHBOARD STATS -->
@@ -610,9 +610,10 @@
       statusAlert.classList.add('hidden');
     }
 
+    // Fungsi logDebug yang sudah disesuaikan agar tampilan tersembunyi
     function logDebug(msg) {
-      debugLog.classList.remove('hidden');
-      debugLog.innerHTML = `[${new Date().toLocaleTimeString()}] ${msg}`;
+      debugLog.classList.add('hidden');
+      console.log(`[${new Date().toLocaleTimeString()}] ${msg}`);
     }
 
     async function fetchDataWithUrl(testUrl, silent = false) {
@@ -636,7 +637,6 @@
         logDebug("Respon diterima: " + JSON.stringify(data));
 
         if (data.status === 'success') {
-          // BACA PEMBARUAN PROPERTI "DATA" DARI KELUARAN APPS SCRIPT
           const listTransaksi = Array.isArray(data.data) ? data.data : (Array.isArray(data.transaksi) ? data.transaksi : []);
           renderTableData(listTransaksi);
           updateDashboardStats(listTransaksi);
