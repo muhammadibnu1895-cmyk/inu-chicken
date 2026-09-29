@@ -12,14 +12,18 @@
 
   <title>Inu Chicken - POS Kasir</title>
 
+
   <script src="https://cdn.tailwindcss.com"></script>
+
 
   <link
     rel="stylesheet"
     href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
   >
 
+
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
 
   <script>
 
@@ -143,6 +147,7 @@
         id="themeToggle"
         onclick="toggleTheme()"
         class="p-2 rounded-lg text-slate-500 hover:bg-slate-100 dark:hover:bg-slate-800 transition"
+        title="Ganti tema"
       >
 
         <i
@@ -180,7 +185,6 @@
     <!-- MENU -->
 
     <div class="lg:col-span-2 space-y-4">
-
 
       <div
         class="flex justify-between items-center bg-brand-50 dark:bg-brand-950/30 border border-brand-200 dark:border-brand-900/50 p-4 rounded-2xl"
@@ -261,6 +265,7 @@
         </button>
 
 
+
         <!-- PRODUK 2 -->
 
         <button
@@ -301,6 +306,7 @@
         </button>
 
 
+
         <!-- PRODUK 3 -->
 
         <button
@@ -339,6 +345,7 @@
           </div>
 
         </button>
+
 
 
         <!-- PRODUK 4 -->
@@ -561,9 +568,6 @@
   class="hidden space-y-6"
 >
 
-
-  <!-- HEADER ADMIN -->
-
   <div
     class="flex justify-between items-center bg-slate-900 text-white p-4 rounded-2xl shadow-md"
   >
@@ -624,7 +628,7 @@
         </p>
 
         <p class="text-[10px] text-slate-400 mt-1">
-          URL sudah tertanam di aplikasi
+          Status koneksi server
         </p>
 
       </div>
@@ -646,9 +650,6 @@
   <!-- DASHBOARD -->
 
   <section class="space-y-4">
-
-
-    <!-- JUDUL + FILTER -->
 
     <div
       class="flex flex-wrap justify-between items-center gap-3"
@@ -721,7 +722,6 @@
     <!-- STATISTIK -->
 
     <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
-
 
       <div
         class="bg-white dark:bg-slate-900 p-4 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm"
@@ -829,7 +829,6 @@
 
     <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
 
-
       <div
         class="md:col-span-2 bg-white dark:bg-slate-900 p-4 rounded-2xl border border-slate-200 dark:border-slate-700"
       >
@@ -850,8 +849,6 @@
       </div>
 
 
-
-      <!-- BREAKDOWN -->
 
       <div
         class="bg-white dark:bg-slate-900 p-4 rounded-2xl border border-slate-200 dark:border-slate-700"
@@ -1076,6 +1073,8 @@
       <input
         type="number"
         id="inputUangBayar"
+        min="0"
+        step="100"
         oninput="calculateChange()"
         class="w-full text-lg font-bold p-2.5 mt-1 bg-slate-50 dark:bg-slate-800 border dark:border-slate-700 rounded-xl"
       >
@@ -1227,6 +1226,22 @@
       <div class="flex justify-between">
 
         <span>
+          ID Transaksi
+        </span>
+
+        <strong
+          id="rcptId"
+          class="font-mono text-[10px]"
+        >
+          -
+        </strong>
+
+      </div>
+
+
+      <div class="flex justify-between">
+
+        <span>
           Total
         </span>
 
@@ -1308,7 +1323,7 @@
 
 
     <p class="text-xs text-slate-500 mt-1">
-      Masukkan PIN Admin
+      Masukkan PIN 6 digit
     </p>
 
 
@@ -1321,8 +1336,10 @@
       <input
         type="password"
         id="pinInput"
-        maxlength="10"
-        placeholder="••••"
+        maxlength="6"
+        inputmode="numeric"
+        autocomplete="off"
+        placeholder="••••••"
         class="w-full text-center text-xl font-bold tracking-widest p-3 bg-slate-50 dark:bg-slate-800 border dark:border-slate-700 rounded-xl"
         required
       >
@@ -1384,41 +1401,80 @@
 const APP_SCRIPT_URL =
   "https://script.google.com/macros/s/AKfycbxqnpjgoLlPVZDSjvAy5Amy0YZl1Vf9AG9wwxPqsXjut1i96DzUqySM3OrBIPEhQDvwUQ/exec";
 
-const ADMIN_PIN_DEFAULT = "1234";
 
-const AUTO_SYNC_INTERVAL = 10;
+const AUTO_SYNC_INTERVAL =
+  10;
+
+
+/*
+ * Harga hanya untuk tampilan UI.
+ * Server Apps Script tetap menjadi sumber harga resmi.
+ */
+
+const PRODUCTS = {
+
+  "Nasi + Ayam": 10000,
+
+  "Ayam": 8000,
+
+  "Nasi": 3000,
+
+  "Saus / Sambal": 3000
+
+};
 
 
 /* =========================================================
    STATE
 ========================================================= */
 
-let activeRole = "kasir";
-
-let isAdminUnlocked = false;
-
-let cart = [];
-
-let currentTotalCart = 0;
-
-let currentUangBayar = 0;
-
-let currentKembalian = 0;
-
-let salesChart = null;
-
-let syncTimer = null;
-
-let secondsLeft = AUTO_SYNC_INTERVAL;
+let activeRole =
+  "kasir";
 
 
-/* =========================================================
-   DASHBOARD FILTER
-========================================================= */
+let isAdminUnlocked =
+  false;
 
-let dashboardFilter = "today";
 
-let allTransactions = [];
+let cart =
+  [];
+
+
+let currentTotalCart =
+  0;
+
+
+let currentUangBayar =
+  0;
+
+
+let currentKembalian =
+  0;
+
+
+let salesChart =
+  null;
+
+
+let syncTimer =
+  null;
+
+
+let secondsLeft =
+  AUTO_SYNC_INTERVAL;
+
+
+let dashboardFilter =
+  "today";
+
+
+let allTransactions =
+  [];
+
+
+let checkoutProcessing =
+  false;
+
 
 
 /* =========================================================
@@ -1426,97 +1482,190 @@ let allTransactions = [];
 ========================================================= */
 
 const viewKasir =
-  document.getElementById("viewKasir");
+  document.getElementById(
+    "viewKasir"
+  );
+
 
 const viewAdmin =
-  document.getElementById("viewAdmin");
+  document.getElementById(
+    "viewAdmin"
+  );
+
 
 const btnRoleKasir =
-  document.getElementById("btnRoleKasir");
+  document.getElementById(
+    "btnRoleKasir"
+  );
+
 
 const btnRoleAdmin =
-  document.getElementById("btnRoleAdmin");
+  document.getElementById(
+    "btnRoleAdmin"
+  );
+
 
 const cartList =
-  document.getElementById("cartList");
+  document.getElementById(
+    "cartList"
+  );
+
 
 const cartTotal =
-  document.getElementById("cartTotal");
+  document.getElementById(
+    "cartTotal"
+  );
+
 
 const btnCheckout =
-  document.getElementById("btnCheckout");
+  document.getElementById(
+    "btnCheckout"
+  );
+
 
 const confirmModal =
-  document.getElementById("confirmModal");
+  document.getElementById(
+    "confirmModal"
+  );
+
 
 const confirmOrderSummary =
-  document.getElementById("confirmOrderSummary");
+  document.getElementById(
+    "confirmOrderSummary"
+  );
+
 
 const modalTotalTagihan =
-  document.getElementById("modalTotalTagihan");
+  document.getElementById(
+    "modalTotalTagihan"
+  );
+
 
 const inputUangBayar =
-  document.getElementById("inputUangBayar");
+  document.getElementById(
+    "inputUangBayar"
+  );
+
 
 const modalKembalian =
-  document.getElementById("modalKembalian");
+  document.getElementById(
+    "modalKembalian"
+  );
+
 
 const btnSaveCheckout =
-  document.getElementById("btnSaveCheckout");
+  document.getElementById(
+    "btnSaveCheckout"
+  );
+
 
 const btnSaveText =
-  document.getElementById("btnSaveText");
+  document.getElementById(
+    "btnSaveText"
+  );
+
 
 const btnSaveSpinner =
-  document.getElementById("btnSaveSpinner");
+  document.getElementById(
+    "btnSaveSpinner"
+  );
+
 
 const receiptModal =
-  document.getElementById("receiptModal");
+  document.getElementById(
+    "receiptModal"
+  );
+
 
 const pinModal =
-  document.getElementById("pinModal");
+  document.getElementById(
+    "pinModal"
+  );
+
 
 const pinInput =
-  document.getElementById("pinInput");
+  document.getElementById(
+    "pinInput"
+  );
+
 
 const pinError =
-  document.getElementById("pinError");
+  document.getElementById(
+    "pinError"
+  );
+
 
 const dataTable =
-  document.getElementById("dataTable");
+  document.getElementById(
+    "dataTable"
+  );
+
 
 const kasirRecentTable =
-  document.getElementById("kasirRecentTable");
+  document.getElementById(
+    "kasirRecentTable"
+  );
+
 
 const autoRefreshToggle =
-  document.getElementById("autoRefreshToggle");
+  document.getElementById(
+    "autoRefreshToggle"
+  );
+
 
 const syncCountdown =
-  document.getElementById("syncCountdown");
+  document.getElementById(
+    "syncCountdown"
+  );
+
 
 const dashTotalOmset =
-  document.getElementById("dashTotalOmset");
+  document.getElementById(
+    "dashTotalOmset"
+  );
+
 
 const dashTotalTx =
-  document.getElementById("dashTotalTx");
+  document.getElementById(
+    "dashTotalTx"
+  );
+
 
 const dashTotalItems =
-  document.getElementById("dashTotalItems");
+  document.getElementById(
+    "dashTotalItems"
+  );
+
 
 const dashTopProduct =
-  document.getElementById("dashTopProduct");
+  document.getElementById(
+    "dashTopProduct"
+  );
+
 
 const dashTopQty =
-  document.getElementById("dashTopQty");
+  document.getElementById(
+    "dashTopQty"
+  );
+
 
 const productBreakdown =
-  document.getElementById("productBreakdown");
+  document.getElementById(
+    "productBreakdown"
+  );
+
 
 const themeIcon =
-  document.getElementById("themeIcon");
+  document.getElementById(
+    "themeIcon"
+  );
+
 
 const urlStatus =
-  document.getElementById("urlStatus");
+  document.getElementById(
+    "urlStatus"
+  );
+
 
 
 /* =========================================================
@@ -1526,10 +1675,14 @@ const urlStatus =
 function rupiah(number) {
 
   return "Rp " +
-    Number(number || 0)
-      .toLocaleString("id-ID");
+    Number(
+      number || 0
+    ).toLocaleString(
+      "id-ID"
+    );
 
 }
+
 
 
 /* =========================================================
@@ -1539,12 +1692,14 @@ function rupiah(number) {
 function toggleTheme() {
 
   document.documentElement
-    .classList.toggle("dark");
+    .classList
+    .toggle("dark");
 
 
   const isDark =
     document.documentElement
-      .classList.contains("dark");
+      .classList
+      .contains("dark");
 
 
   themeIcon.className =
@@ -1555,8 +1710,19 @@ function toggleTheme() {
 
   localStorage.setItem(
     "theme",
-    isDark ? "dark" : "light"
+    isDark
+      ? "dark"
+      : "light"
   );
+
+
+  if (
+    salesChart
+  ) {
+
+    updateFilteredDashboard();
+
+  }
 
 }
 
@@ -1564,11 +1730,14 @@ function toggleTheme() {
 function loadTheme() {
 
   if (
-    localStorage.getItem("theme") === "dark"
+    localStorage.getItem(
+      "theme"
+    ) === "dark"
   ) {
 
     document.documentElement
-      .classList.add("dark");
+      .classList
+      .add("dark");
 
 
     themeIcon.className =
@@ -1579,15 +1748,42 @@ function loadTheme() {
 }
 
 
+
 /* =========================================================
    CART
 ========================================================= */
 
-function addToCart(nama, harga) {
+function addToCart(
+  nama,
+  harga
+) {
+
+  /*
+   * Harga di UI harus sesuai master.
+   */
+
+  if (
+    !Object.prototype.hasOwnProperty.call(
+      PRODUCTS,
+      nama
+    )
+  ) {
+
+    showStatus(
+      "error",
+      "Produk tidak tersedia."
+    );
+
+    return;
+
+  }
+
 
   const existing =
     cart.find(
-      item => item.namaProduk === nama
+      item =>
+        item.namaProduk ===
+        nama
     );
 
 
@@ -1599,11 +1795,14 @@ function addToCart(nama, harga) {
 
     cart.push({
 
-      namaProduk: nama,
+      namaProduk:
+        nama,
 
-      hargaSatuan: harga,
+      hargaSatuan:
+        PRODUCTS[nama],
 
-      jumlah: 1
+      jumlah:
+        1
 
     });
 
@@ -1615,17 +1814,33 @@ function addToCart(nama, harga) {
 }
 
 
-function updateCartQty(index, change) {
+function updateCartQty(
+  index,
+  change
+) {
 
-  if (!cart[index]) return;
+  if (
+    !cart[index]
+  ) {
+
+    return;
+
+  }
 
 
-  cart[index].jumlah += change;
+  cart[index].jumlah +=
+    change;
 
 
-  if (cart[index].jumlah <= 0) {
+  if (
+    cart[index].jumlah <=
+    0
+  ) {
 
-    cart.splice(index, 1);
+    cart.splice(
+      index,
+      1
+    );
 
   }
 
@@ -1639,6 +1854,12 @@ function clearCart() {
 
   cart = [];
 
+  currentTotalCart = 0;
+
+  currentUangBayar = 0;
+
+  currentKembalian = 0;
+
   renderCart();
 
 }
@@ -1646,7 +1867,9 @@ function clearCart() {
 
 function renderCart() {
 
-  if (!cart.length) {
+  if (
+    !cart.length
+  ) {
 
     cartList.innerHTML = `
 
@@ -1659,95 +1882,121 @@ function renderCart() {
     `;
 
 
-    cartTotal.innerText = "Rp 0";
+    cartTotal.innerText =
+      "Rp 0";
 
-    currentTotalCart = 0;
 
-    btnCheckout.disabled = true;
+    currentTotalCart =
+      0;
+
+
+    btnCheckout.disabled =
+      true;
+
 
     return;
 
   }
 
 
-  let total = 0;
+  let total =
+    0;
 
 
   cartList.innerHTML =
-    cart.map((item, index) => {
+    cart
+      .map(
+        function(
+          item,
+          index
+        ) {
 
-      const subtotal =
-        item.jumlah *
-        item.hargaSatuan;
-
-
-      total += subtotal;
-
-
-      return `
-
-        <div
-          class="flex items-center justify-between p-2.5 bg-slate-50 dark:bg-slate-800 rounded-xl text-xs"
-        >
-
-          <div class="flex-1 pr-2">
-
-            <p class="font-bold">
-              ${escapeHtml(item.namaProduk)}
-            </p>
-
-            <p class="text-[10px] text-slate-400">
-              ${rupiah(item.hargaSatuan)}
-            </p>
-
-            <p class="text-[10px] text-brand-600 font-semibold">
-              ${rupiah(subtotal)}
-            </p>
-
-          </div>
+          const subtotal =
+            item.jumlah *
+            item.hargaSatuan;
 
 
-          <div class="flex items-center gap-1.5">
+          total +=
+            subtotal;
 
-            <button
-              onclick="updateCartQty(${index},-1)"
-              class="w-6 h-6 rounded-lg bg-slate-200 dark:bg-slate-700 font-bold"
+
+          return `
+
+            <div
+              class="flex items-center justify-between p-2.5 bg-slate-50 dark:bg-slate-800 rounded-xl text-xs"
             >
-              -
-            </button>
+
+              <div class="flex-1 pr-2">
+
+                <p class="font-bold">
+                  ${escapeHtml(
+                    item.namaProduk
+                  )}
+                </p>
+
+                <p class="text-[10px] text-slate-400">
+                  ${rupiah(
+                    item.hargaSatuan
+                  )}
+                </p>
+
+                <p class="text-[10px] text-brand-600 font-semibold">
+                  ${rupiah(
+                    subtotal
+                  )}
+                </p>
+
+              </div>
 
 
-            <span class="font-bold px-1">
-              ${item.jumlah}
-            </span>
+              <div class="flex items-center gap-1.5">
+
+                <button
+                  onclick="updateCartQty(${index},-1)"
+                  class="w-6 h-6 rounded-lg bg-slate-200 dark:bg-slate-700 font-bold"
+                >
+                  -
+                </button>
 
 
-            <button
-              onclick="updateCartQty(${index},1)"
-              class="w-6 h-6 rounded-lg bg-slate-200 dark:bg-slate-700 font-bold"
-            >
-              +
-            </button>
-
-          </div>
-
-        </div>
-
-      `;
-
-    }).join("");
+                <span class="font-bold px-1">
+                  ${item.jumlah}
+                </span>
 
 
-  currentTotalCart = total;
+                <button
+                  onclick="updateCartQty(${index},1)"
+                  class="w-6 h-6 rounded-lg bg-slate-200 dark:bg-slate-700 font-bold"
+                >
+                  +
+                </button>
+
+              </div>
+
+            </div>
+
+          `;
+
+        }
+      )
+      .join("");
+
+
+  currentTotalCart =
+    total;
 
 
   cartTotal.innerText =
-    rupiah(total);
+    rupiah(
+      total
+    );
 
 
-  btnCheckout.disabled = false;
+  btnCheckout.disabled =
+    false;
 
 }
+
 
 
 /* =========================================================
@@ -1756,35 +2005,55 @@ function renderCart() {
 
 function openConfirmModal() {
 
-  if (!cart.length) return;
+  if (
+    !cart.length ||
+    checkoutProcessing
+  ) {
+
+    return;
+
+  }
 
 
   confirmOrderSummary.innerHTML =
-    cart.map(item => `
+    cart
+      .map(
+        function(item) {
 
-      <div class="flex justify-between">
+          return `
 
-        <span class="font-semibold">
+            <div class="flex justify-between">
 
-          ${escapeHtml(item.namaProduk)}
-          x${item.jumlah}
+              <span class="font-semibold">
 
-        </span>
+                ${escapeHtml(
+                  item.namaProduk
+                )}
 
-        <span>
-          ${rupiah(
-            item.jumlah *
-            item.hargaSatuan
-          )}
-        </span>
+                x${item.jumlah}
 
-      </div>
+              </span>
 
-    `).join("");
+              <span>
+                ${rupiah(
+                  item.jumlah *
+                  item.hargaSatuan
+                )}
+              </span>
+
+            </div>
+
+          `;
+
+        }
+      )
+      .join("");
 
 
   modalTotalTagihan.innerText =
-    rupiah(currentTotalCart);
+    rupiah(
+      currentTotalCart
+    );
 
 
   inputUangBayar.value =
@@ -1800,7 +2069,13 @@ function openConfirmModal() {
 
 
   setTimeout(
-    () => inputUangBayar.focus(),
+    function() {
+
+      inputUangBayar.focus();
+
+      inputUangBayar.select();
+
+    },
     100
   );
 
@@ -1808,6 +2083,15 @@ function openConfirmModal() {
 
 
 function closeConfirmModal() {
+
+  if (
+    checkoutProcessing
+  ) {
+
+    return;
+
+  }
+
 
   confirmModal
     .classList
@@ -1819,10 +2103,15 @@ function closeConfirmModal() {
 function calculateChange() {
 
   const bayar =
-    Number(inputUangBayar.value) || 0;
+    Math.floor(
+      Number(
+        inputUangBayar.value
+      ) || 0
+    );
 
 
-  currentUangBayar = bayar;
+  currentUangBayar =
+    bayar;
 
 
   currentKembalian =
@@ -1830,12 +2119,17 @@ function calculateChange() {
     currentTotalCart;
 
 
-  if (currentKembalian < 0) {
+  if (
+    currentKembalian <
+    0
+  ) {
 
     modalKembalian.innerText =
       "Kurang " +
       rupiah(
-        Math.abs(currentKembalian)
+        Math.abs(
+          currentKembalian
+        )
       );
 
 
@@ -1849,7 +2143,9 @@ function calculateChange() {
   } else {
 
     modalKembalian.innerText =
-      rupiah(currentKembalian);
+      rupiah(
+        currentKembalian
+      );
 
 
     modalKembalian.className =
@@ -1864,7 +2160,9 @@ function calculateChange() {
 }
 
 
-function setQuickPayment(amount) {
+function setQuickPayment(
+  amount
+) {
 
   inputUangBayar.value =
     amount === "pas"
@@ -1877,13 +2175,32 @@ function setQuickPayment(amount) {
 }
 
 
+
 /* =========================================================
    CHECKOUT
 ========================================================= */
 
 async function checkout() {
 
-  if (!cart.length) return;
+  if (
+    checkoutProcessing
+  ) {
+
+    return;
+
+  }
+
+
+  if (
+    !cart.length
+  ) {
+
+    return;
+
+  }
+
+
+  calculateChange();
 
 
   if (
@@ -1900,18 +2217,41 @@ async function checkout() {
   }
 
 
-  setCheckoutLoading(true);
+  checkoutProcessing =
+    true;
 
+
+  setCheckoutLoading(
+    true
+  );
+
+
+  /*
+   * Hanya kirim nama + qty.
+   * Server akan menentukan harga resmi.
+   */
 
   const payload = {
 
-    items: cart,
+    items:
+      cart.map(
+        function(item) {
+
+          return {
+
+            namaProduk:
+              item.namaProduk,
+
+            jumlah:
+              item.jumlah
+
+          };
+
+        }
+      ),
 
     uangBayar:
-      currentUangBayar,
-
-    kembalian:
-      currentKembalian
+      currentUangBayar
 
   };
 
@@ -1923,9 +2263,11 @@ async function checkout() {
         APP_SCRIPT_URL,
         {
 
-          method: "POST",
+          method:
+            "POST",
 
-          redirect: "follow",
+          redirect:
+            "follow",
 
           headers: {
 
@@ -1935,10 +2277,24 @@ async function checkout() {
           },
 
           body:
-            JSON.stringify(payload)
+            JSON.stringify(
+              payload
+            )
 
         }
       );
+
+
+    if (
+      !response.ok
+    ) {
+
+      throw new Error(
+        "HTTP " +
+        response.status
+      );
+
+    }
 
 
     const result =
@@ -1954,10 +2310,17 @@ async function checkout() {
 
 
       document.getElementById(
+        "rcptId"
+      ).innerText =
+        result.transactionId ||
+        "-";
+
+
+      document.getElementById(
         "rcptTotal"
       ).innerText =
         rupiah(
-          currentTotalCart
+          result.total
         );
 
 
@@ -1965,7 +2328,7 @@ async function checkout() {
         "rcptBayar"
       ).innerText =
         rupiah(
-          currentUangBayar
+          result.uangBayar
         );
 
 
@@ -1973,7 +2336,7 @@ async function checkout() {
         "rcptKembalian"
       ).innerText =
         rupiah(
-          currentKembalian
+          result.kembalian
         );
 
 
@@ -1989,7 +2352,13 @@ async function checkout() {
       );
 
 
-      await fetchData(true);
+      /*
+       * Refresh data.
+       */
+
+      await fetchData(
+        true
+      );
 
 
       resetSyncTimer();
@@ -2008,1823 +2377,5 @@ async function checkout() {
 
   } catch (error) {
 
-    console.error(error);
-
-
-    alert(
-      "Koneksi gagal. Pastikan Web App Apps Script sudah dideploy sebagai Web App dan aksesnya dapat dibuka publik."
-    );
-
-  } finally {
-
-    setCheckoutLoading(false);
-
-  }
-
-}
-
-
-function setCheckoutLoading(loading) {
-
-  btnSaveCheckout.disabled =
-    loading;
-
-
-  if (loading) {
-
-    btnSaveText
-      .classList
-      .add("hidden");
-
-
-    btnSaveSpinner
-      .classList
-      .remove("hidden");
-
-  } else {
-
-    btnSaveText
-      .classList
-      .remove("hidden");
-
-
-    btnSaveSpinner
-      .classList
-      .add("hidden");
-
-  }
-
-}
-
-
-/* =========================================================
-   RECEIPT
-========================================================= */
-
-function closeReceiptModal() {
-
-  receiptModal
-    .classList
-    .add("hidden");
-
-
-  clearCart();
-
-}
-
-
-/* =========================================================
-   FETCH DATA
-========================================================= */
-
-async function fetchData(silent = false) {
-
-  try {
-
-    if (!silent) {
-
-      dataTable.innerHTML = `
-
-        <tr>
-
-          <td
-            colspan="6"
-            class="text-center py-6 text-slate-400"
-          >
-
-            <i
-              class="fa-solid fa-spinner animate-spin mr-2"
-            ></i>
-
-            Memuat data...
-
-          </td>
-
-        </tr>
-
-      `;
-
-    }
-
-
-    const response =
-      await fetch(
-        APP_SCRIPT_URL,
-        {
-
-          method: "GET",
-
-          redirect: "follow"
-
-        }
-      );
-
-
-    const data =
-      await response.json();
-
-
-    if (
-      data.status !==
-      "success"
-    ) {
-
-      throw new Error(
-        data.message ||
-        "Server error"
-      );
-
-    }
-
-
-    const transaksi =
-      Array.isArray(data.data)
-        ? data.data
-        : [];
-
-
-    allTransactions =
-      transaksi;
-
-
-    renderTableData(
-      transaksi
-    );
-
-
-    updateFilteredDashboard();
-
-
-    setConnectionStatus(
-      true
-    );
-
-
-    return true;
-
-  } catch (error) {
-
-    console.error(error);
-
-
-    setConnectionStatus(
-      false
-    );
-
-
-    if (!silent) {
-
-      dataTable.innerHTML = `
-
-        <tr>
-
-          <td
-            colspan="6"
-            class="text-center py-6 text-red-500"
-          >
-
-            <i
-              class="fa-solid fa-triangle-exclamation mr-1"
-            ></i>
-
-            Gagal mengambil data Apps Script.
-
-          </td>
-
-        </tr>
-
-      `;
-
-    }
-
-
-    return false;
-
-  }
-
-}
-
-
-/* =========================================================
-   FILTER DASHBOARD
-========================================================= */
-
-function setDashboardFilter(filter) {
-
-  dashboardFilter =
-    filter;
-
-
-  updateFilterButtons();
-
-  updateFilteredDashboard();
-
-}
-
-
-function updateFilterButtons() {
-
-  const buttons = {
-
-    today:
-      document.getElementById(
-        "filterToday"
-      ),
-
-    "7days":
-      document.getElementById(
-        "filter7Days"
-      ),
-
-    month:
-      document.getElementById(
-        "filterMonth"
-      ),
-
-    all:
-      document.getElementById(
-        "filterAll"
-      )
-
-  };
-
-
-  Object.values(buttons)
-    .forEach(button => {
-
-      if (!button) return;
-
-
-      button.className =
-        "dashboard-filter px-3 py-1.5 rounded-lg text-xs font-semibold transition text-slate-600 dark:text-slate-300 hover:bg-white dark:hover:bg-slate-700";
-
-    });
-
-
-  const active =
-    buttons[
-      dashboardFilter
-    ];
-
-
-  if (active) {
-
-    active.className =
-      "dashboard-filter px-3 py-1.5 rounded-lg bg-white dark:bg-slate-700 text-brand-600 shadow-sm text-xs font-bold transition";
-
-  }
-
-}
-
-
-function getFilteredTransactions() {
-
-  if (
-    !Array.isArray(
-      allTransactions
-    )
-  ) {
-
-    return [];
-
-  }
-
-
-  if (
-    dashboardFilter ===
-    "all"
-  ) {
-
-    return [
-      ...allTransactions
-    ];
-
-  }
-
-
-  const now =
-    new Date();
-
-
-  const startToday =
-    new Date(
-
-      now.getFullYear(),
-
-      now.getMonth(),
-
-      now.getDate(),
-
-      0,
-
-      0,
-
-      0,
-
-      0
-
-    );
-
-
-  if (
-    dashboardFilter ===
-    "today"
-  ) {
-
-    return allTransactions
-      .filter(tx => {
-
-        const date =
-          parseTransactionDate(
-            tx["Tanggal & Waktu"]
-          );
-
-
-        return (
-          date &&
-          date >=
-            startToday
-        );
-
-      });
-
-  }
-
-
-  if (
-    dashboardFilter ===
-    "7days"
-  ) {
-
-    const start7Days =
-      new Date(
-        startToday
-      );
-
-
-    start7Days.setDate(
-      start7Days.getDate() - 6
-    );
-
-
-    return allTransactions
-      .filter(tx => {
-
-        const date =
-          parseTransactionDate(
-            tx["Tanggal & Waktu"]
-          );
-
-
-        return (
-          date &&
-          date >=
-            start7Days
-        );
-
-      });
-
-  }
-
-
-  if (
-    dashboardFilter ===
-    "month"
-  ) {
-
-    const startMonth =
-      new Date(
-
-        now.getFullYear(),
-
-        now.getMonth(),
-
-        1,
-
-        0,
-
-        0,
-
-        0,
-
-        0
-
-      );
-
-
-    return allTransactions
-      .filter(tx => {
-
-        const date =
-          parseTransactionDate(
-            tx["Tanggal & Waktu"]
-          );
-
-
-        return (
-          date &&
-          date >=
-            startMonth
-        );
-
-      });
-
-  }
-
-
-  return [
-    ...allTransactions
-  ];
-
-}
-
-
-function updateFilteredDashboard() {
-
-  const filtered =
-    getFilteredTransactions();
-
-
-  updateDashboardStats(
-    filtered
-  );
-
-
-  updateDashboardFilterLabel();
-
-}
-
-
-function updateDashboardFilterLabel() {
-
-  const label =
-    document.getElementById(
-      "dashboardFilterLabel"
-    );
-
-
-  if (!label) return;
-
-
-  const labels = {
-
-    today:
-      "Menampilkan data hari ini",
-
-    "7days":
-      "Menampilkan data 7 hari terakhir",
-
-    month:
-      "Menampilkan data bulan ini",
-
-    all:
-      "Menampilkan seluruh data transaksi"
-
-  };
-
-
-  label.innerText =
-    labels[
-      dashboardFilter
-    ] ||
-    labels.all;
-
-}
-
-
-function parseTransactionDate(
-  value
-) {
-
-  if (!value) return null;
-
-
-  const date =
-    new Date(value);
-
-
-  if (
-    !isNaN(
-      date.getTime()
-    )
-  ) {
-
-    return date;
-
-  }
-
-
-  const text =
-    String(value)
-      .trim();
-
-
-  const match =
-    text.match(
-      /^(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{4})(?:\s+(\d{1,2}):(\d{2})(?::(\d{2}))?)?$/
-    );
-
-
-  if (!match) {
-
-    return null;
-
-  }
-
-
-  const day =
-    Number(match[1]);
-
-
-  const month =
-    Number(match[2]) - 1;
-
-
-  const year =
-    Number(match[3]);
-
-
-  const hour =
-    Number(
-      match[4] || 0
-    );
-
-
-  const minute =
-    Number(
-      match[5] || 0
-    );
-
-
-  const second =
-    Number(
-      match[6] || 0
-    );
-
-
-  const parsed =
-    new Date(
-
-      year,
-
-      month,
-
-      day,
-
-      hour,
-
-      minute,
-
-      second
-
-    );
-
-
-  return isNaN(
-    parsed.getTime()
-  )
-    ? null
-    : parsed;
-
-}
-
-
-/* =========================================================
-   TABLE
-========================================================= */
-
-function renderTableData(
-  transaksi
-) {
-
-  if (!transaksi.length) {
-
-    dataTable.innerHTML = `
-
-      <tr>
-
-        <td
-          colspan="6"
-          class="text-center py-6 text-slate-400"
-        >
-          Belum ada transaksi.
-        </td>
-
-      </tr>
-
-    `;
-
-
-    kasirRecentTable.innerHTML = `
-
-      <tr>
-
-        <td
-          colspan="4"
-          class="text-center py-4 text-slate-400"
-        >
-          Belum ada transaksi.
-        </td>
-
-      </tr>
-
-    `;
-
-
-    return;
-
-  }
-
-
-  const rows =
-    [...transaksi]
-      .reverse();
-
-
-  dataTable.innerHTML =
-    rows.map(tx => `
-
-      <tr
-        class="hover:bg-slate-50 dark:hover:bg-slate-800/60"
-      >
-
-        <td
-          class="py-2.5 px-3 font-mono text-[11px]"
-        >
-          ${escapeHtml(
-            tx["ID Transaksi"] ||
-            "-"
-          )}
-        </td>
-
-
-        <td class="py-2.5 px-3">
-
-          ${formatDate(
-            tx["Tanggal & Waktu"]
-          )}
-
-        </td>
-
-
-        <td
-          class="py-2.5 px-3 font-semibold"
-        >
-
-          ${escapeHtml(
-            tx["Nama Produk"] ||
-            "-"
-          )}
-
-        </td>
-
-
-        <td
-          class="py-2.5 px-3 text-center font-bold"
-        >
-
-          ${Number(
-            tx["Jumlah"] || 0
-          )}
-
-        </td>
-
-
-        <td
-          class="py-2.5 px-3 text-right"
-        >
-
-          ${rupiah(
-            Number(
-              tx["Harga Satuan"] ||
-              0
-            )
-          )}
-
-        </td>
-
-
-        <td
-          class="py-2.5 px-3 text-right font-bold text-brand-600"
-        >
-
-          ${rupiah(
-            Number(
-              tx["Total Harga"] ||
-              0
-            )
-          )}
-
-        </td>
-
-      </tr>
-
-    `).join("");
-
-
-  kasirRecentTable.innerHTML =
-    rows
-      .slice(0, 5)
-      .map(tx => `
-
-        <tr>
-
-          <td
-            class="py-2 px-3 text-slate-400 text-[11px]"
-          >
-
-            ${formatDate(
-              tx["Tanggal & Waktu"]
-            )}
-
-          </td>
-
-
-          <td class="py-2 px-3 font-medium">
-
-            ${escapeHtml(
-              tx["Nama Produk"] ||
-              "-"
-            )}
-
-          </td>
-
-
-          <td
-            class="py-2 px-3 text-center font-bold"
-          >
-
-            ${Number(
-              tx["Jumlah"] || 0
-            )}
-
-          </td>
-
-
-          <td
-            class="py-2 px-3 text-right font-bold text-brand-600"
-          >
-
-            ${rupiah(
-              Number(
-                tx["Total Harga"] ||
-                0
-              )
-            )}
-
-          </td>
-
-        </tr>
-
-      `).join("");
-
-}
-
-
-/* =========================================================
-   DASHBOARD
-========================================================= */
-
-function updateDashboardStats(
-  transaksi
-) {
-
-  let totalOmset = 0;
-
-  let totalItems = 0;
-
-  const productSummary = {};
-
-
-  transaksi.forEach(tx => {
-
-    const total =
-      Number(
-        tx["Total Harga"] ||
-        0
-      );
-
-
-    const qty =
-      Number(
-        tx["Jumlah"] ||
-        0
-      );
-
-
-    const name =
-      tx["Nama Produk"] ||
-      "Lainnya";
-
-
-    totalOmset += total;
-
-    totalItems += qty;
-
-
-    if (
-      !productSummary[name]
-    ) {
-
-      productSummary[name] = {
-
-        qty: 0,
-
-        omset: 0
-
-      };
-
-    }
-
-
-    productSummary[name].qty +=
-      qty;
-
-
-    productSummary[name].omset +=
-      total;
-
-  });
-
-
-  dashTotalOmset.innerText =
-    rupiah(totalOmset);
-
-
-  dashTotalTx.innerText =
-    transaksi.length;
-
-
-  dashTotalItems.innerText =
-    totalItems +
-    " pcs";
-
-
-  let topProduct = "-";
-
-  let topQty = 0;
-
-
-  Object.entries(
-    productSummary
-  ).forEach(
-    ([name, stats]) => {
-
-      if (
-        stats.qty >
-        topQty
-      ) {
-
-        topQty =
-          stats.qty;
-
-        topProduct =
-          name;
-
-      }
-
-    }
-  );
-
-
-  dashTopProduct.innerText =
-    topProduct;
-
-
-  dashTopQty.innerText =
-    topQty +
-    " porsi terjual";
-
-
-  renderChart(
-    productSummary
-  );
-
-
-  renderBreakdown(
-    productSummary,
-    totalItems
-  );
-
-}
-
-
-/* =========================================================
-   CHART
-========================================================= */
-
-function renderChart(
-  productSummary
-) {
-
-  const labels =
-    Object.keys(
-      productSummary
-    );
-
-
-  const values =
-    labels.map(
-      key =>
-        productSummary[key]
-          .omset
-    );
-
-
-  const canvas =
-    document.getElementById(
-      "salesChart"
-    );
-
-
-  const ctx =
-    canvas.getContext(
-      "2d"
-    );
-
-
-  if (salesChart) {
-
-    salesChart.destroy();
-
-  }
-
-
-  const isDark =
-    document.documentElement
-      .classList
-      .contains("dark");
-
-
-  salesChart =
-    new Chart(
-      ctx,
-      {
-
-        type: "bar",
-
-
-        data: {
-
-          labels:
-            labels.length
-              ? labels
-              : [
-                  "Belum Ada Data"
-                ],
-
-
-          datasets: [
-
-            {
-
-              label:
-                "Pendapatan",
-
-
-              data:
-                values.length
-                  ? values
-                  : [0],
-
-
-              backgroundColor:
-                "#f97316",
-
-
-              borderRadius: 8
-
-            }
-
-          ]
-
-        },
-
-
-        options: {
-
-          responsive: true,
-
-          maintainAspectRatio:
-            false,
-
-
-          plugins: {
-
-            legend: {
-
-              display: false
-
-            }
-
-          },
-
-
-          scales: {
-
-            x: {
-
-              ticks: {
-
-                color:
-                  isDark
-                    ? "#cbd5e1"
-                    : "#64748b"
-
-              }
-
-            },
-
-
-            y: {
-
-              beginAtZero: true,
-
-
-              ticks: {
-
-                color:
-                  isDark
-                    ? "#cbd5e1"
-                    : "#64748b",
-
-
-                callback:
-                  value =>
-                    "Rp " +
-                    Number(
-                      value
-                    )
-                    .toLocaleString(
-                      "id-ID"
-                    )
-
-              }
-
-            }
-
-          }
-
-        }
-
-      }
-    );
-
-}
-
-
-/* =========================================================
-   BREAKDOWN
-========================================================= */
-
-function renderBreakdown(
-  productSummary,
-  totalItems
-) {
-
-  if (!totalItems) {
-
-    productBreakdown.innerHTML = `
-
-      <p
-        class="text-xs text-slate-400 text-center py-4"
-      >
-        Belum ada data statistik.
-      </p>
-
-    `;
-
-    return;
-
-  }
-
-
-  const colors = [
-
-    "bg-brand-600",
-
-    "bg-amber-500",
-
-    "bg-red-500",
-
-    "bg-blue-500",
-
-    "bg-purple-500"
-
-  ];
-
-
-  productBreakdown.innerHTML =
-    Object.entries(
-      productSummary
-    )
-    .sort(
-      (a, b) =>
-        b[1].qty -
-        a[1].qty
-    )
-    .map(
-      ([name, stats], index) => {
-
-        const percentage =
-          Math.round(
-            (
-              stats.qty /
-              totalItems
-            ) * 100
-          );
-
-
-        const color =
-          colors[
-            index %
-            colors.length
-          ];
-
-
-        return `
-
-          <div>
-
-            <div
-              class="flex justify-between text-xs font-semibold mb-1"
-            >
-
-              <span>
-                ${escapeHtml(name)}
-              </span>
-
-
-              <span
-                class="text-slate-500"
-              >
-                ${stats.qty}
-                pcs
-                (${percentage}%)
-              </span>
-
-            </div>
-
-
-            <div
-              class="w-full bg-slate-100 dark:bg-slate-800 h-2 rounded-full overflow-hidden"
-            >
-
-              <div
-                class="${color} h-full rounded-full"
-                style="width:${percentage}%"
-              ></div>
-
-            </div>
-
-          </div>
-
-        `;
-
-      }
-    )
-    .join("");
-
-}
-
-
-/* =========================================================
-   ROLE
-========================================================= */
-
-function switchRole(role) {
-
-  if (
-    role === "admin" &&
-    !isAdminUnlocked
-  ) {
-
-    openPinModal();
-
-    return;
-
-  }
-
-
-  activeRole =
-    role;
-
-
-  if (
-    role === "kasir"
-  ) {
-
-    viewKasir
-      .classList
-      .remove("hidden");
-
-
-    viewAdmin
-      .classList
-      .add("hidden");
-
-
-    btnRoleKasir.className =
-      "px-3 py-1.5 rounded-lg bg-white dark:bg-slate-700 text-brand-600 shadow-sm flex items-center gap-1.5";
-
-
-    btnRoleAdmin.className =
-      "px-3 py-1.5 rounded-lg text-slate-600 dark:text-slate-400 flex items-center gap-1.5";
-
-  } else {
-
-    viewKasir
-      .classList
-      .add("hidden");
-
-
-    viewAdmin
-      .classList
-      .remove("hidden");
-
-
-    btnRoleAdmin.className =
-      "px-3 py-1.5 rounded-lg bg-white dark:bg-slate-700 text-brand-600 shadow-sm flex items-center gap-1.5";
-
-
-    btnRoleKasir.className =
-      "px-3 py-1.5 rounded-lg text-slate-600 dark:text-slate-400 flex items-center gap-1.5";
-
-
-    fetchData();
-
-  }
-
-}
-
-
-/* =========================================================
-   PIN
-========================================================= */
-
-function openPinModal() {
-
-  pinModal
-    .classList
-    .remove("hidden");
-
-
-  pinInput.value =
-    "";
-
-
-  pinError
-    .classList
-    .add("hidden");
-
-
-  setTimeout(
-    () =>
-      pinInput.focus(),
-    100
-  );
-
-}
-
-
-function closePinModal() {
-
-  pinModal
-    .classList
-    .add("hidden");
-
-}
-
-
-async function verifyAdminPin(e) {
-
-  e.preventDefault();
-
-
-  const enteredPin =
-    pinInput.value.trim();
-
-
-  const btn =
-    document.getElementById(
-      "btnVerifyPin"
-    );
-
-
-  const text =
-    document.getElementById(
-      "btnPinText"
-    );
-
-
-  const spinner =
-    document.getElementById(
-      "btnPinSpinner"
-    );
-
-
-  btn.disabled =
-    true;
-
-
-  text.innerText =
-    "Memeriksa...";
-
-
-  spinner
-    .classList
-    .remove("hidden");
-
-
-  try {
-
-    const response =
-      await fetch(
-
-        `${APP_SCRIPT_URL}?action=verifyPin&pin=${encodeURIComponent(enteredPin)}`,
-
-        {
-
-          method: "GET",
-
-          redirect: "follow"
-
-        }
-
-      );
-
-
-    const data =
-      await response.json();
-
-
-    if (
-      data.valid === true
-    ) {
-
-      isAdminUnlocked =
-        true;
-
-
-      closePinModal();
-
-
-      switchRole(
-        "admin"
-      );
-
-    } else {
-
-      pinError.innerText =
-        "PIN Admin salah.";
-
-
-      pinError
-        .classList
-        .remove("hidden");
-
-
-      pinInput.select();
-
-    }
-
-  } catch (error) {
-
-    console.error(error);
-
-
-    if (
-      enteredPin ===
-      ADMIN_PIN_DEFAULT
-    ) {
-
-      isAdminUnlocked =
-        true;
-
-
-      closePinModal();
-
-
-      switchRole(
-        "admin"
-      );
-
-    } else {
-
-      pinError.innerText =
-        "Gagal terhubung ke Apps Script.";
-
-
-      pinError
-        .classList
-        .remove("hidden");
-
-    }
-
-  } finally {
-
-    btn.disabled =
-      false;
-
-
-    text.innerText =
-      "Masuk";
-
-
-    spinner
-      .classList
-      .add("hidden");
-
-  }
-
-}
-
-
-function lockAdmin() {
-
-  isAdminUnlocked =
-    false;
-
-
-  switchRole(
-    "kasir"
-  );
-
-}
-
-
-/* =========================================================
-   STATUS KONEKSI
-========================================================= */
-
-function setConnectionStatus(
-  connected
-) {
-
-  if (connected) {
-
-    urlStatus.className =
-      "text-xs font-semibold text-emerald-600 bg-emerald-50 px-2 py-1 rounded-lg";
-
-
-    urlStatus.innerText =
-      "✓ Terhubung";
-
-  } else {
-
-    urlStatus.className =
-      "text-xs font-semibold text-red-600 bg-red-50 px-2 py-1 rounded-lg";
-
-
-    urlStatus.innerText =
-      "✕ Tidak Terhubung";
-
-  }
-
-}
-
-
-/* =========================================================
-   AUTO REFRESH
-========================================================= */
-
-function startAutoSyncTimer() {
-
-  stopAutoSyncTimer();
-
-
-  if (
-    !autoRefreshToggle.checked
-  ) {
-
-    return;
-
-  }
-
-
-  secondsLeft =
-    AUTO_SYNC_INTERVAL;
-
-
-  syncCountdown.innerText =
-    `(${secondsLeft}s)`;
-
-
-  syncTimer =
-    setInterval(
-      async () => {
-
-        secondsLeft--;
-
-
-        if (
-          secondsLeft <= 0
-        ) {
-
-          secondsLeft =
-            AUTO_SYNC_INTERVAL;
-
-
-          await fetchData(
-            true
-          );
-
-        }
-
-
-        syncCountdown.innerText =
-          `(${secondsLeft}s)`;
-
-      },
-      1000
-    );
-
-}
-
-
-function stopAutoSyncTimer() {
-
-  if (syncTimer) {
-
-    clearInterval(
-      syncTimer
-    );
-
-    syncTimer =
-      null;
-
-  }
-
-}
-
-
-function resetSyncTimer() {
-
-  startAutoSyncTimer();
-
-}
-
-
-autoRefreshToggle.addEventListener(
-  "change",
-  () => {
-
-    if (
-      autoRefreshToggle.checked
-    ) {
-
-      resetSyncTimer();
-
-    } else {
-
-      stopAutoSyncTimer();
-
-
-      syncCountdown.innerText =
-        "(Off)";
-
-    }
-
-  }
-);
-
-
-document
-  .getElementById(
-    "btnFetch"
-  )
-  .addEventListener(
-    "click",
-    async () => {
-
-      await fetchData();
-
-      resetSyncTimer();
-
-    }
-  );
-
-
-/* =========================================================
-   STATUS ALERT
-========================================================= */
-
-function showStatus(
-  type,
-  message
-) {
-
-  const alertBox =
-    document.getElementById(
-      "statusAlert"
-    );
-
-
-  alertBox.classList.remove(
-
-    "hidden",
-
-    "bg-emerald-100",
-
-    "text-emerald-700",
-
-    "bg-red-100",
-
-    "text-red-700"
-
-  );
-
-
-  if (
-    type ===
-    "success"
-  ) {
-
-    alertBox.classList.add(
-
-      "bg-emerald-100",
-
-      "text-emerald-700"
-
-    );
-
-
-    alertBox.innerHTML =
-      `
-
-        <i
-          class="fa-solid fa-circle-check"
-        ></i>
-
-        ${escapeHtml(
-          message
-        )}
-
-      `;
-
-  } else {
-
-    alertBox.classList.add(
-
-      "bg-red-100",
-
-      "text-red-700"
-
-    );
-
-
-    alertBox.innerHTML =
-      `
-
-        <i
-          class="fa-solid fa-circle-xmark"
-        ></i>
-
-        ${escapeHtml(
-          message
-        )}
-
-      `;
-
-  }
-
-
-  setTimeout(
-    () =>
-      alertBox
-        .classList
-        .add("hidden"),
-    5000
-  );
-
-}
-
-
-/* =========================================================
-   DATE
-========================================================= */
-
-function formatDate(
-  dateString
-) {
-
-  if (!dateString)
-    return "-";
-
-
-  const date =
-    parseTransactionDate(
-      dateString
-    );
-
-
-  if (!date) {
-
-    return escapeHtml(
-      String(
-        dateString
-      )
-    );
-
-  }
-
-
-  return date.toLocaleDateString(
-    "id-ID",
-    {
-
-      day: "2-digit",
-
-      month: "short",
-
-      year: "numeric",
-
-      hour: "2-digit",
-
-      minute: "2-digit"
-
-    }
-  );
-
-}
-
-
-/* =========================================================
-   SECURITY
-========================================================= */
-
-function escapeHtml(
-  value
-) {
-
-  return String(
-    value ?? ""
-  )
-
-    .replace(
-      /&/g,
-      "&amp;"
-    )
-
-    .replace(
-      /</g,
-      "&lt;"
-    )
-
-    .replace(
-      />/g,
-      "&gt;"
-    )
-
-    .replace(
-      /"/g,
-      "&quot;"
-    )
-
-    .replace(
-      /'/g,
-      "&#039;"
-    );
-
-}
-
-
-/* =========================================================
-   INITIALIZATION
-========================================================= */
-
-window.addEventListener(
-  "DOMContentLoaded",
-  async () => {
-
-    loadTheme();
-
-
-    renderCart();
-
-
-    setConnectionStatus(
-      false
-    );
-
-
-    updateFilterButtons();
-
-
-    updateDashboardFilterLabel();
-
-
-    await fetchData(
-      true
-    );
-
-
-    startAutoSyncTimer();
-
-  }
-);
-
-</script>
-
-</body>
-</html>
+    console.error(
+      "
