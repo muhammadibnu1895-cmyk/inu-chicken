@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Aplikasi Kasir & Management</title>
+  <title>PosKasir Pro - Apps Script Integrated</title>
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
   <!-- FontAwesome Icons -->
@@ -200,7 +200,7 @@
       <section class="bg-white dark:bg-slate-800 p-5 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm">
         <div class="flex justify-between items-center mb-3">
           <h3 class="text-sm font-bold text-slate-800 dark:text-slate-200 flex items-center gap-2">
-            <i class="fa-solid fa-clock-rotate-left text-brand-600"></i> Transaksi Terakhir (Shift Ini)
+            <i class="fa-solid fa-clock-rotate-left text-brand-600"></i> Transaksi Terakhir
           </h3>
           <button onclick="switchRole('admin')" class="text-xs text-brand-600 dark:text-brand-400 hover:underline">
             Lihat Semua di Dashboard Admin &rarr;
@@ -279,7 +279,9 @@
             <i class="fa-solid fa-trash-can"></i> Hapus
           </button>
         </div>
-        <p id="urlNotice" class="text-[11px] text-slate-400">Ganti URL kapan saja lalu klik "Simpan & Tes URL". URL hanya akan tersimpan jika koneksi berhasil dinyatakan valid.</p>
+        
+        <!-- Debug Console Output Box -->
+        <div id="debugLog" class="hidden mt-2 p-3 bg-slate-900 text-green-400 font-mono text-[11px] rounded-xl overflow-x-auto max-h-32 leading-relaxed border border-slate-700"></div>
       </section>
 
       <!-- DASHBOARD STATS -->
@@ -462,6 +464,7 @@
     const urlStatus = document.getElementById('urlStatus');
     const themeToggle = document.getElementById('themeToggle');
     const themeIcon = document.getElementById('themeIcon');
+    const debugLog = document.getElementById('debugLog');
 
     // Auto Refresh Elements
     const autoRefreshToggle = document.getElementById('autoRefreshToggle');
@@ -553,7 +556,7 @@
       const url = localStorage.getItem('appScriptUrl');
 
       if (!url) {
-        showAlert("URL Google Apps Script belum tersimpan atau tidak valid! Buka Mode Admin untuk menyimpannya.", "error");
+        showAlert("URL Google Apps Script belum tersimpan! Buka Mode Admin untuk menyimpannya.", "error");
         switchRole('admin');
         return;
       }
@@ -619,6 +622,11 @@
       statusAlert.classList.add('hidden');
     }
 
+    function logDebug(msg) {
+      debugLog.classList.remove('hidden');
+      debugLog.innerHTML = `[${new Date().toLocaleTimeString()}] ${msg}`;
+    }
+
     // UJI KONEKSI DENGAN URL MENGGUNAKAN GET & REDIRECT FOLLOW
     async function fetchDataWithUrl(testUrl, silent = false) {
       if (!testUrl) {
@@ -631,22 +639,26 @@
       }
 
       try {
+        logDebug("Menghubungi Apps Script...");
         const res = await fetch(testUrl, {
           method: 'GET',
           redirect: 'follow'
         });
         
         const data = await res.json();
+        logDebug("Respon diterima: " + JSON.stringify(data));
 
-        if (data.status === 'success' && Array.isArray(data.transaksi)) {
-          renderTableData(data.transaksi);
-          updateDashboardStats(data.transaksi);
+        if (data.status === 'success') {
+          const listTransaksi = Array.isArray(data.transaksi) ? data.transaksi : [];
+          renderTableData(listTransaksi);
+          updateDashboardStats(listTransaksi);
           updateUrlStatus('valid');
           return true;
         } else {
-          throw new Error("Format data JSON tidak valid");
+          throw new Error(data.message || "Status bukan success");
         }
       } catch (err) {
+        logDebug("ERROR: " + err.message);
         if (!silent) {
           dataTable.innerHTML = `<tr><td colspan="3" class="text-center py-6 text-red-500 font-semibold"><i class="fa-solid fa-triangle-exclamation mr-1"></i> URL tidak dapat diakses! Pastikan 'Who has access' diatur ke 'Anyone'.</td></tr>`;
         }
@@ -662,7 +674,7 @@
     }
 
     function renderTableData(transaksi) {
-      if (transaksi.length === 0) {
+      if (!transaksi || transaksi.length === 0) {
         dataTable.innerHTML = `<tr><td colspan="3" class="text-center py-6 text-slate-400">Belum ada transaksi di Google Sheets.</td></tr>`;
         kasirRecentTable.innerHTML = `<tr><td colspan="3" class="text-center py-4 text-slate-400">Belum ada transaksi.</td></tr>`;
         return;
@@ -692,23 +704,25 @@
       let totalItems = 0;
       const productSummary = {};
 
-      transaksi.forEach(tx => {
-        const total = Number(tx["Total Harga"]) || 0;
-        const qty = Number(tx["Jumlah"]) || 0;
-        const name = tx["Nama Produk"] || "Lainnya";
+      if (Array.isArray(transaksi)) {
+        transaksi.forEach(tx => {
+          const total = Number(tx["Total Harga"]) || 0;
+          const qty = Number(tx["Jumlah"]) || 0;
+          const name = tx["Nama Produk"] || "Lainnya";
 
-        totalOmset += total;
-        totalItems += qty;
+          totalOmset += total;
+          totalItems += qty;
 
-        if (!productSummary[name]) {
-          productSummary[name] = { qty: 0, omset: 0 };
-        }
-        productSummary[name].qty += qty;
-        productSummary[name].omset += total;
-      });
+          if (!productSummary[name]) {
+            productSummary[name] = { qty: 0, omset: 0 };
+          }
+          productSummary[name].qty += qty;
+          productSummary[name].omset += total;
+        });
+      }
 
       dashTotalOmset.innerText = "Rp " + totalOmset.toLocaleString('id-ID');
-      dashTotalTx.innerText = transaksi.length;
+      dashTotalTx.innerText = transaksi ? transaksi.length : 0;
       dashTotalItems.innerText = totalItems + " pcs";
 
       let topProd = "-";
@@ -739,10 +753,10 @@
       salesChart = new Chart(ctx, {
         type: 'bar',
         data: {
-          labels: labels,
+          labels: labels.length ? labels : ['Belum ada Data'],
           datasets: [{
             label: 'Total Pendapatan (Rp)',
-            data: dataValues,
+            data: dataValues.length ? dataValues : [0],
             backgroundColor: '#22c55e',
             borderRadius: 8
           }]
@@ -896,7 +910,7 @@
       }
     }
 
-    // SIMPAN & TES URL (HANYA SIMPAN APABILA KONEKSI TES BERHASIL)
+    // SIMPAN & TES URL
     btnSaveUrl.addEventListener('click', async () => {
       const inputUrl = webAppUrlInput.value.trim();
       
@@ -920,7 +934,7 @@
       } else {
         localStorage.removeItem('appScriptUrl');
         updateUrlStatus('invalid');
-        alert("❌ URL Gagal Diakses!\n\nPastikan di Google Apps Script:\n1. Access level diset ke 'Anyone'\n2. Melakukan deployment versi baru (New version)\n3. URL berakhiran /exec");
+        alert("❌ URL Gagal Diakses!\n\nLihat kotak log hitam di bawah kolom URL untuk melihat detail respon/error.");
       }
     });
 
@@ -929,6 +943,7 @@
       if (confirm("Apakah Anda yakin ingin menghapus URL Google Apps Script dari memori?")) {
         localStorage.removeItem('appScriptUrl');
         webAppUrlInput.value = "";
+        debugLog.classList.add('hidden');
         updateUrlStatus('not_set');
         stopAutoSyncTimer();
         dataTable.innerHTML = `<tr><td colspan="3" class="text-center py-6 text-slate-400">Silakan masukkan URL Google Apps Script di atas.</td></tr>`;
