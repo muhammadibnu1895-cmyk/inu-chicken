@@ -241,7 +241,7 @@
     </section>
 
     <!-- =========================================================
-         PANEL ADMIN (BERISI SUB-TAB HALAMAN)
+         PANEL ADMIN (SUB-TAB HALAMAN)
     ========================================================= -->
     <section id="viewAdmin" class="hidden space-y-6">
       
@@ -435,7 +435,8 @@
 
   <!-- LOGIKA JAVASCRIPT -->
   <script>
-    const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyl3yqM_E4mGqP2vYcQ5WwY3BfQ1L1B4V_example/exec"; 
+    // URL APPS SCRIPT
+    const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxqnpjgoLlPVZDSjvAy5Amy0YZl1Vf9AG9wwxPqsXjut1i96DzUqySM3OrBIPEhQDvwUQ/exec"; 
     
     let cart = [];
     let salesData = [];
@@ -681,7 +682,6 @@
       let parsed = new Date(dateVal);
       if (!isNaN(parsed.getTime())) return parsed;
 
-      // Handle Format DD/MM/YYYY HH:mm:ss dari Google Sheets
       if (typeof dateVal === "string" && dateVal.includes("/")) {
         const parts = dateVal.split(" ");
         const dateParts = parts[0].split("/");
