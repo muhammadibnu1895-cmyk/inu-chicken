@@ -298,7 +298,10 @@
           <i class="fa-solid fa-chart-line"></i> Analisis Penjualan
         </button>
         <button id="tabBtnCosting" onclick="showAdminSubTab('costing')" class="px-4 py-2 rounded-xl text-xs font-bold transition flex items-center gap-2 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">
-          <i class="fa-solid fa-boxes-packing"></i> Bahan Baku & HPP
+          <i class="fa-solid fa-boxes-packing"></i> Bahan Baku & Belanja
+        </button>
+        <button id="tabBtnHppAnalisis" onclick="showAdminSubTab('hppAnalisis')" class="px-4 py-2 rounded-xl text-xs font-bold transition flex items-center gap-2 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">
+          <i class="fa-solid fa-pie-chart"></i> Analisis HPP Per Porsi
         </button>
         <button id="tabBtnGaji" onclick="showAdminSubTab('gaji')" class="px-4 py-2 rounded-xl text-xs font-bold transition flex items-center gap-2 bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">
           <i class="fa-solid fa-calculator"></i> Hitung Gaji Karyawan
@@ -368,15 +371,15 @@
         </div>
       </div>
 
-      <!-- ==================== SUB TAB 2: BAHAN BAKU & COSTING HPP ==================== -->
+      <!-- ==================== SUB TAB 2: BAHAN BAKU & BELANJA ==================== -->
       <div id="subTabCosting" class="hidden space-y-4">
         <section class="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm space-y-4">
           <div class="border-b border-slate-100 dark:border-slate-800 pb-3 flex flex-wrap justify-between items-center gap-2">
             <div>
               <h3 class="text-base font-bold flex items-center gap-2">
-                <i class="fa-solid fa-boxes-packing text-brand-600"></i> Modal & Bahan Baku Harian
+                <i class="fa-solid fa-boxes-packing text-brand-600"></i> Modal & Belanja Harian
               </h3>
-              <p class="text-xs text-slate-400">Total HPP dihitung otomatis (Qty × Harga Satuan). Format Rupiah rapi!</p>
+              <p class="text-xs text-slate-400">Total modal dihitung otomatis (Qty × Harga Satuan). Gas LPG 3kg alokasi harian (Rp11.000 / 0.5 tabung).</p>
             </div>
             <div class="flex flex-wrap gap-2">
               <button onclick="addMaterialRow()" class="px-3 py-1.5 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 text-xs font-bold rounded-xl transition flex items-center gap-1.5">
@@ -406,7 +409,7 @@
             </table>
           </div>
 
-          <!-- REKAP COSTING & ESTIMASI LABA -->
+          <!-- REKAP COSTING & ESTIMASI LABA HARIAN -->
           <div class="grid grid-cols-1 md:grid-cols-3 gap-4 pt-2">
             <div class="bg-slate-50 dark:bg-slate-800 p-4 rounded-2xl border border-slate-200 dark:border-slate-700">
               <span class="text-xs text-slate-500 font-bold uppercase block">Total Modal Bahan Baku (HPP)</span>
@@ -426,7 +429,46 @@
         </section>
       </div>
 
-      <!-- ==================== SUB TAB 3: HITUNG GAJI KARYAWAN ==================== -->
+      <!-- ==================== SUB TAB 3: ANALISIS HPP PER PORSI (FITUR BARU) ==================== -->
+      <div id="subTabHppAnalisis" class="hidden space-y-4">
+        <section class="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm space-y-4">
+          <div class="border-b border-slate-100 dark:border-slate-800 pb-3 flex justify-between items-center">
+            <div>
+              <h3 class="text-base font-bold flex items-center gap-2">
+                <i class="fa-solid fa-pie-chart text-brand-600"></i> Analisis Food Cost & Margin HPP Per Menu
+              </h3>
+              <p class="text-xs text-slate-400">Evaluasi persentase modal kuliner per porsi (Standar Ideal Usaha Kuliner: 30% - 40%)</p>
+            </div>
+          </div>
+
+          <div class="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-700">
+            <table class="w-full text-xs text-left">
+              <thead class="bg-slate-50 dark:bg-slate-800">
+                <tr>
+                  <th class="py-3 px-3">Nama Menu</th>
+                  <th class="py-3 px-3 text-right">Harga Jual (Rp)</th>
+                  <th class="py-3 px-3 text-right">Estimasi HPP / Porsi (Rp)</th>
+                  <th class="py-3 px-3 text-center">Food Cost %</th>
+                  <th class="py-3 px-3 text-right">Laba Kotor / Porsi</th>
+                  <th class="py-3 px-3 text-center">Status Ideal</th>
+                </tr>
+              </thead>
+              <tbody id="hppAnalysisTableBody"></tbody>
+            </table>
+          </div>
+
+          <div class="bg-amber-50 dark:bg-amber-950/30 border border-amber-200 dark:border-amber-900/50 p-4 rounded-2xl space-y-1 text-xs text-amber-800 dark:text-amber-300">
+            <p class="font-bold flex items-center gap-1.5"><i class="fa-solid fa-circle-info"></i> Panduan Food Cost Kuliner:</p>
+            <ul class="list-disc list-inside space-y-0.5 text-[11px] text-slate-600 dark:text-slate-400">
+              <li><strong>< 30% (Sangat Sehat):</strong> Keuntungan bersih sangat tebal.</li>
+              <li><strong>30% - 40% (Ideal Kuliner):</strong> Rasio standar bisnis restoran / warung makan.</li>
+              <li><strong>> 40% (Waspada):</strong> Margin tipis, disarankan evaluasi porsi atau penyesuaian harga jual.</li>
+            </ul>
+          </div>
+        </section>
+      </div>
+
+      <!-- ==================== SUB TAB 4: HITUNG GAJI KARYAWAN ==================== -->
       <div id="subTabGaji" class="hidden space-y-4">
         <section class="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm space-y-4">
           <div class="border-b border-slate-100 dark:border-slate-800 pb-3">
@@ -500,7 +542,7 @@
         </section>
       </div>
 
-      <!-- ==================== SUB TAB 4: DATA TRANSAKSI ==================== -->
+      <!-- ==================== SUB TAB 5: DATA TRANSAKSI ==================== -->
       <div id="subTabData" class="hidden space-y-4">
         <section class="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm">
           <div class="flex flex-wrap justify-between items-center gap-3 mb-4">
@@ -596,6 +638,14 @@
     let salesData = [];
     let materialsData = [];
 
+    // DATA STANDAR HPP PER PORSI KULINER INU CHICKEN
+    let menuHppConfig = [
+      { nama: "Nasi + Ayam", hargaJual: 10000, hppPorsi: 4500 },
+      { nama: "Ayam", hargaJual: 8000, hppPorsi: 3500 },
+      { nama: "Nasi", hargaJual: 3000, hppPorsi: 1000 },
+      { nama: "Saus / Sambal", hargaJual: 3000, hppPorsi: 800 }
+    ];
+
     let activeFilter = 'today';
     let currentRole = null;
 
@@ -639,6 +689,7 @@
     function showAdminSubTab(tabName) {
       document.getElementById("subTabAnalisis").classList.add("hidden");
       document.getElementById("subTabCosting").classList.add("hidden");
+      document.getElementById("subTabHppAnalisis").classList.add("hidden");
       document.getElementById("subTabGaji").classList.add("hidden");
       document.getElementById("subTabData").classList.add("hidden");
 
@@ -647,6 +698,7 @@
 
       document.getElementById("tabBtnAnalisis").className = inactiveBtnClass;
       document.getElementById("tabBtnCosting").className = inactiveBtnClass;
+      document.getElementById("tabBtnHppAnalisis").className = inactiveBtnClass;
       document.getElementById("tabBtnGaji").className = inactiveBtnClass;
       document.getElementById("tabBtnData").className = inactiveBtnClass;
 
@@ -658,6 +710,10 @@
         document.getElementById("subTabCosting").classList.remove("hidden");
         document.getElementById("tabBtnCosting").className = activeBtnClass;
         calculateCostingSummary();
+      } else if (tabName === 'hppAnalisis') {
+        document.getElementById("subTabHppAnalisis").classList.remove("hidden");
+        document.getElementById("tabBtnHppAnalisis").className = activeBtnClass;
+        renderHppAnalysisTable();
       } else if (tabName === 'gaji') {
         document.getElementById("subTabGaji").classList.remove("hidden");
         document.getElementById("tabBtnGaji").className = activeBtnClass;
@@ -665,6 +721,48 @@
         document.getElementById("subTabData").classList.remove("hidden");
         document.getElementById("tabBtnData").className = activeBtnClass;
       }
+    }
+
+    // RENDER TABEL ANALISIS HPP PER PORSI
+    function renderHppAnalysisTable() {
+      const tbody = document.getElementById("hppAnalysisTableBody");
+      tbody.innerHTML = "";
+
+      menuHppConfig.forEach((item, idx) => {
+        const foodCostPct = ((item.hppPorsi / item.hargaJual) * 100).toFixed(1);
+        const labaKotor = item.hargaJual - item.hppPorsi;
+
+        let badgeClass = "bg-emerald-100 text-emerald-700 dark:bg-emerald-900/50 dark:text-emerald-300";
+        let badgeStatus = "Sangat Ideal";
+
+        if (foodCostPct > 40) {
+          badgeClass = "bg-red-100 text-red-700 dark:bg-red-900/50 dark:text-red-300";
+          badgeStatus = "Terlalu Tinggi (>40%)";
+        } else if (foodCostPct >= 30) {
+          badgeClass = "bg-blue-100 text-blue-700 dark:bg-blue-900/50 dark:text-blue-300";
+          badgeStatus = "Ideal Kuliner";
+        }
+
+        tbody.innerHTML += `
+          <tr class="border-b border-slate-100 dark:border-slate-800">
+            <td class="py-3 px-3 font-bold">${item.nama}</td>
+            <td class="py-3 px-3 text-right font-semibold">${formatRupiah(item.hargaJual)}</td>
+            <td class="py-3 px-3 text-right">
+              <input type="number" value="${item.hppPorsi}" oninput="updateHppPorsiConfig(${idx}, this.value)" class="w-28 text-right font-bold px-2 py-1 bg-slate-50 dark:bg-slate-800 rounded border border-slate-200 dark:border-slate-700 text-xs">
+            </td>
+            <td class="py-3 px-3 text-center font-black">${foodCostPct}%</td>
+            <td class="py-3 px-3 text-right font-black text-emerald-600">${formatRupiah(labaKotor)}</td>
+            <td class="py-3 px-3 text-center">
+              <span class="px-2.5 py-1 rounded-full text-[10px] font-bold ${badgeClass}">${badgeStatus}</span>
+            </td>
+          </tr>
+        `;
+      });
+    }
+
+    function updateHppPorsiConfig(idx, val) {
+      menuHppConfig[idx].hppPorsi = Number(val) || 0;
+      renderHppAnalysisTable();
     }
 
     // --- LOGIN / AUTENTIKASI PIN ---
@@ -891,7 +989,7 @@
         }
       } catch (err) {
         alert("Terjadi kesalahan jaringan.");
-      } finally {
+      } font-bold {
         btn.disabled = false;
         btn.innerText = "Selesaikan Transaksi";
       }
@@ -921,7 +1019,7 @@
       window.print();
     }
 
-    // --- RENDER TABEL BAHAN BAKU HARIAN (PENAKSIRAN SUBTOTAL = QTY * HARGA SATUAN) ---
+    // --- RENDER TABEL BAHAN BAKU HARIAN ---
     function renderMaterialsTable() {
       const tbody = document.getElementById("materialsTableBody");
       tbody.innerHTML = "";
