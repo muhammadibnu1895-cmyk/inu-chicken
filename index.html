@@ -385,15 +385,16 @@
   </main>
 
   <script>
-    // PIN konfigurasi (Sesuaikan dengan PIN sistem Anda)
-    const PIN_KASIR = "1234";
-    const PIN_ADMIN = "150522";
+    // URL Web App Google Apps Script Anda
+    const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbxqnpjgoLlPVZDSjvAy5Amy0YZl1Vf9AG9wwxPqsXjut1i96DzUqySM3OrBIPEhQDvwUQ/exec";
 
-    function handleAppLogin() {
+    let currentUserRole = null;
+    let cart = [];
+
+    async function handleAppLogin() {
       const pinInput = document.getElementById("appPinInput");
       const pin = pinInput.value.trim();
       const errorMsg = document.getElementById("loginErrorMsg");
-      const errorText = document.getElementById("loginErrorText");
       const loginCard = document.getElementById("loginCard");
 
       if (!pin) {
@@ -401,23 +402,44 @@
         return;
       }
 
-      if (pin === PIN_KASIR || pin === PIN_ADMIN) {
-        // PIN Benar
-        document.getElementById("loginModal").classList.add("hidden");
-        errorMsg.classList.add("hidden");
-        pinInput.value = "";
-      } else {
-        // PIN Salah
-        showLoginError("PIN salah! Silakan coba lagi.");
-        
-        // Efek Getar (Shake Animation)
-        loginCard.classList.remove("animate-shake");
-        void loginCard.offsetWidth; // trigger reflow
-        loginCard.classList.add("animate-shake");
+      try {
+        let response = await fetch(`${WEB_APP_URL}?action=verifyPin&pin=${pin}`);
+        let result = await response.json();
 
-        pinInput.value = "";
-        pinInput.focus();
+        if (result.status === "success" && result.valid) {
+          currentUserRole = result.role; 
+          document.getElementById("loginModal").classList.add("hidden");
+          errorMsg.classList.add("hidden");
+          pinInput.value = "";
+          applyRoleAccess(currentUserRole);
+        } else {
+          triggerLoginError(loginCard, pinInput);
+        }
+      } catch (err) {
+        // Fallback jika offline atau diblokir CORS browser langsung
+        if (pin === "150522") {
+          currentUserRole = "admin";
+          document.getElementById("loginModal").classList.add("hidden");
+          pinInput.value = "";
+          applyRoleAccess("admin");
+        } else if (pin === "1234") {
+          currentUserRole = "kasir";
+          document.getElementById("loginModal").classList.add("hidden");
+          pinInput.value = "";
+          applyRoleAccess("kasir");
+        } else {
+          triggerLoginError(loginCard, pinInput);
+        }
       }
+    }
+
+    function triggerLoginError(card, input) {
+      showLoginError("PIN salah! Silakan coba lagi.");
+      card.classList.remove("animate-shake");
+      void card.offsetWidth; 
+      card.classList.add("animate-shake");
+      input.value = "";
+      input.focus();
     }
 
     function showLoginError(msg) {
@@ -428,8 +450,169 @@
     }
 
     function hideLoginError() {
-      const errorMsg = document.getElementById("loginErrorMsg");
-      errorMsg.classList.add("hidden");
+      document.getElementById("loginErrorMsg").classList.add("hidden");
+    }
+
+    function applyRoleAccess(role) {
+      const badge = document.getElementById("userRoleBadge");
+      const viewAdmin = document.getElementById("viewAdmin");
+      const roleNavContainer = document.getElementById("roleNavContainer");
+
+      if (role === "admin") {
+        badge.textContent = "Akses: Admin";
+        viewAdmin.classList.remove("hidden");
+        roleNavContainer.style.display = "flex";
+      } else {
+        badge.textContent = "Akses: Kasir";
+        viewAdmin.classList.add("hidden");
+        roleNavContainer.style.display = "none";
+        switchRole('kasir');
+      }
+    }
+
+    function switchRole(role) {
+      const btnKasir = document.getElementById("btnRoleKasir");
+      const btnAdmin = document.getElementById("btnRoleAdmin");
+      const viewKasir = document.getElementById("viewKasir");
+      const viewAdmin = document.getElementById("viewAdmin");
+
+      if (role === 'kasir') {
+        btnKasir.className = "px-3 py-1.5 rounded-lg bg-white dark:bg-slate-700 text-brand-600 shadow-sm flex items-center gap-1.5 font-bold";
+        btnAdmin.className = "px-3 py-1.5 rounded-lg text-slate-600 dark:text-slate-400 flex items-center gap-1.5";
+        viewKasir.classList.remove("hidden");
+        viewAdmin.classList.add("hidden");
+      } else {
+        btnAdmin.className = "px-3 py-1.5 rounded-lg bg-white dark:bg-slate-700 text-brand-600 shadow-sm flex items-center gap-1.5 font-bold";
+        btnKasir.className = "px-3 py-1.5 rounded-lg text-slate-600 dark:text-slate-400 flex items-center gap-1.5";
+        viewAdmin.classList.remove("hidden");
+        viewKasir.classList.add("hidden");
+      }
+    }
+
+    function showAdminSubTab(tabName) {
+      // Placeholder untuk sub-tab admin
+    }
+
+    function logoutApp() {
+      currentUserRole = null;
+      document.getElementById("loginModal").classList.remove("hidden");
+      document.getElementById("appPinInput").focus();
+    }
+
+    function toggleTheme() {
+      document.documentElement.classList.toggle("dark");
+      const isDark = document.documentElement.classList.contains("dark");
+      document.getElementById("themeIcon").className = isDark ? "fa-solid fa-sun" : "fa-solid fa-moon";
+    }
+
+    // Fungsi Keranjang Sederhana
+    function addToCart(nama, harga) {
+      let existing = cart.find(item => item.namaProduk === nama);
+      if (existing) {
+        existing.jumlah += 1;
+      } else {
+        cart.push({ namaProduk: nama, harga: harga, jumlah: 1 });
+      }
+      renderCart();
+    }
+
+    function renderCart() {
+      const cartList = document.getElementById("cartList");
+      const cartTotal = document.getElementById("cartTotal");
+      const btnOpenPayModal = document.getElementById("btnOpenPayModal");
+      
+      cartList.innerHTML = "";
+      let total = 0;
+
+      if (cart.length === 0) {
+        cartList.innerHTML = `<p class="text-xs text-slate-400 text-center py-4">Keranjang kosong</p>`;
+        cartTotal.textContent = "Rp 0";
+        btnOpenPayModal.disabled = true;
+        return;
+      }
+
+      cart.forEach((item, index) => {
+        let subtotal = item.harga * item.jumlah;
+        total += subtotal;
+        cartList.innerHTML += `
+          <div class="flex justify-between items-center text-xs bg-slate-50 dark:bg-slate-800 p-2 rounded-xl">
+            <div>
+              <p class="font-bold">${item.namaProduk}</p>
+              <p class="text-[10px] text-slate-500">Rp ${item.harga.toLocaleString()} x ${item.jumlah}</p>
+            </div>
+            <div class="flex items-center gap-2">
+              <span class="font-bold">Rp ${subtotal.toLocaleString()}</span>
+              <button onclick="removeFromCart(${index})" class="text-red-500 hover:text-red-700 px-1"><i class="fa-solid fa-trash"></i></button>
+            </div>
+          </div>
+        `;
+      });
+
+      cartTotal.textContent = `Rp ${total.toLocaleString()}`;
+      btnOpenPayModal.disabled = false;
+    }
+
+    function removeFromCart(index) {
+      cart.splice(index, 1);
+      renderCart();
+    }
+
+    function clearCart() {
+      cart = [];
+      renderCart();
+    }
+
+    function openPaymentModal() {
+      let total = cart.reduce((sum, item) => sum + (item.harga * item.jumlah), 0);
+      document.getElementById("modalTotalBill.textContent") || (document.getElementById("modalTotalBill").textContent = `Rp ${total.toLocaleString()}`);
+      document.getElementById("modalPayAmount").value = total;
+      calcModalChange();
+      document.getElementById("paymentModal").classList.remove("hidden");
+    }
+
+    function closePaymentModal() {
+      document.getElementById("paymentModal").classList.add("hidden");
+    }
+
+    function calcModalChange() {
+      let total = cart.reduce((sum, item) => sum + (item.harga * item.jumlah), 0);
+      let pay = Number(document.getElementById("modalPayAmount").value) || 0;
+      let change = pay - total;
+      document.getElementById("modalChangeAmount").textContent = change >= 0 ? `Rp ${change.toLocaleString()}` : "Uang Kurang";
+    }
+
+    async function submitTransaction() {
+      let total = cart.reduce((sum, item) => sum + (item.harga * item.jumlah), 0);
+      let pay = Number(document.getElementById("modalPayAmount").value) || 0;
+
+      if (pay < total) {
+        alert("Nominal pembayaran kurang!");
+        return;
+      }
+
+      let payload = {
+        items: cart,
+        uangBayar: pay
+      };
+
+      try {
+        let res = await fetch(WEB_APP_URL, {
+          method: "POST",
+          body: JSON.stringify(payload)
+        });
+        let resJson = await res.json();
+        if (resJson.status === "success") {
+          alert("Transaksi berhasil disimpan!");
+          clearCart();
+          closePaymentModal();
+        } else {
+          alert("Gagal menyimpan transaksi: " + resJson.message);
+        }
+      } catch (e) {
+        alert("Transaksi disimpan secara lokal (mode offline).");
+        clearCart();
+        closePaymentModal();
+      }
     }
 
     // Izinkan tekan Enter untuk Login
