@@ -782,8 +782,8 @@
         </div>
 
 
-        <!-- STATISTIK CARD AKUMULASI -->
-        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3">
+        <!-- STATISTIK CARD AKUMULASI (4 CARD) -->
+        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
 
           <div class="bg-white dark:bg-slate-900 p-4 rounded-2xl border border-slate-200 dark:border-slate-700">
             <span class="text-[10px] text-slate-500 font-semibold uppercase block">
@@ -817,21 +817,11 @@
 
           <div class="bg-white dark:bg-slate-900 p-4 rounded-2xl border border-slate-200 dark:border-slate-700">
             <span class="text-[10px] text-slate-500 font-semibold uppercase block">
-              Jumlah Transaksi
+              Total Qty (Ayam + Nasi)
             </span>
-            <p id="dashTotalTx"
-               class="text-lg font-black mt-1">
-              0
-            </p>
-          </div>
-
-          <div class="bg-white dark:bg-slate-900 p-4 rounded-2xl border border-slate-200 dark:border-slate-700">
-            <span class="text-[10px] text-slate-500 font-semibold uppercase block">
-              Menu Terlaris
-            </span>
-            <p id="dashTopProduct"
-               class="text-xs font-extrabold mt-1 text-emerald-600 truncate">
-              -
+            <p id="dashTotalAyamNasiQty"
+               class="text-lg font-black mt-1 text-brand-600">
+              0 pcs
             </p>
           </div>
 
@@ -840,18 +830,36 @@
 
         <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
 
+          <!-- GRAFIK INFORMASI PENJUALAN INU CHICKEN -->
           <div
             class="md:col-span-2 bg-white dark:bg-slate-900
                    p-5 rounded-2xl border
                    border-slate-200 dark:border-slate-700
-                   shadow-sm">
+                   shadow-sm flex flex-col justify-between">
 
-            <h3 class="text-xs font-bold uppercase tracking-wider text-slate-500">
-              Grafik Porsi Terjual
-            </h3>
+            <div>
+              <h3 class="text-xs font-bold uppercase tracking-wider text-slate-500 text-center mb-4">
+                INFORMASI PENJUALAN INU CHICKEN
+              </h3>
 
-            <div class="relative h-64 w-full">
-              <canvas id="productBarChart"></canvas>
+              <div class="relative h-64 w-full">
+                <canvas id="productBarChart"></canvas>
+              </div>
+            </div>
+
+            <!-- TABEL DETAIL PRESISI LURUS PER KOLOM -->
+            <div class="mt-4 border border-slate-200 dark:border-slate-700 rounded-xl overflow-hidden text-[11px]">
+              <div class="overflow-x-auto">
+                <table class="w-full text-center border-collapse">
+                  <thead>
+                    <tr id="trNamaBarang" class="font-bold border-b border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/50"></tr>
+                  </thead>
+                  <tbody>
+                    <tr id="trNilaiBarang" class="border-b border-slate-100 dark:border-slate-800"></tr>
+                    <tr id="trQtyBarang" class="bg-blue-50/50 dark:bg-blue-950/20 font-bold text-blue-600 dark:text-blue-400"></tr>
+                  </tbody>
+                </table>
+              </div>
             </div>
 
           </div>
@@ -861,11 +869,11 @@
                    rounded-2xl border border-slate-200
                    dark:border-slate-700 shadow-sm">
 
-            <h3 class="text-xs font-bold uppercase tracking-wider text-slate-500">
+            <h3 class="text-xs font-bold uppercase tracking-wider text-slate-500 mb-4">
               Metode Pembayaran
             </h3>
 
-            <div class="relative h-64 w-full">
+            <div class="relative h-72 w-full">
               <canvas id="productPieChart"></canvas>
             </div>
 
@@ -1554,7 +1562,7 @@ let materialsData = [];
 
 let activeFilter = "today";
 let currentRole = null;
-let currentPaymentMethod = "Tunai"; // Global state metode pembayaran
+let currentPaymentMethod = "Tunai";
 
 let barChartInstance = null;
 let pieChartInstance = null;
@@ -3063,17 +3071,9 @@ async function fetchSalesData() {
     }
 
 
-    /* ========================
-       PENJUALAN
-    ======================== */
-
     salesData =
       data.data || [];
 
-
-    /* ========================
-       MASTER HPP
-    ======================== */
 
     const masterHpp =
       data.masterHpp || [];
@@ -3128,93 +3128,69 @@ async function fetchSalesData() {
 
 
 /* ============================================================
-   DATE PARSER
+   DATE PARSER KEBALE & ULTRA FLEXIBLE
 ============================================================ */
 
 function parseTransactionDate(value) {
 
   if (!value) return null;
 
+  if (value instanceof Date) return value;
 
-  if (value instanceof Date) {
+  // Coba standar Date constructor
+  const parsed = new Date(value);
+  if (!isNaN(parsed.getTime())) return parsed;
 
-    return value;
+  if (typeof value === "string") {
+    let cleanVal = value.trim();
 
-  }
+    // Format DD/MM/YYYY atau MM/DD/YYYY atau YYYY/MM/DD
+    if (cleanVal.includes("/")) {
+      const parts = cleanVal.split(" ");
+      const dateParts = parts[0].split("/");
 
+      if (dateParts.length === 3) {
+        let p1 = Number(dateParts[0]);
+        let p2 = Number(dateParts[1]);
+        let p3 = Number(dateParts[2]);
 
-  const parsed =
-    new Date(value);
+        let year, month, day;
 
+        if (p1 > 1000) { // YYYY/MM/DD
+          year = p1; month = p2 - 1; day = p3;
+        } else if (p3 > 1000) { // DD/MM/YYYY
+          year = p3; month = p2 - 1; day = p1;
+        } else {
+          year = 2000 + p3; month = p2 - 1; day = p1;
+        }
 
-  if (!isNaN(parsed.getTime())) {
+        let hour = 0, minute = 0, second = 0;
+        if (parts[1]) {
+          const timeParts = parts[1].split(":");
+          hour = Number(timeParts[0]) || 0;
+          minute = Number(timeParts[1]) || 0;
+          second = Number(timeParts[2]) || 0;
+        }
 
-    return parsed;
-
-  }
-
-
-  if (
-    typeof value === "string" &&
-    value.includes("/")
-  ) {
-
-    const parts =
-      value.split(" ");
-
-    const dateParts =
-      parts[0].split("/");
-
-
-    if (
-      dateParts.length === 3
-    ) {
-
-      const day =
-        Number(dateParts[0]);
-
-      const month =
-        Number(dateParts[1]) - 1;
-
-      const year =
-        Number(dateParts[2]);
-
-
-      let hour = 0;
-      let minute = 0;
-      let second = 0;
-
-
-      if (parts[1]) {
-
-        const time =
-          parts[1].split(":");
-
-        hour =
-          Number(time[0]) || 0;
-
-        minute =
-          Number(time[1]) || 0;
-
-        second =
-          Number(time[2]) || 0;
-
+        return new Date(year, month, day, hour, minute, second);
       }
-
-
-      return new Date(
-        year,
-        month,
-        day,
-        hour,
-        minute,
-        second
-      );
-
     }
-
+    
+    // Format YYYY-MM-DD
+    if (cleanVal.includes("-")) {
+      const parts = cleanVal.split(" ");
+      const dateParts = parts[0].split("-");
+      if (dateParts.length === 3) {
+        let p1 = Number(dateParts[0]);
+        let p2 = Number(dateParts[1]);
+        let p3 = Number(dateParts[2]);
+        let year = p1 > 1000 ? p1 : p3;
+        let month = p2 - 1;
+        let day = p1 > 1000 ? p3 : p1;
+        return new Date(year, month, day);
+      }
+    }
   }
-
 
   return null;
 
@@ -3222,13 +3198,12 @@ function parseTransactionDate(value) {
 
 
 /* ============================================================
-   FILTER
+   FILTER DATA BY PERIOD (Dengan Fallback String Matching Mematikan)
 ============================================================ */
 
 function setDashboardFilter(filter) {
 
   activeFilter = filter;
-
 
   const buttons = {
     today: "filterToday",
@@ -3237,119 +3212,87 @@ function setDashboardFilter(filter) {
     all: "filterAll"
   };
 
+  Object.values(buttons).forEach(id => {
+    document.getElementById(id).className =
+      "px-3 py-1.5 rounded-lg text-xs font-bold text-slate-500";
+  });
 
-  Object.values(buttons)
-    .forEach(id => {
-
-      document
-        .getElementById(id)
-        .className =
-        "px-3 py-1.5 rounded-lg text-xs " +
-        "font-bold text-slate-500";
-
-    });
-
-
-  document
-    .getElementById(buttons[filter])
-    .className =
-    "px-3 py-1.5 rounded-lg text-xs " +
-    "font-bold bg-white dark:bg-slate-700 " +
-    "text-brand-600 shadow-sm";
-
+  document.getElementById(buttons[filter]).className =
+    "px-3 py-1.5 rounded-lg text-xs font-bold bg-white dark:bg-slate-700 text-brand-600 shadow-sm";
 
   const labels = {
-
-    today:
-      "Menampilkan data hari ini",
-
-    "7days":
-      "Menampilkan data 7 hari terakhir",
-
-    month:
-      "Menampilkan data bulan ini",
-
-    all:
-      "Menampilkan seluruh data"
-
+    today: "Menampilkan data hari ini",
+    "7days": "Menampilkan data 7 hari terakhir",
+    month: "Menampilkan data bulan ini",
+    all: "Menampilkan seluruh data"
   };
 
-
-  document
-    .getElementById("dashboardFilterLabel")
-    .innerText =
-    labels[filter];
-
+  document.getElementById("dashboardFilterLabel").innerText = labels[filter];
 
   renderDashboard();
 
 }
 
 
-function filterDataByPeriod(
-  data,
-  filter
-) {
+function filterDataByPeriod(data, filter) {
 
-  const now =
-    new Date();
-
+  const now = new Date();
+  const currentMonth = now.getMonth();
+  const currentYear = now.getFullYear();
 
   return data.filter(item => {
 
-    const date =
-      parseTransactionDate(
-        item["Tanggal & Waktu"]
-      );
+    const rawDate = item["Tanggal & Waktu"] || item["Waktu"] || item["Tanggal"] || "";
+    const date = parseTransactionDate(rawDate);
 
+    if (filter === "all") return true;
 
-    if (!date) {
-
-      return filter === "all";
-
-    }
-
-
-    if (filter === "today") {
-
-      return (
-        date.toDateString() ===
-        now.toDateString()
-      );
-
-    }
-
-
-    if (filter === "7days") {
-
-      const diff =
-        (
-          now.getTime() -
-          date.getTime()
-        ) /
-        (
-          1000 * 60 * 60 * 24
+    // Jika Objek Tanggal Berhasil Terurai
+    if (date) {
+      if (filter === "today") {
+        return (
+          date.getDate() === now.getDate() &&
+          date.getMonth() === currentMonth &&
+          date.getFullYear() === currentYear
         );
+      }
 
-      return (
-        diff >= 0 &&
-        diff <= 7
-      );
+      if (filter === "7days") {
+        const diffTime = now.getTime() - date.getTime();
+        const diffDays = diffTime / (1000 * 3600 * 24);
+        return diffDays >= 0 && diffDays <= 7;
+      }
 
+      if (filter === "month") {
+        return (
+          date.getMonth() === currentMonth &&
+          date.getFullYear() === currentYear
+        );
+      }
     }
 
+    // FALLBACK TEKS JIKA TANGGAL DI SHEET DALAM FORMAT TEKS LOKAL/INDONESIA
+    const rawStr = String(rawDate).trim();
+    const targetMonthPad = String(currentMonth + 1).padStart(2, '0');
+    const targetMonthNoPad = String(currentMonth + 1);
 
     if (filter === "month") {
-
+      // Cocokkan pola bulan dan tahun di dalam string
       return (
-        date.getMonth() ===
-          now.getMonth() &&
-        date.getFullYear() ===
-          now.getFullYear()
+        rawStr.includes(`/${targetMonthPad}/${currentYear}`) ||
+        rawStr.includes(`/${targetMonthNoPad}/${currentYear}`) ||
+        rawStr.includes(`-${targetMonthPad}-${currentYear}`) ||
+        rawStr.includes(`${currentYear}-${targetMonthPad}`)
       );
-
     }
 
+    if (filter === "today") {
+      const dayPad = String(now.getDate()).padStart(2, '0');
+      return (
+        rawStr.includes(`${dayPad}/${targetMonthPad}/${currentYear}`) ||
+        rawStr.includes(`${now.getDate()}/${targetMonthNoPad}/${currentYear}`)
+      );
+    }
 
     return true;
 
@@ -3364,297 +3307,174 @@ function filterDataByPeriod(
 
 function renderDashboard() {
 
-  const filtered =
-    filterDataByPeriod(
-      salesData,
-      activeFilter
-    );
-
+  const filtered = filterDataByPeriod(salesData, activeFilter);
 
   let totalOmset = 0;
   let omsetTunai = 0;
   let omsetNonTunai = 0;
-  let totalItems = 0;
+  let totalAyamNasiQty = 0;
 
-  const productCounts = {};
-  const paymentMethodsOmset = {
-    "Tunai": 0,
-    "Non-Tunai": 0
+  // Struktur Barang
+  const productSummary = {
+    "Nasi + Ayam": { omset: 0, qty: 0 },
+    "Ayam": { omset: 0, qty: 0 },
+    "Nasi": { omset: 0, qty: 0 },
+    "Saus / Sambal": { omset: 0, qty: 0 }
   };
-
 
   filtered.forEach(row => {
 
-    const total =
-      getNumericValue(
-        row["Total Harga"]
-      );
-
-    const qty =
-      Number(
-        row["Jumlah"]
-      ) || 0;
-
-    const product =
-      row["Nama Produk"] ||
-      "Lainnya";
-
-    const method =
-      row["Metode Pembayaran"] ||
-      row["Metode"] ||
-      "Tunai";
-
+    const total = getNumericValue(row["Total Harga"]);
+    const qty = Number(row["Jumlah"]) || 0;
+    const product = row["Nama Produk"] || "Lainnya";
+    const method = row["Metode Pembayaran"] || row["Metode"] || "Tunai";
 
     totalOmset += total;
 
     if (method.toLowerCase().includes("non")) {
       omsetNonTunai += total;
-      paymentMethodsOmset["Non-Tunai"] += total;
     } else {
       omsetTunai += total;
-      paymentMethodsOmset["Tunai"] += total;
     }
 
-    totalItems += qty;
+    const lowerProd = product.toLowerCase();
+    if (lowerProd.includes("ayam") || lowerProd.includes("nasi")) {
+      totalAyamNasiQty += qty;
+    }
 
-
-    productCounts[product] =
-      (
-        productCounts[product] ||
-        0
-      ) + qty;
+    if (!productSummary[product]) {
+      productSummary[product] = { omset: 0, qty: 0 };
+    }
+    productSummary[product].omset += total;
+    productSummary[product].qty += qty;
 
   });
 
 
-  let topProduct = "-";
-  let topQty = 0;
-
-
-  Object.entries(
-    productCounts
-  ).forEach(
-    ([name, qty]) => {
-
-      if (qty > topQty) {
-
-        topQty = qty;
-
-        topProduct = name;
-
-      }
-
-    }
-  );
-
-
-  document.getElementById(
-    "dashTotalOmset"
-  ).innerText =
-    formatRupiah(totalOmset);
-
-  document.getElementById(
-    "dashOmsetTunai"
-  ).innerText =
-    formatRupiah(omsetTunai);
-
-  document.getElementById(
-    "dashOmsetNonTunai"
-  ).innerText =
-    formatRupiah(omsetNonTunai);
-
-
-  document.getElementById(
-    "dashTotalTx"
-  ).innerText =
-    filtered.length;
-
-
-  document.getElementById(
-    "dashTopProduct"
-  ).innerText =
-    topProduct === "-"
-      ? "-"
-      : `${topProduct} (${topQty})`;
+  // Update Card
+  document.getElementById("dashTotalOmset").innerText = formatRupiah(totalOmset);
+  document.getElementById("dashOmsetTunai").innerText = formatRupiah(omsetTunai);
+  document.getElementById("dashOmsetNonTunai").innerText = formatRupiah(omsetNonTunai);
+  document.getElementById("dashTotalAyamNasiQty").innerText = `${totalAyamNasiQty} pcs`;
 
 
   renderCharts(
-    productCounts,
-    paymentMethodsOmset
+    productSummary,
+    { "Tunai": omsetTunai, "Non-Tunai": omsetNonTunai }
   );
 
 
-  renderTable(
-    salesData
-  );
+  renderTable(salesData);
 
 }
 
 
 /* ============================================================
-   CHARTS
+   CHARTS & TABEL HTML LURUS PRESISI
 ============================================================ */
 
-function renderCharts(
-  counts,
-  paymentMethods
-) {
+function renderCharts(productSummary, paymentMethods) {
 
-  const barLabels = Object.keys(counts);
-  const qtyData = Object.values(counts);
+  const products = Object.keys(productSummary);
+  const omsetValues = products.map(p => productSummary[p].omset);
 
-  const pieLabels = Object.keys(paymentMethods);
-  const methodData = Object.values(paymentMethods);
+  const barCanvas = document.getElementById("productBarChart");
+  const pieCanvas = document.getElementById("productPieChart");
 
+  if (!barCanvas || !pieCanvas) return;
 
-  const barCanvas =
-    document.getElementById(
-      "productBarChart"
-    );
+  if (barChartInstance) barChartInstance.destroy();
+  if (pieChartInstance) pieChartInstance.destroy();
 
-  const pieCanvas =
-    document.getElementById(
-      "productPieChart"
-    );
-
-
-  if (!barCanvas || !pieCanvas) {
-
-    return;
-
-  }
-
-
-  if (barChartInstance) {
-
-    barChartInstance.destroy();
-
-  }
-
-
-  if (pieChartInstance) {
-
-    pieChartInstance.destroy();
-
-  }
-
-
-  barChartInstance =
-    new Chart(
-      barCanvas.getContext("2d"),
-      {
-
-        type: "bar",
-
-        data: {
-
-          labels:
-            barLabels.length
-              ? barLabels
-              : ["Belum Ada Data"],
-
-          datasets: [{
-
-            label:
-              "Porsi Terjual",
-
-            data:
-              qtyData.length
-                ? qtyData
-                : [0],
-
-            backgroundColor:
-              "#ea580c",
-
-            borderRadius:
-              8
-
-          }]
-
-        },
-
-        options: {
-
-          responsive: true,
-
-          maintainAspectRatio: false,
-
-          plugins: {
-
-            legend: {
-              display: false
-            }
-
-          },
-
-          scales: {
-
-            y: {
-
-              beginAtZero: true,
-
-              ticks: {
-                precision: 0
-              }
-
-            }
-
-          }
-
+  // 1. RENDER CHART
+  barChartInstance = new Chart(barCanvas.getContext("2d"), {
+    type: "bar",
+    data: {
+      labels: products,
+      datasets: [
+        {
+          label: "NILAI",
+          data: omsetValues,
+          backgroundColor: "#ea580c",
+          borderRadius: 6,
+          barPercentage: 0.45
         }
-
-      }
-    );
-
-
-  pieChartInstance =
-    new Chart(
-      pieCanvas.getContext("2d"),
-      {
-
-        type: "doughnut",
-
-        data: {
-
-          labels: pieLabels,
-
-          datasets: [{
-
-            data: methodData,
-
-            backgroundColor: [
-              "#10b981", // Emerald untuk Tunai
-              "#3b82f6"  // Blue untuk Non-Tunai
-            ]
-
-          }]
-
-        },
-
-        options: {
-
-          responsive: true,
-
-          maintainAspectRatio: false,
-
-          plugins: {
-
-            legend: {
-              position: "bottom"
+      ]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          callbacks: {
+            label: function(context) {
+              const prodName = context.label;
+              const qty = productSummary[prodName] ? productSummary[prodName].qty : 0;
+              return [
+                ` NILAI: ${formatRupiah(context.raw)}`,
+                ` QTY: ${qty}`
+              ];
             }
-
           }
-
         }
-
+      },
+      scales: {
+        x: {
+          grid: { display: false },
+          ticks: { display: false }
+        },
+        y: {
+          beginAtZero: true,
+          display: false
+        }
       }
-    );
+    }
+  });
+
+
+  // 2. RENDER TABEL HTML LURUS SESUAI DAFTAR BARANG
+  const trNama = document.getElementById("trNamaBarang");
+  const trNilai = document.getElementById("trNilaiBarang");
+  const trQty = document.getElementById("trQtyBarang");
+
+  trNama.innerHTML = `<td class="p-2 text-left font-extrabold text-slate-600 bg-slate-100 dark:bg-slate-800 w-32">NAMA BARANG</td>`;
+  trNilai.innerHTML = `<td class="p-2 text-left font-extrabold text-brand-600 bg-slate-50 dark:bg-slate-800/80 w-32">NILAI</td>`;
+  trQty.innerHTML = `<td class="p-2 text-left font-extrabold text-blue-600 dark:text-blue-400 bg-blue-100/50 dark:bg-blue-900/40 w-32">QTY</td>`;
+
+  products.forEach(p => {
+    const data = productSummary[p] || { omset: 0, qty: 0 };
+
+    trNama.innerHTML += `<td class="p-2 font-bold uppercase text-slate-700 dark:text-slate-200 border-l border-slate-200 dark:border-slate-700">${escapeHtml(p)}</td>`;
+    trNilai.innerHTML += `<td class="p-2 font-bold text-brand-600 border-l border-slate-200 dark:border-slate-700">${formatRupiah(data.omset)}</td>`;
+    trQty.innerHTML += `<td class="p-2 font-black text-blue-600 dark:text-blue-400 border-l border-slate-200 dark:border-slate-700">${data.qty}</td>`;
+  });
+
+
+  // 3. GRAFIK PIE METODE PEMBAYARAN
+  pieChartInstance = new Chart(pieCanvas.getContext("2d"), {
+    type: "doughnut",
+    data: {
+      labels: Object.keys(paymentMethods),
+      datasets: [{
+        data: Object.values(paymentMethods),
+        backgroundColor: ["#10b981", "#3b82f6"]
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { position: "bottom" }
+      }
+    }
+  });
 
 }
 
 
 /* ============================================================
-   TABLE
+   TABLE TRANSAKSI
 ============================================================ */
 
 function renderTable(data) {
@@ -3684,7 +3504,7 @@ function renderTable(data) {
 
       const date =
         parseTransactionDate(
-          row["Tanggal & Waktu"]
+          row["Tanggal & Waktu"] || row["Waktu"]
         );
 
 
@@ -3693,6 +3513,7 @@ function renderTable(data) {
           ? date.toLocaleString("id-ID")
           : (
               row["Tanggal & Waktu"] ||
+              row["Waktu"] ||
               "-"
             );
 
@@ -3860,7 +3681,7 @@ function exportToCSV() {
 
     const date =
       parseTransactionDate(
-        row["Tanggal & Waktu"]
+        row["Tanggal & Waktu"] || row["Waktu"]
       );
 
 
@@ -3869,6 +3690,7 @@ function exportToCSV() {
         ? date.toLocaleString("id-ID")
         : (
             row["Tanggal & Waktu"] ||
+            row["Waktu"] ||
             ""
           );
 
