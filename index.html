@@ -60,14 +60,16 @@
       }
     }
 
-    input::-webkit-outer-spin-button,
-    input::-webkit-inner-spin-button {
-      -webkit-appearance: none;
+    /* Mengaktifkan spinner bawaan browser untuk input number */
+    input[type=number].show-spinners::-webkit-outer-spin-button,
+    input[type=number].show-spinners::-webkit-inner-spin-button {
+      -webkit-appearance: inner-spin-button !important;
+      opacity: 1;
       margin: 0;
     }
 
-    input[type=number] {
-      -moz-appearance: textfield;
+    input[type=number].show-spinners {
+      -moz-appearance: numberinput !important;
     }
   </style>
 </head>
@@ -516,7 +518,7 @@
                      text-left shadow-sm transition">
 
               <div class="flex justify-between items-start">
-                <span class="text-3xl">🌶️</span>
+                <span class="text-3xl">🌶️️</span>
 
                 <span
                   class="w-7 h-7 rounded-full
@@ -684,14 +686,36 @@
         </button>
 
         <button
+          id="tabBtnPengeluaran"
+          onclick="showAdminSubTab('pengeluaran')"
+          class="px-4 py-2 rounded-xl text-xs font-bold
+                 bg-slate-100 dark:bg-slate-800
+                 text-slate-600 dark:text-slate-300">
+
+          <i class="fa-solid fa-chart-pie"></i>
+          Analisis Pengeluaran
+        </button>
+
+        <button
+          id="tabBtnMasterHpp"
+          onclick="showAdminSubTab('masterHpp')"
+          class="px-4 py-2 rounded-xl text-xs font-bold
+                 bg-slate-100 dark:bg-slate-800
+                 text-slate-600 dark:text-slate-300">
+
+          <i class="fa-solid fa-database"></i>
+          Master HPP
+        </button>
+
+        <button
           id="tabBtnCosting"
           onclick="showAdminSubTab('costing')"
           class="px-4 py-2 rounded-xl text-xs font-bold
                  bg-slate-100 dark:bg-slate-800
                  text-slate-600 dark:text-slate-300">
 
-          <i class="fa-solid fa-boxes-packing"></i>
-          Bahan Baku & HPP
+          <i class="fa-solid fa-receipt"></i>
+          HPP
         </button>
 
         <button
@@ -719,10 +743,7 @@
       </div>
 
 
-      <!-- =====================================================
-            ANALISIS
-      ====================================================== -->
-
+      <!-- ANALISIS PENJUALAN -->
       <div id="subTabAnalisis" class="space-y-6">
 
         <div
@@ -782,47 +803,26 @@
         </div>
 
 
-        <!-- STATISTIK CARD AKUMULASI (4 CARD) -->
         <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
 
           <div class="bg-white dark:bg-slate-900 p-4 rounded-2xl border border-slate-200 dark:border-slate-700">
-            <span class="text-[10px] text-slate-500 font-semibold uppercase block">
-              Total Omset
-            </span>
-            <p id="dashTotalOmset"
-               class="text-lg font-black mt-1 text-brand-600">
-              Rp 0
-            </p>
+            <span class="text-[10px] text-slate-500 font-semibold uppercase block">Total Omset</span>
+            <p id="dashTotalOmset" class="text-lg font-black mt-1 text-brand-600">Rp 0</p>
           </div>
 
           <div class="bg-emerald-50 dark:bg-emerald-950/30 p-4 rounded-2xl border border-emerald-200 dark:border-emerald-800">
-            <span class="text-[10px] text-emerald-700 dark:text-emerald-400 font-semibold uppercase block">
-              💵 Omset Tunai
-            </span>
-            <p id="dashOmsetTunai"
-               class="text-lg font-black mt-1 text-emerald-600 dark:text-emerald-400">
-              Rp 0
-            </p>
+            <span class="text-[10px] text-emerald-700 dark:text-emerald-400 font-semibold uppercase block">💵 Omset Tunai</span>
+            <p id="dashOmsetTunai" class="text-lg font-black mt-1 text-emerald-600 dark:text-emerald-400">Rp 0</p>
           </div>
 
           <div class="bg-blue-50 dark:bg-blue-950/30 p-4 rounded-2xl border border-blue-200 dark:border-blue-800">
-            <span class="text-[10px] text-blue-700 dark:text-blue-400 font-semibold uppercase block">
-              💳 Omset Non-Tunai
-            </span>
-            <p id="dashOmsetNonTunai"
-               class="text-lg font-black mt-1 text-blue-600 dark:text-blue-400">
-              Rp 0
-            </p>
+            <span class="text-[10px] text-blue-700 dark:text-blue-400 font-semibold uppercase block">💳 Omset Non-Tunai</span>
+            <p id="dashOmsetNonTunai" class="text-lg font-black mt-1 text-blue-600 dark:text-blue-400">Rp 0</p>
           </div>
 
           <div class="bg-white dark:bg-slate-900 p-4 rounded-2xl border border-slate-200 dark:border-slate-700">
-            <span class="text-[10px] text-slate-500 font-semibold uppercase block">
-              Total Qty (Ayam + Nasi)
-            </span>
-            <p id="dashTotalAyamNasiQty"
-               class="text-lg font-black mt-1 text-brand-600">
-              0 pcs
-            </p>
+            <span class="text-[10px] text-slate-500 font-semibold uppercase block">Total Qty (Ayam + Nasi)</span>
+            <p id="dashTotalAyamNasiQty" class="text-lg font-black mt-1 text-brand-600">0 pcs</p>
           </div>
 
         </div>
@@ -830,7 +830,6 @@
 
         <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
 
-          <!-- GRAFIK INFORMASI PENJUALAN INU CHICKEN -->
           <div
             class="md:col-span-2 bg-white dark:bg-slate-900
                    p-5 rounded-2xl border
@@ -847,7 +846,6 @@
               </div>
             </div>
 
-            <!-- TABEL DETAIL PRESISI LURUS PER KOLOM -->
             <div class="mt-4 border border-slate-200 dark:border-slate-700 rounded-xl overflow-hidden text-[11px]">
               <div class="overflow-x-auto">
                 <table class="w-full text-center border-collapse">
@@ -884,212 +882,141 @@
       </div>
 
 
-      <!-- =====================================================
-            HPP
-      ====================================================== -->
+      <!-- ANALISIS PENGELUARAN -->
+      <div id="subTabPengeluaran" class="space-y-6 hidden">
 
-      <div id="subTabCosting" class="hidden space-y-6">
+        <div class="flex flex-wrap justify-between items-center gap-3 bg-white dark:bg-slate-900 p-4 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm">
+          <div>
+            <h2 class="text-base font-bold"><i class="fa-solid fa-chart-pie text-red-500"></i> Laporan Analisis Pengeluaran HPP</h2>
+            <p id="expenseFilterLabel" class="text-xs text-slate-400 mt-0.5">Menampilkan pengeluaran hari ini</p>
+          </div>
+          <div class="flex items-center gap-1 bg-slate-100 dark:bg-slate-800 p-1 rounded-xl">
+            <button onclick="setExpenseFilter('today')" id="expFilterToday" class="px-3 py-1.5 rounded-lg text-xs font-bold bg-white dark:bg-slate-700 text-brand-600 shadow-sm">Hari Ini</button>
+            <button onclick="setExpenseFilter('7days')" id="expFilter7Days" class="px-3 py-1.5 rounded-lg text-xs font-bold text-slate-500">7 Hari</button>
+            <button onclick="setExpenseFilter('month')" id="expFilterMonth" class="px-3 py-1.5 rounded-lg text-xs font-bold text-slate-500">Bulan Ini</button>
+            <button onclick="setExpenseFilter('all')" id="expFilterAll" class="px-3 py-1.5 rounded-lg text-xs font-bold text-slate-500">Semua</button>
+          </div>
+        </div>
 
-        <!-- MASTER HPP -->
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+          <div class="bg-white dark:bg-slate-900 p-4 rounded-2xl border border-slate-200 dark:border-slate-700">
+            <span class="text-[10px] text-slate-500 font-semibold uppercase block">Total Pengeluaran HPP</span>
+            <p id="expenseTotalCost" class="text-lg font-black mt-1 text-red-500">Rp 0</p>
+          </div>
+          <div class="bg-amber-50 dark:bg-amber-950/30 p-4 rounded-2xl border border-amber-200 dark:border-amber-800">
+            <span class="text-[10px] text-amber-700 dark:text-amber-400 font-semibold uppercase block">Total Jenis Bahan Baku</span>
+            <p id="expenseTotalItems" class="text-lg font-black mt-1 text-amber-600 dark:text-amber-400">0 Jenis</p>
+          </div>
+          <div class="bg-slate-50 dark:bg-slate-800 p-4 rounded-2xl border border-slate-200 dark:border-slate-700">
+            <span class="text-[10px] text-slate-500 font-semibold uppercase block">Bahan Pengeluaran Tertinggi</span>
+            <p id="expenseTopItem" class="text-xs font-black mt-1 text-slate-800 dark:text-slate-200 truncate">-</p>
+          </div>
+        </div>
 
-        <section
-          class="bg-white dark:bg-slate-900 p-5
-                 rounded-2xl border border-slate-200
-                 dark:border-slate-700 shadow-sm space-y-4">
-
-          <div
-            class="flex flex-wrap justify-between items-center gap-3
-                   border-b border-slate-100
-                   dark:border-slate-800 pb-3">
-
-            <div>
-
-              <h3 class="text-base font-bold">
-                <i class="fa-solid fa-database text-brand-600"></i>
-                Master HPP / Bahan Baku
-              </h3>
-
-              <p class="text-xs text-slate-400 mt-1">
-                Daftar bahan baku permanen yang digunakan sebagai template.
-              </p>
-
-            </div>
-
-            <div class="flex flex-wrap gap-2">
-
-              <button
-                onclick="addMaterialRow()"
-                class="px-3 py-1.5 bg-slate-100
-                       dark:bg-slate-800 text-xs font-bold rounded-xl">
-
-                <i class="fa-solid fa-plus"></i>
-                Tambah Bahan
-              </button>
-
-              <button
-                onclick="saveMasterMaterialsPermanently()"
-                id="btnSaveMasterHPP"
-                class="px-3 py-1.5 bg-brand-600
-                       hover:bg-brand-700 text-white
-                       text-xs font-bold rounded-xl">
-
-                <i class="fa-solid fa-floppy-disk"></i>
-                Simpan Master
-              </button>
-
+        <div class="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm flex flex-col justify-between">
+          <div>
+            <h3 class="text-xs font-bold uppercase tracking-wider text-slate-500 text-center mb-4">INFORMASI PENGELUARAN INU CHICKEN</h3>
+            <div class="relative h-64 w-full">
+              <canvas id="expenseBarChart"></canvas>
             </div>
           </div>
 
-
-          <div
-            class="overflow-x-auto rounded-xl
-                   border border-slate-200 dark:border-slate-700">
-
-            <table class="w-full text-xs text-left">
-
-              <thead class="bg-slate-50 dark:bg-slate-800">
-
-                <tr>
-                  <th class="py-3 px-3">
-                    Nama Bahan
-                  </th>
-
-                  <th class="py-3 px-3 text-center">
-                    Qty
-                  </th>
-
-                  <th class="py-3 px-3 text-right">
-                    Harga Satuan
-                  </th>
-
-                  <th class="py-3 px-3 text-right">
-                    Subtotal
-                  </th>
-
-                  <th class="py-3 px-3 text-center">
-                    Aksi
-                  </th>
-                </tr>
-
-              </thead>
-
-              <tbody id="materialsTableBody"></tbody>
-
-            </table>
+          <div class="mt-4 border border-slate-200 dark:border-slate-700 rounded-xl overflow-hidden text-[11px]">
+            <div class="overflow-x-auto">
+              <table class="w-full text-center border-collapse">
+                <thead>
+                  <tr id="expTrNamaBahan" class="font-bold border-b border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/50"></tr>
+                </thead>
+                <tbody>
+                  <tr id="expTrNilaiBiaya" class="border-b border-slate-100 dark:border-slate-800"></tr>
+                  <tr id="expTrQtyBahan" class="bg-red-50/50 dark:bg-red-950/20 font-bold text-red-600 dark:text-red-400"></tr>
+                </tbody>
+              </table>
+            </div>
           </div>
-
-
-          <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-
-            <div
-              class="bg-slate-50 dark:bg-slate-800 p-4
-                     rounded-2xl border border-slate-200
-                     dark:border-slate-700">
-
-              <span class="text-xs text-slate-500 font-bold uppercase">
-                Total Master HPP
-              </span>
-
-              <p id="totalMaterialCost"
-                 class="text-xl font-black text-red-500 mt-1">
-                Rp 0
-              </p>
-
-            </div>
-
-            <div
-              class="bg-slate-50 dark:bg-slate-800 p-4
-                     rounded-2xl border border-slate-200
-                     dark:border-slate-700">
-
-              <span class="text-xs text-slate-500 font-bold uppercase">
-                Total Omset
-              </span>
-
-              <p id="costingOmsetTotal"
-                 class="text-xl font-black text-brand-600 mt-1">
-                Rp 0
-              </p>
-
-            </div>
-
-            <div
-              class="bg-emerald-50 dark:bg-emerald-950/30 p-4
-                     rounded-2xl border border-emerald-200
-                     dark:border-emerald-800">
-
-              <span class="text-xs text-emerald-600 font-bold uppercase">
-                Estimasi Selisih
-              </span>
-
-              <p id="netProfitTotal"
-                 class="text-xl font-black text-emerald-600 mt-1">
-                Rp 0
-              </p>
-
-            </div>
-
-          </div>
-
-        </section>
-
-
-        <!-- HPP HARIAN -->
-
-        <section
-          class="bg-white dark:bg-slate-900 p-5
-                 rounded-2xl border border-slate-200
-                 dark:border-slate-700 shadow-sm">
-
-          <div
-            class="flex flex-wrap justify-between items-center gap-3
-                   border-b border-slate-100
-                   dark:border-slate-800 pb-3 mb-4">
-
-            <div>
-
-              <h3 class="text-base font-bold">
-                <i class="fa-solid fa-receipt text-brand-600"></i>
-                Catat Belanja HPP Hari Ini
-              </h3>
-
-              <p class="text-xs text-slate-400">
-                Data ini masuk ke sheet HPP sebagai riwayat pembelian.
-              </p>
-
-            </div>
-
-            <button
-              onclick="saveHPPToBackend()"
-              id="btnSaveHPPBackend"
-              class="px-4 py-2 bg-brand-600
-                     hover:bg-brand-700 text-white
-                     rounded-xl text-xs font-bold">
-
-              <i class="fa-solid fa-cloud-arrow-up"></i>
-              Catat Belanja Hari Ini
-
-            </button>
-
-          </div>
-
-          <p class="text-xs text-slate-500">
-            Data Master HPP di atas digunakan sebagai daftar baku.
-            Saat tombol ini ditekan, data yang sedang tampil dicatat
-            sebagai pembelian HPP hari ini.
-          </p>
-
-        </section>
+        </div>
 
       </div>
 
 
-      <!-- =====================================================
-            GAJI
-      ====================================================== -->
+      <!-- MASTER HPP -->
+      <div id="subTabMasterHpp" class="hidden space-y-6">
+        <section class="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm space-y-4">
+          <div class="flex flex-wrap justify-between items-center gap-3 border-b border-slate-100 dark:border-slate-800 pb-3">
+            <div>
+              <h3 class="text-base font-bold text-slate-800 dark:text-slate-100">
+                <i class="fa-solid fa-database text-brand-600"></i> Kelola Master HPP / Bahan Baku
+              </h3>
+              <p class="text-xs text-slate-400 mt-1">Ubah Harga Satuan bila ada perubahan harga pasar. Qty Standar terkunci sebagai porsi acuan baku.</p>
+            </div>
+            <div class="flex flex-wrap gap-2">
+              <button onclick="addMaterialRow()" class="px-3 py-1.5 bg-slate-100 dark:bg-slate-800 text-xs font-bold rounded-xl hover:bg-slate-200 transition">
+                <i class="fa-solid fa-plus"></i> Tambah Bahan
+              </button>
+              <button onclick="saveMasterMaterialsPermanently()" id="btnSaveMasterHPP" class="px-4 py-1.5 bg-brand-600 hover:bg-brand-700 text-white text-xs font-bold rounded-xl shadow-sm transition">
+                <i class="fa-solid fa-floppy-disk"></i> Simpan Master HPP
+              </button>
+            </div>
+          </div>
 
+          <div class="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-700">
+            <table class="w-full text-xs text-left">
+              <thead class="bg-slate-50 dark:bg-slate-800">
+                <tr>
+                  <th class="py-3 px-3">Nama Bahan Baku</th>
+                  <th class="py-3 px-3 text-center">Kuantitas Standar (Terkunci)</th>
+                  <th class="py-3 px-3 text-right">Harga Satuan (Bisa Diubah)</th>
+                  <th class="py-3 px-3 text-right">Biaya Standar Harian (Rp)</th>
+                  <th class="py-3 px-3 text-center">Aksi</th>
+                </tr>
+              </thead>
+              <tbody id="materialsTableBody"></tbody>
+            </table>
+          </div>
+        </section>
+      </div>
+
+
+      <!-- TAB HPP HARIAN -->
+      <div id="subTabCosting" class="hidden space-y-6">
+        <section class="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm space-y-4">
+          <div class="border-b border-slate-100 dark:border-slate-800 pb-3">
+            <h3 class="text-base font-bold text-slate-800 dark:text-slate-100">
+              <i class="fa-solid fa-receipt text-brand-600"></i> Catat Belanja HPP Hari Ini
+            </h3>
+            <p class="text-xs text-slate-400 mt-1">Ubah Qty pemakaian hari ini menggunakan tombol panah atas/bawah pada input. Tekan simpan untuk mencatat ke riwayat Sheet.</p>
+          </div>
+
+          <div class="bg-brand-50 dark:bg-brand-950/30 p-4 rounded-2xl border border-brand-200 dark:border-brand-900/50 flex flex-wrap justify-between items-center gap-4">
+            <div>
+              <p class="text-xs font-bold uppercase text-brand-600">Total Biaya Belanja Hari Ini</p>
+              <p id="dailyHppCostPreview" class="text-2xl font-black text-brand-700 dark:text-brand-400 mt-0.5">Rp 0</p>
+              <p class="text-[11px] text-slate-500 mt-1">Dihitung otomatis dari Qty × Harga Satuan terbaru.</p>
+            </div>
+            <button onclick="saveHPPToBackend()" id="btnSaveHPPBackend" class="px-5 py-3 bg-brand-600 hover:bg-brand-700 text-white rounded-xl text-xs font-bold transition shadow-md flex items-center gap-2">
+              <i class="fa-solid fa-cloud-arrow-up"></i> Catat Belanja Hari Ini
+            </button>
+          </div>
+
+          <div class="overflow-x-auto rounded-xl border border-slate-200 dark:border-slate-700">
+            <table class="w-full text-xs text-left">
+              <thead class="bg-slate-50 dark:bg-slate-800">
+                <tr>
+                  <th class="py-3 px-3">Nama Bahan Baku</th>
+                  <th class="py-3 px-3 text-center">Qty Hari Ini (Tombol Panah / Ketik)</th>
+                  <th class="py-3 px-3 text-right">Harga Satuan</th>
+                  <th class="py-3 px-3 text-right">Total Biaya Hari Ini (Rp)</th>
+                </tr>
+              </thead>
+              <tbody id="dailyHppPreviewBody"></tbody>
+            </table>
+          </div>
+        </section>
+      </div>
+
+
+      <!-- GAJI -->
       <div id="subTabGaji" class="hidden space-y-4">
-
         <section
           class="bg-white dark:bg-slate-900 p-5
                  rounded-2xl border border-slate-200
@@ -1109,9 +1036,7 @@
             </p>
           </div>
 
-
           <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-
             <div>
               <label class="block text-xs font-semibold text-slate-500 mb-1">
                 Nama Karyawan
@@ -1209,14 +1134,11 @@
 
           </div>
 
-
           <div class="grid grid-cols-2 sm:grid-cols-3 gap-3">
-
             <div class="bg-slate-50 dark:bg-slate-800 p-3 rounded-xl">
               <span class="text-[11px] text-slate-500">
                 Total Periode
               </span>
-
               <span
                 id="salTotalDaysDisplay"
                 class="text-sm font-bold block">
@@ -1228,7 +1150,6 @@
               <span class="text-[11px] text-emerald-600">
                 Hari Kerja
               </span>
-
               <span
                 id="salWorkDaysDisplay"
                 class="text-sm font-bold block">
@@ -1240,16 +1161,13 @@
               <span class="text-[11px] text-amber-600">
                 Sakit / Izin
               </span>
-
               <span
                 id="salSickDaysDisplay"
                 class="text-sm font-bold block">
                 0 Hari
               </span>
             </div>
-
           </div>
-
 
           <div
             class="bg-brand-50 dark:bg-brand-950/40
@@ -1258,23 +1176,19 @@
                    flex flex-wrap justify-between items-center gap-3">
 
             <div>
-
               <p class="text-xs uppercase font-bold text-brand-600">
                 Total Gaji Bersih
               </p>
-
               <p
                 id="salTotalDisplay"
                 class="text-2xl font-black text-brand-700">
                 Rp 0
               </p>
-
               <p
                 id="salDetailFormula"
                 class="text-[11px] text-slate-500">
                 -
               </p>
-
             </div>
 
             <button
@@ -1282,7 +1196,6 @@
               class="px-4 py-2.5 bg-brand-600
                      hover:bg-brand-700 text-white
                      rounded-xl text-xs font-bold">
-
               <i class="fa-solid fa-print"></i>
               Cetak Slip Gaji
             </button>
@@ -1293,12 +1206,8 @@
       </div>
 
 
-      <!-- =====================================================
-            DATA TRANSAKSI
-      ====================================================== -->
-
+      <!-- DATA TRANSAKSI -->
       <div id="subTabData" class="hidden space-y-4">
-
         <section
           class="bg-white dark:bg-slate-900 p-5
                  rounded-2xl border border-slate-200
@@ -1314,13 +1223,11 @@
             </h2>
 
             <div class="flex gap-2">
-
               <button
                 onclick="exportToCSV()"
                 class="px-3 py-1.5 bg-emerald-600
                        hover:bg-emerald-700 text-white
                        text-xs rounded-lg font-bold">
-
                 <i class="fa-solid fa-file-excel"></i>
                 Ekspor CSV
               </button>
@@ -1330,14 +1237,11 @@
                 class="px-3 py-1.5 bg-slate-100
                        dark:bg-slate-800 text-xs
                        rounded-lg font-bold">
-
                 <i class="fa-solid fa-rotate"></i>
                 Refresh
               </button>
-
             </div>
           </div>
-
 
           <div
             class="overflow-x-auto rounded-xl
@@ -1345,9 +1249,7 @@
                    dark:border-slate-700">
 
             <table class="w-full text-xs text-left">
-
               <thead class="bg-slate-50 dark:bg-slate-800">
-
                 <tr>
                   <th class="py-3 px-3">ID</th>
                   <th class="py-3 px-3">Waktu</th>
@@ -1357,16 +1259,12 @@
                   <th class="py-3 px-3 text-right">Harga</th>
                   <th class="py-3 px-3 text-right">Total</th>
                 </tr>
-
               </thead>
-
               <tbody id="salesTableBody"></tbody>
-
             </table>
           </div>
 
         </section>
-
       </div>
 
     </section>
@@ -1374,13 +1272,9 @@
   </main>
 
 
-  <!-- =========================================================
-        PRINT SALARY
-  ========================================================== -->
-
+  <!-- PRINT SALARY -->
   <div id="printSalaryArea"
        class="hidden p-8 bg-white text-slate-900 space-y-4">
-
     <div class="text-center border-b pb-4">
       <h1 class="text-2xl font-bold">INU CHICKEN</h1>
       <p class="text-xs">SLIP GAJI KARYAWAN</p>
@@ -1388,1837 +1282,855 @@
     </div>
 
     <div class="space-y-1 text-sm">
-      <p>
-        <strong>Nama:</strong>
-        <span id="printName"></span>
-      </p>
-
-      <p>
-        <strong>Periode:</strong>
-        <span id="printPeriod"></span>
-      </p>
-
-      <p>
-        <strong>Sakit / Izin:</strong>
-        <span id="printSickDaysText"></span>
-      </p>
+      <p><strong>Nama:</strong> <span id="printName"></span></p>
+      <p><strong>Periode:</strong> <span id="printPeriod"></span></p>
+      <p><strong>Sakit / Izin:</strong> <span id="printSickDaysText"></span></p>
     </div>
 
     <table class="w-full text-xs border-collapse border border-slate-300">
-
       <thead>
         <tr class="bg-slate-100">
-          <th class="border border-slate-300 p-2 text-left">
-            Komponen
-          </th>
-
-          <th class="border border-slate-300 p-2 text-right">
-            Nominal
-          </th>
+          <th class="border border-slate-300 p-2 text-left">Komponen</th>
+          <th class="border border-slate-300 p-2 text-right">Nominal</th>
         </tr>
       </thead>
-
       <tbody>
-
         <tr>
-          <td class="border border-slate-300 p-2">
-            Gaji Pokok
-          </td>
-
-          <td
-            class="border border-slate-300 p-2 text-right"
-            id="printBase">
-          </td>
+          <td class="border border-slate-300 p-2">Gaji Pokok</td>
+          <td class="border border-slate-300 p-2 text-right" id="printBase"></td>
         </tr>
-
         <tr>
-          <td class="border border-slate-300 p-2">
-            Potongan / Kasbon
-          </td>
-
-          <td
-            class="border border-slate-300 p-2
-                   text-right text-red-600"
-            id="printDeduction">
-          </td>
+          <td class="border border-slate-300 p-2">Potongan / Kasbon</td>
+          <td class="border border-slate-300 p-2 text-right text-red-600" id="printDeduction"></td>
         </tr>
-
         <tr class="font-bold bg-slate-50">
-
-          <td class="border border-slate-300 p-2">
-            Total Bersih
-          </td>
-
-          <td
-            class="border border-slate-300 p-2 text-right"
-            id="printTotal">
-          </td>
-
+          <td class="border border-slate-300 p-2">Total Bersih</td>
+          <td class="border border-slate-300 p-2 text-right" id="printTotal"></td>
         </tr>
-
       </tbody>
-
     </table>
 
     <div class="flex justify-between pt-12 text-center text-xs">
-
       <div>
         <p>Penerima,</p>
         <br><br>
         <p id="printSignEmp" class="font-bold"></p>
       </div>
-
       <div>
         <p>Pengelola,</p>
         <br><br>
         <p class="font-bold">( Owner Inu Chicken )</p>
       </div>
-
     </div>
   </div>
 
 
-  <!-- =========================================================
-        PRINT RECEIPT
-  ========================================================== -->
-
+  <!-- PRINT RECEIPT -->
   <div id="printReceiptArea"
-       class="hidden p-4 bg-white text-slate-900
-              space-y-3 font-mono text-xs w-64 mx-auto">
-
+       class="hidden p-4 bg-white text-slate-900 space-y-3 font-mono text-xs w-64 mx-auto">
     <div class="text-center border-b pb-2 border-dashed">
-
-      <h2 class="text-base font-bold">
-        INU CHICKEN
-      </h2>
-
-      <p class="text-[10px]">
-        Kota Depok, Jawa Barat
-      </p>
-
+      <h2 class="text-base font-bold">INU CHICKEN</h2>
+      <p class="text-[10px]">Kota Depok, Jawa Barat</p>
       <p id="rcptDate" class="text-[10px]"></p>
       <p id="rcptId" class="text-[10px]"></p>
-
     </div>
 
-    <div
-      id="rcptItems"
-      class="space-y-1 border-b pb-2 border-dashed">
-    </div>
+    <div id="rcptItems" class="space-y-1 border-b pb-2 border-dashed"></div>
 
     <div class="space-y-1 text-right">
-
       <div class="flex justify-between">
         <span>Metode:</span>
         <span id="rcptMethod">Tunai</span>
       </div>
-
       <div class="flex justify-between font-bold">
         <span>Total:</span>
         <span id="rcptTotal"></span>
       </div>
-
       <div class="flex justify-between">
         <span>Bayar:</span>
         <span id="rcptPay"></span>
       </div>
-
       <div class="flex justify-between">
         <span>Kembali:</span>
         <span id="rcptChange"></span>
       </div>
-
     </div>
 
-    <div
-      class="text-center pt-2 text-[10px]
-             border-t border-dashed">
-
+    <div class="text-center pt-2 text-[10px] border-t border-dashed">
       <p>Terima Kasih Atas Kunjungan Anda!</p>
       <p>Ayam Goreng Lezat & Gurih</p>
-
     </div>
-
   </div>
 
 
 <script>
 
-/* ============================================================
-   CONFIG
-============================================================ */
-
 const APPS_SCRIPT_URL =
   "https://script.google.com/macros/s/AKfycbxqnpjgoLlPVZDSjvAy5Amy0YZl1Vf9AG9wwxPqsXjut1i96DzUqySM3OrBIPEhQDvwUQ/exec";
-
-
-/* ============================================================
-   STATE
-============================================================ */
 
 let cart = [];
 let salesData = [];
 let materialsData = [];
+let dailyMaterialsData = [];
 
 let activeFilter = "today";
+let activeExpenseFilter = "today";
+
 let currentRole = null;
 let currentPaymentMethod = "Tunai";
-
 let barChartInstance = null;
 let pieChartInstance = null;
-
-
-/* ============================================================
-   HELPER
-============================================================ */
+let expenseChartInstance = null;
 
 function formatRupiah(number) {
-
   return new Intl.NumberFormat("id-ID", {
     style: "currency",
     currency: "IDR",
     maximumFractionDigits: 0
   }).format(Number(number) || 0);
-
 }
 
-
 function escapeHtml(value) {
-
   return String(value ?? "")
     .replace(/&/g, "&amp;")
     .replace(/</g, "&lt;")
     .replace(/>/g, "&gt;")
     .replace(/"/g, "&quot;")
     .replace(/'/g, "&#039;");
-
 }
 
-
-/* ============================================================
-   INIT
-============================================================ */
+function parseDecimal(val) {
+  if (val === null || val === undefined || val === "") return 0;
+  if (typeof val === "number") return val;
+  let str = String(val).trim().replace(",", ".");
+  return parseFloat(str) || 0;
+}
 
 document.addEventListener("DOMContentLoaded", () => {
-
   initThemeDefaultLight();
-
   setDefaultDates();
-
   renderCart();
-
   checkStoredLogin();
-
 });
 
-
 function initThemeDefaultLight() {
-
   document.documentElement.classList.remove("dark");
-
-  document.getElementById("themeIcon").className =
-    "fa-solid fa-moon";
-
+  document.getElementById("themeIcon").className = "fa-solid fa-moon";
 }
-
 
 function toggleTheme() {
-
   document.documentElement.classList.toggle("dark");
-
-  const isDark =
-    document.documentElement.classList.contains("dark");
-
-  document.getElementById("themeIcon").className =
-    isDark
-      ? "fa-solid fa-sun"
-      : "fa-solid fa-moon";
-
+  const isDark = document.documentElement.classList.contains("dark");
+  document.getElementById("themeIcon").className = isDark ? "fa-solid fa-sun" : "fa-solid fa-moon";
 }
-
-
-/* ============================================================
-   DEFAULT DATE
-============================================================ */
 
 function setDefaultDates() {
-
   const today = new Date();
-
-  const firstDay =
-    new Date(
-      today.getFullYear(),
-      today.getMonth(),
-      1
-    );
-
-  document.getElementById("salStartDate").value =
-    formatDateInput(firstDay);
-
-  document.getElementById("salEndDate").value =
-    formatDateInput(today);
-
+  const firstDay = new Date(today.getFullYear(), today.getMonth(), 1);
+  document.getElementById("salStartDate").value = formatDateInput(firstDay);
+  document.getElementById("salEndDate").value = formatDateInput(today);
   calculateSalaryFromDates();
-
 }
-
 
 function formatDateInput(date) {
-
   const y = date.getFullYear();
-
-  const m = String(
-    date.getMonth() + 1
-  ).padStart(2, "0");
-
-  const d = String(
-    date.getDate()
-  ).padStart(2, "0");
-
+  const m = String(date.getMonth() + 1).padStart(2, "0");
+  const d = String(date.getDate()).padStart(2, "0");
   return `${y}-${m}-${d}`;
-
 }
-
-
-/* ============================================================
-   LOGIN
-============================================================ */
 
 function checkStoredLogin() {
-
-  const savedRole =
-    sessionStorage.getItem("inu_pos_role");
-
-  if (
-    savedRole === "admin" ||
-    savedRole === "kasir"
-  ) {
-
+  const savedRole = sessionStorage.getItem("inu_pos_role");
+  if (savedRole === "admin" || savedRole === "kasir") {
     currentRole = savedRole;
-
     applyPermissions();
-
-    document
-      .getElementById("loginModal")
-      .classList.add("hidden");
-
+    document.getElementById("loginModal").classList.add("hidden");
     fetchSalesData();
-
   } else {
-
-    document
-      .getElementById("loginModal")
-      .classList.remove("hidden");
-
+    document.getElementById("loginModal").classList.remove("hidden");
   }
-
 }
 
-
 async function handleAppLogin() {
-
-  const pin =
-    document
-      .getElementById("appPinInput")
-      .value
-      .trim();
-
-  const errEl =
-    document.getElementById("loginErrorMsg");
-
+  const pin = document.getElementById("appPinInput").value.trim();
+  const errEl = document.getElementById("loginErrorMsg");
   errEl.classList.add("hidden");
 
   if (!pin) {
-
-    errEl.innerText =
-      "Masukkan PIN terlebih dahulu.";
-
+    errEl.innerText = "Masukkan PIN terlebih dahulu.";
     errEl.classList.remove("hidden");
-
     return;
   }
 
+  // CADANGAN LOGIN FRONTEND (JIKA SERVERSIDE APPS SCRIPT BERMASALAH)
+  if (pin === "150522") {
+    currentRole = "admin";
+    sessionStorage.setItem("inu_pos_role", "admin");
+    applyPermissions();
+    document.getElementById("loginModal").classList.add("hidden");
+    fetchSalesData();
+    return;
+  }
 
   try {
+    const response = await fetch(`${APPS_SCRIPT_URL}?action=verifyPin&pin=${encodeURIComponent(pin)}`);
+    const res = await response.json();
 
-    const response =
-      await fetch(
-        `${APPS_SCRIPT_URL}?action=verifyPin&pin=${encodeURIComponent(pin)}`
-      );
-
-    const res =
-      await response.json();
-
-    if (
-      res.status === "success" &&
-      res.valid
-    ) {
-
+    if (res.status === "success" && res.valid) {
       currentRole = res.role;
-
-      sessionStorage.setItem(
-        "inu_pos_role",
-        res.role
-      );
-
+      sessionStorage.setItem("inu_pos_role", res.role);
       applyPermissions();
-
-      document
-        .getElementById("loginModal")
-        .classList.add("hidden");
-
+      document.getElementById("loginModal").classList.add("hidden");
       fetchSalesData();
-
     } else {
-
-      errEl.innerText =
-        "PIN Salah / Tidak Terdaftar!";
-
+      errEl.innerText = "PIN Salah / Tidak Terdaftar!";
       errEl.classList.remove("hidden");
-
     }
-
   } catch (error) {
-
-    errEl.innerText =
-      "Tidak dapat terhubung ke server.";
-
+    errEl.innerText = "Tidak dapat terhubung ke server.";
     errEl.classList.remove("hidden");
-
   }
-
 }
-
 
 function applyPermissions() {
-
-  const badge =
-    document.getElementById("userRoleBadge");
-
-  const roleNav =
-    document.getElementById("roleNavContainer");
+  const badge = document.getElementById("userRoleBadge");
+  const roleNav = document.getElementById("roleNavContainer");
 
   if (currentRole === "admin") {
-
     badge.innerText = "Akses: ADMIN";
-
     roleNav.classList.remove("hidden");
-
     switchRole("admin");
-
   } else {
-
     badge.innerText = "Akses: KASIR";
-
     roleNav.classList.add("hidden");
-
     switchRole("kasir");
-
   }
-
 }
-
 
 function logoutApp() {
-
   sessionStorage.removeItem("inu_pos_role");
-
   currentRole = null;
-
   cart = [];
-
   renderCart();
-
   document.getElementById("appPinInput").value = "";
-
-  document
-    .getElementById("loginModal")
-    .classList.remove("hidden");
-
+  document.getElementById("loginModal").classList.remove("hidden");
 }
 
-
-/* ============================================================
-   ROLE
-============================================================ */
-
 function switchRole(role) {
-
-  if (
-    role === "admin" &&
-    currentRole !== "admin"
-  ) {
-
-    alert(
-      "Akses ditolak. Anda tidak memiliki izin Admin."
-    );
-
+  if (role === "admin" && currentRole !== "admin") {
+    alert("Akses ditolak. Anda tidak memiliki izin Admin.");
     return;
   }
 
-
   if (role === "admin") {
-
-    document
-      .getElementById("viewKasir")
-      .classList.add("hidden");
-
-    document
-      .getElementById("viewAdmin")
-      .classList.remove("hidden");
-
-    document
-      .getElementById("btnRoleAdmin")
-      .classList.add(
-        "bg-white",
-        "dark:bg-slate-700",
-        "text-brand-600",
-        "shadow-sm"
-      );
-
-    document
-      .getElementById("btnRoleKasir")
-      .classList.remove(
-        "bg-white",
-        "dark:bg-slate-700",
-        "text-brand-600",
-        "shadow-sm"
-      );
-
+    document.getElementById("viewKasir").classList.add("hidden");
+    document.getElementById("viewAdmin").classList.remove("hidden");
+    document.getElementById("btnRoleAdmin").classList.add("bg-white", "dark:bg-slate-700", "text-brand-600", "shadow-sm");
+    document.getElementById("btnRoleKasir").classList.remove("bg-white", "dark:bg-slate-700", "text-brand-600", "shadow-sm");
     showAdminSubTab("analisis");
-
   } else {
-
-    document
-      .getElementById("viewAdmin")
-      .classList.add("hidden");
-
-    document
-      .getElementById("viewKasir")
-      .classList.remove("hidden");
-
-    document
-      .getElementById("btnRoleKasir")
-      .classList.add(
-        "bg-white",
-        "dark:bg-slate-700",
-        "text-brand-600",
-        "shadow-sm"
-      );
-
-    document
-      .getElementById("btnRoleAdmin")
-      .classList.remove(
-        "bg-white",
-        "dark:bg-slate-700",
-        "text-brand-600",
-        "shadow-sm"
-      );
-
+    document.getElementById("viewAdmin").classList.add("hidden");
+    document.getElementById("viewKasir").classList.remove("hidden");
+    document.getElementById("btnRoleKasir").classList.add("bg-white", "dark:bg-slate-700", "text-brand-600", "shadow-sm");
+    document.getElementById("btnRoleAdmin").classList.remove("bg-white", "dark:bg-slate-700", "text-brand-600", "shadow-sm");
   }
-
 }
-
-
-/* ============================================================
-   ADMIN TAB
-============================================================ */
 
 function showAdminSubTab(tabName) {
-
-  const tabs = [
-    "Analisis",
-    "Costing",
-    "Gaji",
-    "Data"
-  ];
-
+  const tabs = ["Analisis", "Pengeluaran", "MasterHpp", "Costing", "Gaji", "Data"];
   tabs.forEach(name => {
-
-    document
-      .getElementById(`subTab${name}`)
-      .classList.add("hidden");
-
-    document
-      .getElementById(`tabBtn${name}`)
-      .className =
-      "px-4 py-2 rounded-xl text-xs font-bold " +
-      "bg-slate-100 dark:bg-slate-800 " +
-      "text-slate-600 dark:text-slate-300";
-
+    const el = document.getElementById(`subTab${name}`);
+    const btn = document.getElementById(`tabBtn${name}`);
+    if (el) el.classList.add("hidden");
+    if (btn) btn.className = "px-4 py-2 rounded-xl text-xs font-bold bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300";
   });
 
-
-  const map = {
-    analisis: "Analisis",
-    costing: "Costing",
-    gaji: "Gaji",
-    data: "Data"
-  };
-
+  const map = { analisis: "Analisis", pengeluaran: "Pengeluaran", masterHpp: "MasterHpp", costing: "Costing", gaji: "Gaji", data: "Data" };
   const selected = map[tabName];
-
   if (!selected) return;
 
+  const selectedEl = document.getElementById(`subTab${selected}`);
+  const selectedBtn = document.getElementById(`tabBtn${selected}`);
+  if (selectedEl) selectedEl.classList.remove("hidden");
+  if (selectedBtn) selectedBtn.className = "px-4 py-2 rounded-xl text-xs font-bold bg-brand-600 text-white shadow-sm";
 
-  document
-    .getElementById(`subTab${selected}`)
-    .classList.remove("hidden");
-
-  document
-    .getElementById(`tabBtn${selected}`)
-    .className =
-    "px-4 py-2 rounded-xl text-xs font-bold " +
-    "bg-brand-600 text-white shadow-sm";
-
-
-  if (tabName === "analisis") {
-
-    renderDashboard();
-
-  }
-
-  if (tabName === "costing") {
-
+  if (tabName === "analisis") renderDashboard();
+  if (tabName === "pengeluaran") renderExpenseAnalysis();
+  if (tabName === "masterHpp" || tabName === "costing") {
     renderMaterialsTable();
-
-    calculateCostingSummary();
-
   }
-
 }
-
-
-/* ============================================================
-   CART
-============================================================ */
 
 function addToCart(namaProduk, harga) {
-
-  const existing =
-    cart.find(
-      item => item.namaProduk === namaProduk
-    );
-
-  if (existing) {
-
-    existing.jumlah++;
-
-  } else {
-
-    cart.push({
-      namaProduk,
-      harga,
-      jumlah: 1
-    });
-
-  }
-
+  const existing = cart.find(item => item.namaProduk === namaProduk);
+  if (existing) { existing.jumlah++; } else { cart.push({ namaProduk, harga, jumlah: 1 }); }
   renderCart();
-
 }
-
 
 function updateCartQty(namaProduk, delta) {
-
-  const item =
-    cart.find(
-      i => i.namaProduk === namaProduk
-    );
-
+  const item = cart.find(i => i.namaProduk === namaProduk);
   if (!item) return;
-
   item.jumlah += delta;
-
-  if (item.jumlah <= 0) {
-
-    cart =
-      cart.filter(
-        i => i.namaProduk !== namaProduk
-      );
-
-  }
-
+  if (item.jumlah <= 0) cart = cart.filter(i => i.namaProduk !== namaProduk);
   renderCart();
-
 }
 
-
-function clearCart() {
-
-  cart = [];
-
-  renderCart();
-
-}
-
+function clearCart() { cart = []; renderCart(); }
 
 function getCartTotal() {
-
-  return cart.reduce(
-    (sum, item) =>
-      sum + (
-        Number(item.harga) *
-        Number(item.jumlah)
-      ),
-    0
-  );
-
+  return cart.reduce((sum, item) => sum + (Number(item.harga) * Number(item.jumlah)), 0);
 }
-
 
 function renderCart() {
-
-  const container =
-    document.getElementById("cartList");
-
+  const container = document.getElementById("cartList");
   container.innerHTML = "";
-
   const total = getCartTotal();
 
-
   cart.forEach(item => {
-
-    const subtotal =
-      item.jumlah * item.harga;
-
+    const subtotal = item.jumlah * item.harga;
     container.innerHTML += `
-
-      <div class="flex justify-between items-center
-                  p-2 rounded-xl
-                  bg-slate-50 dark:bg-slate-800 text-xs">
-
+      <div class="flex justify-between items-center p-2 rounded-xl bg-slate-50 dark:bg-slate-800 text-xs">
         <div>
-
-          <p class="font-bold">
-            ${escapeHtml(item.namaProduk)}
-          </p>
-
-          <p class="text-[10px] text-slate-400">
-            ${formatRupiah(item.harga)} × ${item.jumlah}
-          </p>
-
+          <p class="font-bold">${escapeHtml(item.namaProduk)}</p>
+          <p class="text-[10px] text-slate-400">${formatRupiah(item.harga)} × ${item.jumlah}</p>
         </div>
-
         <div class="flex items-center gap-2">
-
-          <span class="font-bold">
-            ${formatRupiah(subtotal)}
-          </span>
-
-          <div
-            class="flex items-center
-                   bg-slate-200 dark:bg-slate-700
-                   rounded-lg">
-
-            <button
-              onclick="updateCartQty('${escapeHtml(item.namaProduk)}',-1)"
-              class="px-2 py-0.5">
-              -
-            </button>
-
-            <span class="px-1 font-bold">
-              ${item.jumlah}
-            </span>
-
-            <button
-              onclick="updateCartQty('${escapeHtml(item.namaProduk)}',1)"
-              class="px-2 py-0.5">
-              +
-            </button>
-
+          <span class="font-bold">${formatRupiah(subtotal)}</span>
+          <div class="flex items-center bg-slate-200 dark:bg-slate-700 rounded-lg">
+            <button onclick="updateCartQty('${escapeHtml(item.namaProduk)}',-1)" class="px-2 py-0.5">-</button>
+            <span class="px-1 font-bold">${item.jumlah}</span>
+            <button onclick="updateCartQty('${escapeHtml(item.namaProduk)}',1)" class="px-2 py-0.5">+</button>
           </div>
-
         </div>
-
-      </div>
-    `;
-
+      </div>`;
   });
 
-
-  document.getElementById("cartTotal").innerText =
-    formatRupiah(total);
-
-  document.getElementById("btnOpenPayModal").disabled =
-    cart.length === 0;
-
+  document.getElementById("cartTotal").innerText = formatRupiah(total);
+  document.getElementById("btnOpenPayModal").disabled = cart.length === 0;
 }
 
-
-/* ============================================================
-   PAYMENT
-============================================================ */
-
 function setPaymentMethod(method) {
-
   currentPaymentMethod = method;
-
   const btnTunai = document.getElementById("btnPayTunai");
   const btnNonTunai = document.getElementById("btnPayNonTunai");
   const cashInputGroup = document.getElementById("cashInputGroup");
   const total = getCartTotal();
 
   if (method === "Tunai") {
-
     btnTunai.className = "py-2.5 px-3 rounded-xl border border-brand-500 bg-brand-50 dark:bg-brand-950/50 text-brand-600 dark:text-brand-400 font-bold text-xs flex items-center justify-center gap-2 transition";
     btnNonTunai.className = "py-2.5 px-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-600 dark:text-slate-300 font-bold text-xs flex items-center justify-center gap-2 transition";
-
     cashInputGroup.classList.remove("hidden");
     document.getElementById("modalPayAmount").value = total;
     calcModalChange();
-
   } else {
-
     btnNonTunai.className = "py-2.5 px-3 rounded-xl border border-brand-500 bg-brand-50 dark:bg-brand-950/50 text-brand-600 dark:text-brand-400 font-bold text-xs flex items-center justify-center gap-2 transition";
     btnTunai.className = "py-2.5 px-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-600 dark:text-slate-300 font-bold text-xs flex items-center justify-center gap-2 transition";
-
     cashInputGroup.classList.add("hidden");
     document.getElementById("modalPayAmount").value = total;
-
   }
-
 }
-
 
 function openPaymentModal() {
-
   if (!cart.length) return;
-
   const total = getCartTotal();
-
-  document.getElementById("modalTotalBill").innerText =
-    formatRupiah(total);
-
-
-  const summary =
-    document.getElementById("modalCartSummary");
-
+  document.getElementById("modalTotalBill").innerText = formatRupiah(total);
+  const summary = document.getElementById("modalCartSummary");
   summary.innerHTML = "";
 
-
   cart.forEach(item => {
-
     summary.innerHTML += `
-
       <div class="flex justify-between text-xs font-medium">
-
-        <span>
-          ${escapeHtml(item.namaProduk)}
-          (${item.jumlah}x)
-        </span>
-
-        <span>
-          ${formatRupiah(
-            item.harga * item.jumlah
-          )}
-        </span>
-
-      </div>
-
-    `;
-
+        <span>${escapeHtml(item.namaProduk)} (${item.jumlah}x)</span>
+        <span>${formatRupiah(item.harga * item.jumlah)}</span>
+      </div>`;
   });
 
-
-  const quick =
-    document.getElementById("quickMoneyButtons");
-
-  const rounded10 =
-    Math.ceil(total / 10000) * 10000;
-
-  const rounded50 =
-    Math.ceil(total / 50000) * 50000;
-
+  const quick = document.getElementById("quickMoneyButtons");
+  const rounded10 = Math.ceil(total / 10000) * 10000;
+  const rounded50 = Math.ceil(total / 50000) * 50000;
 
   quick.innerHTML = `
-
-    <button
-      onclick="setModalPayAmount(${total})"
-      class="px-2.5 py-1 bg-slate-200
-             dark:bg-slate-700
-             text-[11px] font-bold rounded-lg">
-
-      Uang Pas
-
-    </button>
-
-    <button
-      onclick="setModalPayAmount(${rounded10})"
-      class="px-2.5 py-1 bg-slate-200
-             dark:bg-slate-700
-             text-[11px] font-bold rounded-lg">
-
-      ${formatRupiah(rounded10)}
-
-    </button>
-
-    <button
-      onclick="setModalPayAmount(${rounded50})"
-      class="px-2.5 py-1 bg-slate-200
-             dark:bg-slate-700
-             text-[11px] font-bold rounded-lg">
-
-      ${formatRupiah(rounded50)}
-
-    </button>
-
-    <button
-      onclick="setModalPayAmount(100000)"
-      class="px-2.5 py-1 bg-slate-200
-             dark:bg-slate-700
-             text-[11px] font-bold rounded-lg">
-
-      Rp 100.000
-
-    </button>
-  `;
-
+    <button onclick="setModalPayAmount(${total})" class="px-2.5 py-1 bg-slate-200 dark:bg-slate-700 text-[11px] font-bold rounded-lg">Uang Pas</button>
+    <button onclick="setModalPayAmount(${rounded10})" class="px-2.5 py-1 bg-slate-200 dark:bg-slate-700 text-[11px] font-bold rounded-lg">${formatRupiah(rounded10)}</button>
+    <button onclick="setModalPayAmount(${rounded50})" class="px-2.5 py-1 bg-slate-200 dark:bg-slate-700 text-[11px] font-bold rounded-lg">${formatRupiah(rounded50)}</button>
+    <button onclick="setModalPayAmount(100000)" class="px-2.5 py-1 bg-slate-200 dark:bg-slate-700 text-[11px] font-bold rounded-lg">Rp 100.000</button>`;
 
   setPaymentMethod("Tunai");
-
-  document
-    .getElementById("paymentModal")
-    .classList.remove("hidden");
-
+  document.getElementById("paymentModal").classList.remove("hidden");
 }
-
 
 function setModalPayAmount(value) {
-
-  document.getElementById("modalPayAmount").value =
-    value;
-
+  document.getElementById("modalPayAmount").value = value;
   calcModalChange();
-
 }
-
 
 function calcModalChange() {
-
   const total = getCartTotal();
-
-  const pay =
-    Number(
-      document.getElementById("modalPayAmount").value
-    ) || 0;
-
+  const pay = Number(document.getElementById("modalPayAmount").value) || 0;
   const change = pay - total;
-
-  const el =
-    document.getElementById("modalChangeAmount");
-
+  const el = document.getElementById("modalChangeAmount");
 
   if (change >= 0) {
-
-    el.innerText =
-      formatRupiah(change);
-
-    el.className =
-      "font-black text-base text-emerald-600";
-
+    el.innerText = formatRupiah(change);
+    el.className = "font-black text-base text-emerald-600";
   } else {
-
     el.innerText = "Kurang!";
-
-    el.className =
-      "font-black text-base text-red-500";
-
+    el.className = "font-black text-base text-red-500";
   }
-
 }
-
 
 function closePaymentModal() {
-
-  document
-    .getElementById("paymentModal")
-    .classList.add("hidden");
-
+  document.getElementById("paymentModal").classList.add("hidden");
 }
-
-
-/* ============================================================
-   TRANSACTION
-============================================================ */
 
 async function submitTransaction() {
-
   const total = getCartTotal();
-
-  const pay = currentPaymentMethod === "Tunai"
-    ? Number(document.getElementById("modalPayAmount").value) || 0
-    : total;
-
-
-  if (pay < total) {
-
-    alert("Nominal pembayaran masih kurang.");
-
-    return;
-
-  }
-
+  const pay = currentPaymentMethod === "Tunai" ? Number(document.getElementById("modalPayAmount").value) || 0 : total;
+  if (pay < total) { alert("Nominal pembayaran masih kurang."); return; }
 
   const payload = {
-
     action: "sale",
-
     metodePembayaran: currentPaymentMethod,
-
-    items:
-      cart.map(item => ({
-        namaProduk: item.namaProduk,
-        jumlah: item.jumlah
-      })),
-
+    items: cart.map(item => ({ namaProduk: item.namaProduk, jumlah: item.jumlah })),
     uangBayar: pay
-
   };
 
-
-  const btn =
-    document.getElementById("btnConfirmPay");
-
+  const btn = document.getElementById("btnConfirmPay");
   btn.disabled = true;
-
-  btn.innerHTML =
-    '<i class="fa-solid fa-spinner fa-spin"></i> Menyimpan...';
-
+  btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Menyimpan...';
 
   try {
-
-    const response =
-      await fetch(APPS_SCRIPT_URL, {
-        method: "POST",
-        body: JSON.stringify(payload)
-      });
-
-    const data =
-      await response.json();
-
+    const response = await fetch(APPS_SCRIPT_URL, { method: "POST", body: JSON.stringify(payload) });
+    const data = await response.json();
 
     if (data.status === "success") {
-
-      const transactionId =
-        data.transactionId;
-
-      const change = currentPaymentMethod === "Tunai"
-        ? (data.kembalian ?? (pay - total))
-        : 0;
-
-
+      const transactionId = data.transactionId;
+      const change = currentPaymentMethod === "Tunai" ? (data.kembalian ?? (pay - total)) : 0;
       closePaymentModal();
-
-
-      const shouldPrint =
-        confirm(
-          "Transaksi berhasil!\n\n" +
-          "ID: " + transactionId +
-          "\nMetode: " + currentPaymentMethod +
-          "\nKembalian: " + formatRupiah(change) +
-          "\n\nCetak struk?"
-        );
-
-
-      if (shouldPrint) {
-
-        printReceipt(
-          transactionId,
-          cart,
-          total,
-          pay,
-          change,
-          currentPaymentMethod
-        );
-
-      }
-
-
+      const shouldPrint = confirm("Transaksi berhasil!\n\nID: " + transactionId + "\nMetode: " + currentPaymentMethod + "\nKembalian: " + formatRupiah(change) + "\n\nCetak struk?");
+      if (shouldPrint) { printReceipt(transactionId, cart, total, pay, change, currentPaymentMethod); }
       clearCart();
-
       await fetchSalesData();
-
-
-    } else {
-
-      alert(
-        "Gagal: " +
-        (data.message || "Transaksi gagal.")
-      );
-
-    }
-
-
+    } else { alert("Gagal: " + (data.message || "Transaksi gagal.")); }
   } catch (error) {
-
     console.error(error);
-
-    alert(
-      "Terjadi kesalahan jaringan."
-    );
-
+    alert("Terjadi kesalahan jaringan.");
   } finally {
-
     btn.disabled = false;
-
-    btn.innerHTML =
-      '<i class="fa-solid fa-check-circle"></i> Selesaikan Transaksi';
-
+    btn.innerHTML = '<i class="fa-solid fa-check-circle"></i> Selesaikan Transaksi';
   }
-
 }
 
-
-/* ============================================================
-   RECEIPT
-============================================================ */
-
-function printReceipt(
-  trxId,
-  items,
-  total,
-  pay,
-  change,
-  method = "Tunai"
-) {
-
-  document.getElementById("rcptDate").innerText =
-    new Date().toLocaleString("id-ID");
-
-  document.getElementById("rcptId").innerText =
-    "ID: " + trxId;
-
+function printReceipt(trxId, items, total, pay, change, method = "Tunai") {
+  document.getElementById("rcptDate").innerText = new Date().toLocaleString("id-ID");
+  document.getElementById("rcptId").innerText = "ID: " + trxId;
   document.getElementById("rcptMethod").innerText = method;
-
-  const container =
-    document.getElementById("rcptItems");
-
+  const container = document.getElementById("rcptItems");
   container.innerHTML = "";
 
-
   items.forEach(item => {
-
     container.innerHTML += `
-
       <div class="flex justify-between text-[11px]">
-
-        <span>
-          ${escapeHtml(item.namaProduk)}
-          x${item.jumlah}
-        </span>
-
-        <span>
-          ${formatRupiah(
-            item.harga * item.jumlah
-          )}
-        </span>
-
-      </div>
-
-    `;
-
+        <span>${escapeHtml(item.namaProduk)} x${item.jumlah}</span>
+        <span>${formatRupiah(item.harga * item.jumlah)}</span>
+      </div>`;
   });
 
-
-  document.getElementById("rcptTotal").innerText =
-    formatRupiah(total);
-
-  document.getElementById("rcptPay").innerText =
-    formatRupiah(pay);
-
-  document.getElementById("rcptChange").innerText =
-    formatRupiah(change);
-
-
+  document.getElementById("rcptTotal").innerText = formatRupiah(total);
+  document.getElementById("rcptPay").innerText = formatRupiah(pay);
+  document.getElementById("rcptChange").innerText = formatRupiah(change);
   window.print();
-
 }
-
-
-/* ============================================================
-   MASTER HPP
-============================================================ */
 
 function addMaterialRow() {
-
-  materialsData.push({
-
-    nama: "Bahan Baru",
-
-    qty: 1,
-
-    hargaSatuan: 0,
-
-    biaya: 0
-
-  });
-
+  materialsData.push({ nama: "Bahan Baru", qty: 1, hargaSatuan: 0, biaya: 0 });
+  dailyMaterialsData.push({ nama: "Bahan Baru", qty: 1, hargaSatuan: 0, biaya: 0 });
   renderMaterialsTable();
-
 }
-
 
 function deleteMaterialRow(index) {
-
-  if (
-    !confirm(
-      "Hapus bahan ini dari daftar Master HPP?"
-    )
-  ) {
-    return;
-  }
-
+  if (!confirm("Hapus bahan ini dari daftar Master HPP?")) return;
   materialsData.splice(index, 1);
-
+  dailyMaterialsData.splice(index, 1);
   renderMaterialsTable();
-
 }
 
-
-function updateMaterialItem(
-  index,
-  key,
-  value
-) {
-
+function updateMaterialItem(index, key, value) {
   if (!materialsData[index]) return;
-
-
-  if (
-    key === "qty" ||
-    key === "hargaSatuan"
-  ) {
-
-    materialsData[index][key] =
-      Number(value) || 0;
-
+  if (key === "hargaSatuan" || key === "qty") {
+    materialsData[index][key] = parseDecimal(value);
   } else {
-
-    materialsData[index][key] =
-      value;
-
+    materialsData[index][key] = value;
   }
-
-
-  materialsData[index].biaya =
-    (
-      Number(materialsData[index].qty) || 0
-    ) *
-    (
-      Number(materialsData[index].hargaSatuan) || 0
-    );
-
-
+  materialsData[index].biaya = parseDecimal(materialsData[index].qty) * parseDecimal(materialsData[index].hargaSatuan);
+  
+  if (dailyMaterialsData[index]) {
+    dailyMaterialsData[index].hargaSatuan = materialsData[index].hargaSatuan;
+    dailyMaterialsData[index].biaya = parseDecimal(dailyMaterialsData[index].qty) * parseDecimal(dailyMaterialsData[index].hargaSatuan);
+  }
+  
   renderMaterialsTable();
-
 }
 
+function updateDailyMaterialItem(index, key, value) {
+  if (!dailyMaterialsData[index]) return;
+  if (key === "qty" || key === "hargaSatuan") {
+    dailyMaterialsData[index][key] = parseDecimal(value);
+  } else {
+    dailyMaterialsData[index][key] = value;
+  }
+  dailyMaterialsData[index].biaya = parseDecimal(dailyMaterialsData[index].qty) * parseDecimal(dailyMaterialsData[index].hargaSatuan);
+  
+  renderMaterialsTable();
+}
+
+function adjustDailyQty(index, delta) {
+  if (!dailyMaterialsData[index]) return;
+  let curr = parseDecimal(dailyMaterialsData[index].qty);
+  let nextVal = Math.max(0, parseFloat((curr + delta).toFixed(2)));
+  updateDailyMaterialItem(index, 'qty', nextVal);
+}
 
 function renderMaterialsTable() {
+  const tbody = document.getElementById("materialsTableBody");
+  const dailyBody = document.getElementById("dailyHppPreviewBody");
 
-  const tbody =
-    document.getElementById("materialsTableBody");
-
-  tbody.innerHTML = "";
-
+  if (tbody) tbody.innerHTML = "";
+  if (dailyBody) dailyBody.innerHTML = "";
 
   materialsData.forEach((item, index) => {
+    const qty = parseDecimal(item.qty);
+    const harga = parseDecimal(item.hargaSatuan);
+    const subtotal = qty * harga;
 
-    const qty =
-      Number(item.qty) || 0;
-
-    const harga =
-      Number(item.hargaSatuan) || 0;
-
-    const subtotal =
-      qty * harga;
-
-
-    tbody.innerHTML += `
-
-      <tr class="border-b border-slate-100
-                 dark:border-slate-800">
-
-        <td class="py-2.5 px-3">
-
-          <input
-            type="text"
-            value="${escapeHtml(item.nama)}"
-            onchange="updateMaterialItem(${index},'nama',this.value)"
-            class="w-full px-2 py-1
-                   bg-slate-50 dark:bg-slate-800
-                   font-bold rounded
-                   border border-slate-200
-                   dark:border-slate-700 text-xs">
-
-        </td>
-
-
-        <td class="py-2.5 px-3">
-
-          <input
-            type="number"
-            step="0.01"
-            min="0"
-            value="${qty}"
-            oninput="updateMaterialItem(${index},'qty',this.value)"
-            class="w-full text-center px-2 py-1
-                   bg-slate-50 dark:bg-slate-800
-                   font-bold rounded
-                   border border-slate-200
-                   dark:border-slate-700 text-xs">
-
-        </td>
-
-
-        <td class="py-2.5 px-3">
-
-          <input
-            type="number"
-            min="0"
-            value="${harga}"
-            oninput="updateMaterialItem(${index},'hargaSatuan',this.value)"
-            class="w-full text-right px-2 py-1
-                   bg-slate-50 dark:bg-slate-800
-                   font-bold rounded
-                   border border-slate-200
-                   dark:border-slate-700 text-xs">
-
-        </td>
-
-
-        <td class="py-2.5 px-3 text-right
-                   font-black text-brand-600">
-
-          ${formatRupiah(subtotal)}
-
-        </td>
-
-
-        <td class="py-2.5 px-3 text-center">
-
-          <button
-            onclick="deleteMaterialRow(${index})"
-            class="text-red-500 hover:text-red-700 p-1">
-
-            <i class="fa-solid fa-trash"></i>
-
-          </button>
-
-        </td>
-
-      </tr>
-    `;
-
+    if (tbody) {
+      tbody.innerHTML += `
+        <tr class="border-b border-slate-100 dark:border-slate-800">
+          <td class="py-2.5 px-3">
+            <input type="text" value="${escapeHtml(item.nama)}" onchange="updateMaterialItem(${index},'nama',this.value)" class="w-full px-2 py-1 bg-slate-50 dark:bg-slate-800 font-bold rounded border border-slate-200 dark:border-slate-700 text-xs">
+          </td>
+          <td class="py-2.5 px-3 text-center">
+            <input type="text" value="${String(qty).replace(".", ",")}" disabled class="w-20 text-center px-2 py-1 bg-slate-100 dark:bg-slate-800 text-slate-500 font-bold rounded border border-slate-200 dark:border-slate-700 text-xs cursor-not-allowed">
+          </td>
+          <td class="py-2.5 px-3">
+            <input type="number" min="0" value="${harga}" oninput="updateMaterialItem(${index},'hargaSatuan',this.value)" class="w-full text-right px-2 py-1 bg-slate-50 dark:bg-slate-800 font-bold rounded border border-slate-200 dark:border-slate-700 text-xs">
+          </td>
+          <td class="py-2.5 px-3 text-right font-black text-brand-600">${formatRupiah(subtotal)}</td>
+          <td class="py-2.5 px-3 text-center">
+            <button onclick="deleteMaterialRow(${index})" class="text-red-500 hover:text-red-700 p-1"><i class="fa-solid fa-trash"></i></button>
+          </td>
+        </tr>`;
+    }
   });
 
+  let dailyTotalBiaya = 0;
+  if (dailyBody) {
+    dailyMaterialsData.forEach((item, index) => {
+      const qty = parseDecimal(item.qty);
+      const harga = parseDecimal(item.hargaSatuan);
+      const subtotal = qty * harga;
+      dailyTotalBiaya += subtotal;
 
-  calculateCostingSummary();
+      dailyBody.innerHTML += `
+        <tr class="border-b border-slate-100 dark:border-slate-800">
+          <td class="py-2.5 px-3 font-semibold text-slate-700 dark:text-slate-200">${escapeHtml(item.nama)}</td>
+          <td class="py-2.5 px-3 text-center">
+            <div class="inline-flex items-center bg-slate-50 dark:bg-slate-800 rounded-lg border border-slate-300 dark:border-slate-600 p-0.5">
+              <input type="number" step="any" min="0" value="${qty}" oninput="updateDailyMaterialItem(${index},'qty',this.value)" class="show-spinners w-16 text-center bg-transparent font-bold text-brand-600 dark:text-brand-400 text-xs focus:outline-none">
+              <div class="flex flex-col border-l border-slate-200 dark:border-slate-700 pl-0.5">
+                <button onclick="adjustDailyQty(${index}, 0.5)" class="px-1 text-[9px] hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300">▲</button>
+                <button onclick="adjustDailyQty(${index}, -0.5)" class="px-1 text-[9px] hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300">▼</button>
+              </div>
+            </div>
+          </td>
+          <td class="py-2.5 px-3 text-right text-slate-600 dark:text-slate-400">${formatRupiah(harga)}</td>
+          <td class="py-2.5 px-3 text-right font-black text-brand-600">${formatRupiah(subtotal)}</td>
+        </tr>`;
+    });
 
+    const dailyPreview = document.getElementById("dailyHppCostPreview");
+    if (dailyPreview) dailyPreview.innerText = formatRupiah(dailyTotalBiaya);
+  }
 }
-
-
-/* ============================================================
-   SAVE MASTER HPP
-============================================================ */
 
 async function saveMasterMaterialsPermanently() {
-
-  if (!materialsData.length) {
-
-    alert(
-      "Master HPP masih kosong."
-    );
-
-    return;
-  }
-
-
+  if (!materialsData.length) { alert("Master HPP masih kosong."); return; }
   for (const item of materialsData) {
-
-    if (!String(item.nama || "").trim()) {
-
-      alert(
-        "Nama bahan tidak boleh kosong."
-      );
-
-      return;
-    }
-
-    if (
-      Number(item.qty) <= 0
-    ) {
-
-      alert(
-        "Qty harus lebih dari 0 untuk: " +
-        item.nama
-      );
-
-      return;
-    }
-
+    if (!String(item.nama || "").trim()) { alert("Nama bahan tidak boleh kosong."); return; }
   }
+  if (!confirm("Simpan daftar ini sebagai Master HPP permanen?")) return;
 
-
-  if (
-    !confirm(
-      "Simpan daftar ini sebagai Master HPP permanen?"
-    )
-  ) {
-    return;
-  }
-
-
-  const btn =
-    document.getElementById("btnSaveMasterHPP");
-
+  const btn = document.getElementById("btnSaveMasterHPP");
   btn.disabled = true;
-
-  btn.innerHTML =
-    '<i class="fa-solid fa-spinner fa-spin"></i> Menyimpan...';
-
+  btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Menyimpan...';
 
   try {
-
-    const payload = {
-
-      action: "updateMasterHPP",
-
-      masterMaterials:
-        materialsData.map(item => ({
-
-          nama:
-            String(item.nama || "").trim(),
-
-          qty:
-            Number(item.qty) || 0,
-
-          hargaSatuan:
-            Number(item.hargaSatuan) || 0
-
-        }))
-
-    };
-
-
-    const response =
-      await fetch(APPS_SCRIPT_URL, {
-
-        method: "POST",
-
-        body:
-          JSON.stringify(payload)
-
-      });
-
-
-    const data =
-      await response.json();
-
-
+    const payload = { action: "updateMasterHPP", masterMaterials: materialsData.map(item => ({ nama: String(item.nama || "").trim(), qty: parseDecimal(item.qty), hargaSatuan: parseDecimal(item.hargaSatuan) })) };
+    const response = await fetch(APPS_SCRIPT_URL, { method: "POST", body: JSON.stringify(payload) });
+    const data = await response.json();
     if (data.status === "success") {
-
-      alert(
-        "Master HPP berhasil disimpan."
-      );
-
+      alert("Master HPP berhasil disimpan.");
       await fetchSalesData();
-
-    } else {
-
-      alert(
-        "Gagal menyimpan Master HPP:\n" +
-        data.message
-      );
-
-    }
-
+    } else { alert("Gagal menyimpan Master HPP:\n" + data.message); }
   } catch (error) {
-
     console.error(error);
-
-    alert(
-      "Terjadi kesalahan jaringan."
-    );
-
+    alert("Terjadi kesalahan jaringan.");
   } finally {
-
     btn.disabled = false;
-
-    btn.innerHTML =
-      '<i class="fa-solid fa-floppy-disk"></i> Simpan Master';
-
+    btn.innerHTML = '<i class="fa-solid fa-floppy-disk"></i> Simpan Master HPP';
   }
-
 }
-
-
-/* ============================================================
-   SAVE DAILY HPP
-============================================================ */
 
 async function saveHPPToBackend() {
-
-  if (!materialsData.length) {
-
-    alert(
-      "Master HPP masih kosong."
-    );
-
-    return;
-  }
-
-
-  const btn =
-    document.getElementById("btnSaveHPPBackend");
-
+  if (!dailyMaterialsData.length) { alert("Data belanja HPP harian masih kosong."); return; }
+  const btn = document.getElementById("btnSaveHPPBackend");
   btn.disabled = true;
-
-  btn.innerHTML =
-    '<i class="fa-solid fa-spinner fa-spin"></i> Menyimpan...';
-
+  btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Menyimpan...';
 
   try {
-
-    const payload = {
-
-      action: "saveHPP",
-
-      materials:
-        materialsData.map(item => ({
-
-          nama:
-            String(item.nama || "").trim(),
-
-          qty:
-            Number(item.qty) || 0,
-
-          biaya:
-            (
-              Number(item.qty) || 0
-            ) *
-            (
-              Number(item.hargaSatuan) || 0
-            )
-
-        }))
-
-    };
-
-
-    const response =
-      await fetch(APPS_SCRIPT_URL, {
-
-        method: "POST",
-
-        body:
-          JSON.stringify(payload)
-
-      });
-
-
-    const data =
-      await response.json();
-
-
-    if (data.status === "success") {
-
-      alert(
-        "Belanja HPP hari ini berhasil dicatat."
-      );
-
-    } else {
-
-      alert(
-        "Gagal:\n" +
-        data.message
-      );
-
-    }
-
+    const payload = { action: "saveHPP", materials: dailyMaterialsData.map(item => ({ nama: String(item.nama || "").trim(), qty: parseDecimal(item.qty), biaya: parseDecimal(item.qty) * parseDecimal(item.hargaSatuan) })) };
+    const response = await fetch(APPS_SCRIPT_URL, { method: "POST", body: JSON.stringify(payload) });
+    const data = await response.json();
+    if (data.status === "success") { alert("Belanja HPP hari ini berhasil dicatat."); }
+    else { alert("Gagal:\n" + data.message); }
   } catch (error) {
-
     console.error(error);
-
-    alert(
-      "Terjadi kesalahan jaringan."
-    );
-
+    alert("Terjadi kesalahan jaringan.");
   } finally {
-
     btn.disabled = false;
-
-    btn.innerHTML =
-      '<i class="fa-solid fa-cloud-arrow-up"></i> Catat Belanja Hari Ini';
-
+    btn.innerHTML = '<i class="fa-solid fa-cloud-arrow-up"></i> Catat Belanja Hari Ini';
   }
-
 }
-
-
-/* ============================================================
-   COSTING
-============================================================ */
 
 function calculateCostingSummary() {
-
-  const totalCost =
-    materialsData.reduce(
-      (sum, item) => {
-
-        const qty =
-          Number(item.qty) || 0;
-
-        const price =
-          Number(item.hargaSatuan) || 0;
-
-        return sum + (
-          qty * price
-        );
-
-      },
-      0
-    );
-
-
-  const omset =
-    salesData.reduce(
-      (sum, row) =>
-        sum +
-        getNumericValue(
-          row["Total Harga"]
-        ),
-      0
-    );
-
-
-  const profit =
-    omset - totalCost;
-
-
-  document.getElementById(
-    "totalMaterialCost"
-  ).innerText =
-    formatRupiah(totalCost);
-
-
-  document.getElementById(
-    "costingOmsetTotal"
-  ).innerText =
-    formatRupiah(omset);
-
-
-  document.getElementById(
-    "netProfitTotal"
-  ).innerText =
-    formatRupiah(profit);
-
+  const dailyTotal = dailyMaterialsData.reduce((sum, item) => sum + (parseDecimal(item.qty) * parseDecimal(item.hargaSatuan)), 0);
+  const dailyPreview = document.getElementById("dailyHppCostPreview");
+  if (dailyPreview) dailyPreview.innerText = formatRupiah(dailyTotal);
 }
-
 
 function getNumericValue(value) {
-
-  if (typeof value === "number") {
-
-    return value;
-
-  }
-
-  if (
-    value === null ||
-    value === undefined
-  ) {
-
-    return 0;
-
-  }
-
-  return Number(
-    String(value)
-      .replace(/[^0-9-]/g, "")
-  ) || 0;
-
+  if (typeof value === "number") return value;
+  if (value === null || value === undefined) return 0;
+  return Number(String(value).replace(/[^0-9-]/g, "")) || 0;
 }
-
-
-/* ============================================================
-   FETCH DATA
-============================================================ */
 
 async function fetchSalesData() {
-
   try {
+    const response = await fetch(`${APPS_SCRIPT_URL}?action=getData`);
+    const data = await response.json();
+    if (data.status !== "success") { console.error(data.message); return; }
+    salesData = data.data || [];
+    const masterHpp = data.masterHpp || [];
+    
+    materialsData = masterHpp.map(item => {
+      const nama = item["Nama Bahan Baku"] || item["Nama Bahan"] || item.nama || item["Bahan"] || item["Nama"] || Object.values(item)[0] || "Bahan";
+      const qty = parseDecimal(item["Kuantitas Standar Harian"] || item["Qty"] || item.qty || item["Jumlah"] || Object.values(item)[1]) || 1;
 
-    const response =
-      await fetch(
-        `${APPS_SCRIPT_URL}?action=getData`
-      );
+      let totalBiaya = parseDecimal(item["Biaya Standar Harian (Rp)"] || item["Biaya Standar Harian"] || item["Biaya"] || item.biaya);
+      let hargaSatuan = parseDecimal(item["Harga Satuan"] || item.hargaSatuan || item["Harga"]);
 
+      if (hargaSatuan === 0 && totalBiaya > 0 && qty > 0) {
+        hargaSatuan = totalBiaya / qty;
+      } else if (totalBiaya === 0 && hargaSatuan > 0) {
+        totalBiaya = hargaSatuan * qty;
+      }
 
-    const data =
-      await response.json();
+      return {
+        nama: nama,
+        qty: qty,
+        hargaSatuan: hargaSatuan,
+        biaya: totalBiaya
+      };
+    });
 
-
-    if (data.status !== "success") {
-
-      console.error(
-        data.message
-      );
-
-      return;
-
-    }
-
-
-    salesData =
-      data.data || [];
-
-
-    const masterHpp =
-      data.masterHpp || [];
-
-
-    materialsData =
-      masterHpp.map(item => ({
-
-        nama:
-          item.nama ||
-          item["Nama Bahan"] ||
-          "",
-
-        qty:
-          Number(
-            item.qty ||
-            item["Qty"]
-          ) || 0,
-
-        hargaSatuan:
-          Number(
-            item.hargaSatuan ||
-            item["Harga Satuan"]
-          ) || 0,
-
-        biaya:
-          Number(
-            item.biaya ||
-            item["Biaya"]
-          ) || 0
-
-      }));
-
+    dailyMaterialsData = JSON.parse(JSON.stringify(materialsData));
 
     renderMaterialsTable();
-
     renderDashboard();
-
-    calculateCostingSummary();
-
-
+    renderExpenseAnalysis();
   } catch (error) {
-
-    console.error(
-      "fetchSalesData error:",
-      error
-    );
-
+    console.error("fetchSalesData error:", error);
   }
-
 }
 
-
-/* ============================================================
-   DATE PARSER KEBALE & ULTRA FLEXIBLE
-============================================================ */
-
-function parseTransactionDate(value) {
-
-  if (!value) return null;
-
-  if (value instanceof Date) return value;
-
-  // Coba standar Date constructor
-  const parsed = new Date(value);
-  if (!isNaN(parsed.getTime())) return parsed;
-
-  if (typeof value === "string") {
-    let cleanVal = value.trim();
-
-    // Format DD/MM/YYYY atau MM/DD/YYYY atau YYYY/MM/DD
-    if (cleanVal.includes("/")) {
-      const parts = cleanVal.split(" ");
-      const dateParts = parts[0].split("/");
-
-      if (dateParts.length === 3) {
-        let p1 = Number(dateParts[0]);
-        let p2 = Number(dateParts[1]);
-        let p3 = Number(dateParts[2]);
-
-        let year, month, day;
-
-        if (p1 > 1000) { // YYYY/MM/DD
-          year = p1; month = p2 - 1; day = p3;
-        } else if (p3 > 1000) { // DD/MM/YYYY
-          year = p3; month = p2 - 1; day = p1;
-        } else {
-          year = 2000 + p3; month = p2 - 1; day = p1;
-        }
-
-        let hour = 0, minute = 0, second = 0;
-        if (parts[1]) {
-          const timeParts = parts[1].split(":");
-          hour = Number(timeParts[0]) || 0;
-          minute = Number(timeParts[1]) || 0;
-          second = Number(timeParts[2]) || 0;
-        }
-
-        return new Date(year, month, day, hour, minute, second);
-      }
-    }
-    
-    // Format YYYY-MM-DD
-    if (cleanVal.includes("-")) {
-      const parts = cleanVal.split(" ");
-      const dateParts = parts[0].split("-");
-      if (dateParts.length === 3) {
-        let p1 = Number(dateParts[0]);
-        let p2 = Number(dateParts[1]);
-        let p3 = Number(dateParts[2]);
-        let year = p1 > 1000 ? p1 : p3;
-        let month = p2 - 1;
-        let day = p1 > 1000 ? p3 : p1;
-        return new Date(year, month, day);
-      }
-    }
-  }
-
-  return null;
-
-}
-
-
-/* ============================================================
-   FILTER DATA BY PERIOD (Dengan Fallback String Matching Mematikan)
-============================================================ */
-
-function setDashboardFilter(filter) {
-
-  activeFilter = filter;
-
-  const buttons = {
-    today: "filterToday",
-    "7days": "filter7Days",
-    month: "filterMonth",
-    all: "filterAll"
-  };
-
+function setExpenseFilter(filter) {
+  activeExpenseFilter = filter;
+  const buttons = { today: "expFilterToday", "7days": "expFilter7Days", month: "expFilterMonth", all: "expFilterAll" };
+  
   Object.values(buttons).forEach(id => {
-    document.getElementById(id).className =
-      "px-3 py-1.5 rounded-lg text-xs font-bold text-slate-500";
+    const btn = document.getElementById(id);
+    if (btn) btn.className = "px-3 py-1.5 rounded-lg text-xs font-bold text-slate-500";
   });
 
-  document.getElementById(buttons[filter]).className =
-    "px-3 py-1.5 rounded-lg text-xs font-bold bg-white dark:bg-slate-700 text-brand-600 shadow-sm";
+  const activeBtn = document.getElementById(buttons[filter]);
+  if (activeBtn) activeBtn.className = "px-3 py-1.5 rounded-lg text-xs font-bold bg-white dark:bg-slate-700 text-brand-600 shadow-sm";
+
+  const labels = {
+    today: "Menampilkan pengeluaran hari ini",
+    "7days": "Menampilkan pengeluaran 7 hari terakhir",
+    month: "Menampilkan pengeluaran bulan ini",
+    all: "Menampilkan seluruh pengeluaran"
+  };
+  document.getElementById("expenseFilterLabel").innerText = labels[filter];
+
+  renderExpenseAnalysis();
+}
+
+function renderExpenseAnalysis() {
+  const now = new Date();
+  const currentMonth = now.getMonth();
+  const currentYear = now.getFullYear();
+
+  let totalExpense = 0;
+  let topExpenseItem = "-";
+  let topCost = 0;
+
+  const names = [];
+  const costValues = [];
+  const qtyValues = [];
+
+  materialsData.forEach(item => {
+    let qty = parseDecimal(item.qty);
+    const price = parseDecimal(item.hargaSatuan);
+    
+    if (activeExpenseFilter === "today") {
+      qty = dailyMaterialsData.find(d => d.nama === item.nama) ? parseDecimal(dailyMaterialsData.find(d => d.nama === item.nama).qty) : qty;
+    } else if (activeExpenseFilter === "7days") {
+      qty = 0;
+    } else if (activeExpenseFilter === "month") {
+      qty = 0;
+    }
+
+    const subtotal = qty * price;
+
+    totalExpense += subtotal;
+    names.push(item.nama);
+    costValues.push(subtotal);
+    qtyValues.push(qty);
+
+    if (subtotal > topCost && subtotal > 0) {
+      topCost = subtotal;
+      topExpenseItem = `${item.nama} (${formatRupiah(subtotal)})`;
+    }
+  });
+
+  const totalCostEl = document.getElementById("expenseTotalCost");
+  if (totalCostEl) totalCostEl.innerText = formatRupiah(totalExpense);
+
+  const totalItemsEl = document.getElementById("expenseTotalItems");
+  if (totalItemsEl) totalItemsEl.innerText = `${materialsData.length} Jenis`;
+
+  const topItemEl = document.getElementById("expenseTopItem");
+  if (topItemEl) topItemEl.innerText = topExpenseItem;
+
+  const expCanvas = document.getElementById("expenseBarChart");
+  if (!expCanvas) return;
+
+  if (expenseChartInstance) expenseChartInstance.destroy();
+
+  expenseChartInstance = new Chart(expCanvas.getContext("2d"), {
+    type: "bar",
+    data: {
+      labels: names,
+      datasets: [{
+        label: "BIAYA",
+        data: costValues,
+        backgroundColor: "#ef4444",
+        borderRadius: 6,
+        barPercentage: 0.45
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          callbacks: {
+            label: function(context) {
+              const itemIndex = context.dataIndex;
+              return [
+                ` BIAYA: ${formatRupiah(context.raw)}`,
+                ` QTY: ${qtyValues[itemIndex]}`
+              ];
+            }
+          }
+        }
+      },
+      scales: {
+        x: { grid: { display: false }, ticks: { display: false } },
+        y: { beginAtZero: true, display: false }
+      }
+    }
+  });
+
+  const trNama = document.getElementById("expTrNamaBahan");
+  const trNilai = document.getElementById("expTrNilaiBiaya");
+  const trQty = document.getElementById("expTrQtyBahan");
+
+  if (!trNama || !trNilai || !trQty) return;
+
+  trNama.innerHTML = `<td class="p-2 text-left font-extrabold text-slate-600 bg-slate-100 dark:bg-slate-800 w-32">NAMA BAHAN BAKU</td>`;
+  trNilai.innerHTML = `<td class="p-2 text-left font-extrabold text-red-600 bg-slate-50 dark:bg-slate-800/80 w-32">BIAYA</td>`;
+  trQty.innerHTML = `<td class="p-2 text-left font-extrabold text-amber-600 dark:text-amber-400 bg-amber-100/50 dark:bg-amber-900/40 w-32">QTY</td>`;
+
+  names.forEach((p, idx) => {
+    trNama.innerHTML += `<td class="p-2 font-bold uppercase text-slate-700 dark:text-slate-200 border-l border-slate-200 dark:border-slate-700">${escapeHtml(p)}</td>`;
+    trNilai.innerHTML += `<td class="p-2 font-bold text-red-600 border-l border-slate-200 dark:border-slate-700">${formatRupiah(costValues[idx])}</td>`;
+    trQty.innerHTML += `<td class="p-2 font-black text-amber-600 dark:text-amber-400 border-l border-slate-200 dark:border-slate-700">${qtyValues[idx]}</td>`;
+  });
+}
+
+function getRowDateString(row) {
+  if (!row) return "";
+  return row["Tanggal & Waktu"] || row["Waktu"] || row["Tanggal"] || row["Date"] || row["Timestamp"] || Object.values(row)[1] || "";
+}
+
+function parseTransactionDate(value) {
+  if (!value) return null;
+  if (value instanceof Date) return value;
+  const parsedDirect = new Date(value);
+  if (!isNaN(parsedDirect.getTime())) return parsedDirect;
+
+  const str = String(value).trim();
+  if (str.includes("/")) {
+    const spaceParts = str.split(" ");
+    const dParts = spaceParts[0].split("/");
+    if (dParts.length === 3) {
+      let p1 = parseInt(dParts[0], 10), p2 = parseInt(dParts[1], 10), p3 = parseInt(dParts[2], 10);
+      let year = p1 > 1000 ? p1 : (p3 > 1000 ? p3 : 2000 + p3);
+      let month = p2 - 1;
+      let day = p1 > 1000 ? p3 : p1;
+      let hour = 0, min = 0, sec = 0;
+      if (spaceParts[1]) {
+        const tParts = spaceParts[1].split(":");
+        hour = parseInt(tParts[0], 10) || 0;
+        min = parseInt(tParts[1], 10) || 0;
+        sec = parseInt(tParts[2], 10) || 0;
+      }
+      return new Date(year, month, day, hour, min, sec);
+    }
+  }
+  if (str.includes("-")) {
+    const spaceParts = str.split(" ");
+    const dParts = spaceParts[0].split("-");
+    if (dParts.length === 3) {
+      let p1 = parseInt(dParts[0], 10), p2 = parseInt(dParts[1], 10), p3 = parseInt(dParts[2], 10);
+      return new Date(p1 > 1000 ? p1 : p3, p2 - 1, p1 > 1000 ? p3 : p1);
+    }
+  }
+  return null;
+}
+
+function setDashboardFilter(filter) {
+  activeFilter = filter;
+  const buttons = { today: "filterToday", "7days": "filter7Days", month: "filterMonth", all: "filterAll" };
+  Object.values(buttons).forEach(id => {
+    const btn = document.getElementById(id);
+    if (btn) btn.className = "px-3 py-1.5 rounded-lg text-xs font-bold text-slate-500";
+  });
+  const activeBtn = document.getElementById(buttons[filter]);
+  if (activeBtn) activeBtn.className = "px-3 py-1.5 rounded-lg text-xs font-bold bg-white dark:bg-slate-700 text-brand-600 shadow-sm";
 
   const labels = {
     today: "Menampilkan data hari ini",
@@ -3226,95 +2138,52 @@ function setDashboardFilter(filter) {
     month: "Menampilkan data bulan ini",
     all: "Menampilkan seluruh data"
   };
-
   document.getElementById("dashboardFilterLabel").innerText = labels[filter];
-
   renderDashboard();
-
 }
-
 
 function filterDataByPeriod(data, filter) {
-
+  if (filter === "all") return data;
   const now = new Date();
-  const currentMonth = now.getMonth();
-  const currentYear = now.getFullYear();
+  const targetYear = now.getFullYear();
+  const targetMonth = now.getMonth();
 
   return data.filter(item => {
+    const dateStr = getRowDateString(item);
+    const date = parseTransactionDate(dateStr);
 
-    const rawDate = item["Tanggal & Waktu"] || item["Waktu"] || item["Tanggal"] || "";
-    const date = parseTransactionDate(rawDate);
-
-    if (filter === "all") return true;
-
-    // Jika Objek Tanggal Berhasil Terurai
-    if (date) {
-      if (filter === "today") {
-        return (
-          date.getDate() === now.getDate() &&
-          date.getMonth() === currentMonth &&
-          date.getFullYear() === currentYear
-        );
-      }
-
+    if (date && !isNaN(date.getTime())) {
+      if (filter === "today") return (date.getDate() === now.getDate() && date.getMonth() === targetMonth && date.getFullYear() === targetYear);
       if (filter === "7days") {
-        const diffTime = now.getTime() - date.getTime();
-        const diffDays = diffTime / (1000 * 3600 * 24);
+        const diffDays = (now.getTime() - date.getTime()) / (1000 * 3600 * 24);
         return diffDays >= 0 && diffDays <= 7;
       }
-
-      if (filter === "month") {
-        return (
-          date.getMonth() === currentMonth &&
-          date.getFullYear() === currentYear
-        );
-      }
+      if (filter === "month") return (date.getMonth() === targetMonth && date.getFullYear() === targetYear);
     }
 
-    // FALLBACK TEKS JIKA TANGGAL DI SHEET DALAM FORMAT TEKS LOKAL/INDONESIA
-    const rawStr = String(rawDate).trim();
-    const targetMonthPad = String(currentMonth + 1).padStart(2, '0');
-    const targetMonthNoPad = String(currentMonth + 1);
+    const rawUpper = String(dateStr).toUpperCase().trim();
+    const mPad = String(targetMonth + 1).padStart(2, '0');
+    const mNoPad = String(targetMonth + 1);
 
     if (filter === "month") {
-      // Cocokkan pola bulan dan tahun di dalam string
-      return (
-        rawStr.includes(`/${targetMonthPad}/${currentYear}`) ||
-        rawStr.includes(`/${targetMonthNoPad}/${currentYear}`) ||
-        rawStr.includes(`-${targetMonthPad}-${currentYear}`) ||
-        rawStr.includes(`${currentYear}-${targetMonthPad}`)
-      );
+      const monthNames = ["JAN", "FEB", "MAR", "APR", "MEI", "JUN", "JUL", "AGU", "SEP", "OKT", "NOV", "DES"];
+      const fullMonthNames = ["JANUARI", "FEBRUARI", "MARET", "APRIL", "MEI", "JUNI", "JULI", "AGUSTUS", "SEPTEMBER", "OKTOBER", "NOVEMBER", "DESEMBER"];
+      const isNumMatch = (rawUpper.includes(`/${mPad}/${targetYear}`) || rawUpper.includes(`/${mNoPad}/${targetYear}`) || rawUpper.includes(`-${mPad}-${targetYear}`) || rawUpper.includes(`${targetYear}-${mPad}`));
+      const isTextMatch = ((rawUpper.includes(monthNames[targetMonth]) || rawUpper.includes(fullMonthNames[targetMonth])) && rawUpper.includes(String(targetYear)));
+      return isNumMatch || isTextMatch;
     }
-
     if (filter === "today") {
-      const dayPad = String(now.getDate()).padStart(2, '0');
-      return (
-        rawStr.includes(`${dayPad}/${targetMonthPad}/${currentYear}`) ||
-        rawStr.includes(`${now.getDate()}/${targetMonthNoPad}/${currentYear}`)
-      );
+      const dPad = String(now.getDate()).padStart(2, '0');
+      return rawUpper.includes(`${dPad}/${mPad}/${targetYear}`) || rawUpper.includes(`${now.getDate()}/${mNoPad}/${targetYear}`);
     }
-
-    return true;
-
+    return false;
   });
-
 }
 
-
-/* ============================================================
-   DASHBOARD
-============================================================ */
-
 function renderDashboard() {
-
   const filtered = filterDataByPeriod(salesData, activeFilter);
+  let totalOmset = 0, omsetTunai = 0, omsetNonTunai = 0, totalAyamNasiQty = 0;
 
-  let totalOmset = 0;
-  let omsetTunai = 0;
-  let omsetNonTunai = 0;
-  let totalAyamNasiQty = 0;
-
-  // Struktur Barang
   const productSummary = {
     "Nasi + Ayam": { omset: 0, qty: 0 },
     "Ayam": { omset: 0, qty: 0 },
@@ -3323,83 +2192,47 @@ function renderDashboard() {
   };
 
   filtered.forEach(row => {
-
-    const total = getNumericValue(row["Total Harga"]);
-    const qty = Number(row["Jumlah"]) || 0;
-    const product = row["Nama Produk"] || "Lainnya";
+    const total = getNumericValue(row["Total Harga"] || row["Total"]);
+    const qty = Number(row["Jumlah"] || row["Qty"]) || 0;
+    const product = row["Nama Produk"] || row["Produk"] || "Lainnya";
     const method = row["Metode Pembayaran"] || row["Metode"] || "Tunai";
 
     totalOmset += total;
-
-    if (method.toLowerCase().includes("non")) {
-      omsetNonTunai += total;
-    } else {
-      omsetTunai += total;
-    }
+    if (method.toLowerCase().includes("non")) omsetNonTunai += total;
+    else omsetTunai += total;
 
     const lowerProd = product.toLowerCase();
-    if (lowerProd.includes("ayam") || lowerProd.includes("nasi")) {
-      totalAyamNasiQty += qty;
-    }
+    if (lowerProd.includes("ayam") || lowerProd.includes("nasi")) totalAyamNasiQty += qty;
 
-    if (!productSummary[product]) {
-      productSummary[product] = { omset: 0, qty: 0 };
-    }
+    if (!productSummary[product]) productSummary[product] = { omset: 0, qty: 0 };
     productSummary[product].omset += total;
     productSummary[product].qty += qty;
-
   });
 
-
-  // Update Card
   document.getElementById("dashTotalOmset").innerText = formatRupiah(totalOmset);
   document.getElementById("dashOmsetTunai").innerText = formatRupiah(omsetTunai);
   document.getElementById("dashOmsetNonTunai").innerText = formatRupiah(omsetNonTunai);
   document.getElementById("dashTotalAyamNasiQty").innerText = `${totalAyamNasiQty} pcs`;
 
-
-  renderCharts(
-    productSummary,
-    { "Tunai": omsetTunai, "Non-Tunai": omsetNonTunai }
-  );
-
-
+  renderCharts(productSummary, { "Tunai": omsetTunai, "Non-Tunai": omsetNonTunai });
   renderTable(salesData);
-
 }
 
-
-/* ============================================================
-   CHARTS & TABEL HTML LURUS PRESISI
-============================================================ */
-
 function renderCharts(productSummary, paymentMethods) {
-
   const products = Object.keys(productSummary);
   const omsetValues = products.map(p => productSummary[p].omset);
-
   const barCanvas = document.getElementById("productBarChart");
   const pieCanvas = document.getElementById("productPieChart");
 
   if (!barCanvas || !pieCanvas) return;
-
   if (barChartInstance) barChartInstance.destroy();
   if (pieChartInstance) pieChartInstance.destroy();
 
-  // 1. RENDER CHART
   barChartInstance = new Chart(barCanvas.getContext("2d"), {
     type: "bar",
     data: {
       labels: products,
-      datasets: [
-        {
-          label: "NILAI",
-          data: omsetValues,
-          backgroundColor: "#ea580c",
-          borderRadius: 6,
-          barPercentage: 0.45
-        }
-      ]
+      datasets: [{ label: "NILAI", data: omsetValues, backgroundColor: "#ea580c", borderRadius: 6, barPercentage: 0.45 }]
     },
     options: {
       responsive: true,
@@ -3411,29 +2244,15 @@ function renderCharts(productSummary, paymentMethods) {
             label: function(context) {
               const prodName = context.label;
               const qty = productSummary[prodName] ? productSummary[prodName].qty : 0;
-              return [
-                ` NILAI: ${formatRupiah(context.raw)}`,
-                ` QTY: ${qty}`
-              ];
+              return [` NILAI: ${formatRupiah(context.raw)}`, ` QTY: ${qty}`];
             }
           }
         }
       },
-      scales: {
-        x: {
-          grid: { display: false },
-          ticks: { display: false }
-        },
-        y: {
-          beginAtZero: true,
-          display: false
-        }
-      }
+      scales: { x: { grid: { display: false }, ticks: { display: false } }, y: { beginAtZero: true, display: false } }
     }
   });
 
-
-  // 2. RENDER TABEL HTML LURUS SESUAI DAFTAR BARANG
   const trNama = document.getElementById("trNamaBarang");
   const trNilai = document.getElementById("trNilaiBarang");
   const trQty = document.getElementById("trQtyBarang");
@@ -3444,614 +2263,154 @@ function renderCharts(productSummary, paymentMethods) {
 
   products.forEach(p => {
     const data = productSummary[p] || { omset: 0, qty: 0 };
-
     trNama.innerHTML += `<td class="p-2 font-bold uppercase text-slate-700 dark:text-slate-200 border-l border-slate-200 dark:border-slate-700">${escapeHtml(p)}</td>`;
     trNilai.innerHTML += `<td class="p-2 font-bold text-brand-600 border-l border-slate-200 dark:border-slate-700">${formatRupiah(data.omset)}</td>`;
     trQty.innerHTML += `<td class="p-2 font-black text-blue-600 dark:text-blue-400 border-l border-slate-200 dark:border-slate-700">${data.qty}</td>`;
   });
 
-
-  // 3. GRAFIK PIE METODE PEMBAYARAN
   pieChartInstance = new Chart(pieCanvas.getContext("2d"), {
     type: "doughnut",
-    data: {
-      labels: Object.keys(paymentMethods),
-      datasets: [{
-        data: Object.values(paymentMethods),
-        backgroundColor: ["#10b981", "#3b82f6"]
-      }]
-    },
-    options: {
-      responsive: true,
-      maintainAspectRatio: false,
-      plugins: {
-        legend: { position: "bottom" }
-      }
-    }
+    data: { labels: Object.keys(paymentMethods), datasets: [{ data: Object.values(paymentMethods), backgroundColor: ["#10b981", "#3b82f6"] }] },
+    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: "bottom" } } }
   });
-
 }
-
-
-/* ============================================================
-   TABLE TRANSAKSI
-============================================================ */
 
 function renderTable(data) {
-
-  const tbody =
-    document.getElementById(
-      "salesTableBody"
-    );
-
-  const kasirTbody =
-    document.getElementById(
-      "kasirRecentTable"
-    );
-
-
+  const tbody = document.getElementById("salesTableBody");
+  const kasirTbody = document.getElementById("kasirRecentTable");
   tbody.innerHTML = "";
-
   kasirTbody.innerHTML = "";
 
+  const reversed = data.slice().reverse();
+  reversed.forEach((row, index) => {
+    const dateStr = getRowDateString(row);
+    const date = parseTransactionDate(dateStr);
+    const timeStr = date ? date.toLocaleString("id-ID") : (dateStr || "-");
+    const harga = getNumericValue(row["Harga Satuan"] || row["Harga"]);
+    const total = getNumericValue(row["Total Harga"] || row["Total"]);
+    const method = row["Metode Pembayaran"] || row["Metode"] || "Tunai";
 
-  const reversed =
-    data.slice().reverse();
+    const methodBadge = method.toLowerCase().includes("non")
+      ? `<span class="px-2 py-0.5 rounded text-[10px] font-bold bg-blue-100 text-blue-700 dark:bg-blue-900/40 dark:text-blue-300">Non-Tunai</span>`
+      : `<span class="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-100 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-300">Tunai</span>`;
 
+    tbody.innerHTML += `
+      <tr class="border-b border-slate-100 dark:border-slate-800">
+        <td class="py-2.5 px-3 font-mono text-[11px]">${escapeHtml(row["ID Transaksi"] || row["ID"] || "-")}</td>
+        <td class="py-2.5 px-3 text-slate-500">${escapeHtml(timeStr)}</td>
+        <td class="py-2.5 px-3 font-semibold">${escapeHtml(row["Nama Produk"] || row["Produk"] || "-")}</td>
+        <td class="py-2.5 px-3 text-center">${Number(row["Jumlah"] || row["Qty"]) || 0}</td>
+        <td class="py-2.5 px-3 text-center">${methodBadge}</td>
+        <td class="py-2.5 px-3 text-right">${formatRupiah(harga)}</td>
+        <td class="py-2.5 px-3 text-right font-bold text-brand-600">${formatRupiah(total)}</td>
+      </tr>`;
 
-  reversed.forEach(
-    (row, index) => {
-
-      const date =
-        parseTransactionDate(
-          row["Tanggal & Waktu"] || row["Waktu"]
-        );
-
-
-      const timeStr =
-        date
-          ? date.toLocaleString("id-ID")
-          : (
-              row["Tanggal & Waktu"] ||
-              row["Waktu"] ||
-              "-"
-            );
-
-
-      const harga =
-        getNumericValue(
-          row["Harga Satuan"]
-        );
-
-      const total =
-        getNumericValue(
-          row["Total Harga"]
-        );
-
-      const method =
-        row["Metode Pembayaran"] ||
-        row["Metode"] ||
-        "Tunai";
-
-      const methodBadge = method.toLowerCase().includes("non")
-        ? `<span class="px-2 py-0.5 rounded text-[10px] font-bold bg-blue-100 text-blue-700 dark:bg-blue-900/40 dark:text-blue-300">Non-Tunai</span>`
-        : `<span class="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-100 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-300">Tunai</span>`;
-
-
-      tbody.innerHTML += `
-
-        <tr class="border-b
-                   border-slate-100
-                   dark:border-slate-800">
-
-          <td class="py-2.5 px-3
-                     font-mono text-[11px]">
-
-            ${escapeHtml(
-              row["ID Transaksi"] || "-"
-            )}
-
-          </td>
-
-          <td class="py-2.5 px-3
-                     text-slate-500">
-
-            ${escapeHtml(timeStr)}
-
-          </td>
-
-          <td class="py-2.5 px-3
-                     font-semibold">
-
-            ${escapeHtml(
-              row["Nama Produk"] || "-"
-            )}
-
-          </td>
-
-          <td class="py-2.5 px-3 text-center">
-
-            ${Number(
-              row["Jumlah"]
-            ) || 0}
-
-          </td>
-
-          <td class="py-2.5 px-3 text-center">
-
-            ${methodBadge}
-
-          </td>
-
-          <td class="py-2.5 px-3 text-right">
-
-            ${formatRupiah(harga)}
-
-          </td>
-
-          <td class="py-2.5 px-3 text-right
-                     font-bold text-brand-600">
-
-            ${formatRupiah(total)}
-
-          </td>
-
-        </tr>
-      `;
-
-
-      if (index < 5) {
-
-        kasirTbody.innerHTML += `
-
-          <tr class="border-b
-                     border-slate-100
-                     dark:border-slate-800">
-
-            <td class="py-2 px-3 text-slate-400">
-
-              ${escapeHtml(
-                timeStr
-              )}
-
-            </td>
-
-            <td class="py-2 px-3 font-medium">
-
-              ${escapeHtml(
-                row["Nama Produk"] || "-"
-              )}
-
-            </td>
-
-            <td class="py-2 px-3 text-center">
-
-              ${Number(
-                row["Jumlah"]
-              ) || 0}
-
-            </td>
-
-            <td class="py-2 px-3 text-center">
-
-              ${methodBadge}
-
-            </td>
-
-            <td class="py-2 px-3 text-right
-                       font-bold text-brand-600">
-
-              ${formatRupiah(total)}
-
-            </td>
-
-          </tr>
-
-        `;
-
-      }
-
+    if (index < 5) {
+      kasirTbody.innerHTML += `
+        <tr class="border-b border-slate-100 dark:border-slate-800">
+          <td class="py-2 px-3 text-slate-400">${escapeHtml(timeStr)}</td>
+          <td class="py-2 px-3 font-medium">${escapeHtml(row["Nama Produk"] || row["Produk"] || "-")}</td>
+          <td class="py-2 px-3 text-center">${Number(row["Jumlah"] || row["Qty"]) || 0}</td>
+          <td class="py-2 px-3 text-center">${methodBadge}</td>
+          <td class="py-2 px-3 text-right font-bold text-brand-600">${formatRupiah(total)}</td>
+        </tr>`;
     }
-  );
-
+  });
 }
-
-
-/* ============================================================
-   CSV
-============================================================ */
 
 function exportToCSV() {
-
-  if (!salesData.length) {
-
-    alert(
-      "Belum ada data transaksi."
-    );
-
-    return;
-  }
-
-
-  let csv =
-    "ID Transaksi,Tanggal & Waktu,Nama Produk,Jumlah,Metode Pembayaran,Harga Satuan,Total Harga\n";
-
-
+  if (!salesData.length) { alert("Belum ada data transaksi."); return; }
+  let csv = "ID Transaksi,Tanggal & Waktu,Nama Produk,Jumlah,Metode Pembayaran,Harga Satuan,Total Harga\n";
   salesData.forEach(row => {
-
-    const date =
-      parseTransactionDate(
-        row["Tanggal & Waktu"] || row["Waktu"]
-      );
-
-
-    const time =
-      date
-        ? date.toLocaleString("id-ID")
-        : (
-            row["Tanggal & Waktu"] ||
-            row["Waktu"] ||
-            ""
-          );
-
-
+    const dateStr = getRowDateString(row);
+    const date = parseTransactionDate(dateStr);
+    const time = date ? date.toLocaleString("id-ID") : (dateStr || "");
     csv += [
-
-      row["ID Transaksi"] || "",
-
+      row["ID Transaksi"] || row["ID"] || "",
       time,
-
-      row["Nama Produk"] || "",
-
-      row["Jumlah"] || 0,
-
+      row["Nama Produk"] || row["Produk"] || "",
+      row["Jumlah"] || row["Qty"] || 0,
       row["Metode Pembayaran"] || row["Metode"] || "Tunai",
-
-      row["Harga Satuan"] || 0,
-
-      row["Total Harga"] || 0
-
-    ]
-      .map(value =>
-        `"${String(value)
-          .replace(/"/g, '""')}"`
-      )
-      .join(",") + "\n";
-
+      row["Harga Satuan"] || row["Harga"] || 0,
+      row["Total Harga"] || row["Total"] || 0
+    ].map(value => `"${String(value).replace(/"/g, '""')}"`).join(",") + "\n";
   });
 
-
-  const blob =
-    new Blob(
-      [csv],
-      {
-        type:
-          "text/csv;charset=utf-8;"
-      }
-    );
-
-
-  const link =
-    document.createElement("a");
-
-  const url =
-    URL.createObjectURL(blob);
-
-
+  const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+  const link = document.createElement("a");
+  const url = URL.createObjectURL(blob);
   link.href = url;
-
-  link.download =
-    `Penjualan_InuChicken_${formatDateInput(new Date())}.csv`;
-
-
+  link.download = `Penjualan_InuChicken_${formatDateInput(new Date())}.csv`;
   document.body.appendChild(link);
-
   link.click();
-
   document.body.removeChild(link);
-
   URL.revokeObjectURL(url);
-
 }
-
-
-/* ============================================================
-   SALARY
-============================================================ */
 
 function calculateSalaryFromDates() {
-
-  const start =
-    document.getElementById(
-      "salStartDate"
-    ).value;
-
-  const end =
-    document.getElementById(
-      "salEndDate"
-    ).value;
-
-
-  const dailyRate =
-    Number(
-      document.getElementById(
-        "salDailyRate"
-      ).value
-    ) || 0;
-
-
-  const sickDays =
-    Math.max(
-      0,
-      Number(
-        document.getElementById(
-          "salSickDays"
-        ).value
-      ) || 0
-    );
-
-
-  const deduction =
-    Math.max(
-      0,
-      Number(
-        document.getElementById(
-          "salDeduction"
-        ).value
-      ) || 0
-    );
-
+  const start = document.getElementById("salStartDate").value;
+  const end = document.getElementById("salEndDate").value;
+  const dailyRate = Number(document.getElementById("salDailyRate").value) || 0;
+  const sickDays = Math.max(0, Number(document.getElementById("salSickDays").value) || 0);
+  const deduction = Math.max(0, Number(document.getElementById("salDeduction").value) || 0);
 
   let totalDays = 0;
-
-
   if (start && end) {
-
-    const startDate =
-      new Date(start + "T00:00:00");
-
-    const endDate =
-      new Date(end + "T00:00:00");
-
-
-    const diff =
-      endDate.getTime() -
-      startDate.getTime();
-
-
-    if (diff >= 0) {
-
-      totalDays =
-        Math.floor(
-          diff /
-          (
-            1000 *
-            60 *
-            60 *
-            24
-          )
-        ) + 1;
-
-    }
-
+    const startDate = new Date(start + "T00:00:00");
+    const endDate = new Date(end + "T00:00:00");
+    const diff = endDate.getTime() - startDate.getTime();
+    if (diff >= 0) totalDays = Math.floor(diff / (1000 * 60 * 60 * 24)) + 1;
   }
 
+  const effective = Math.max(0, totalDays - sickDays);
+  const gross = effective * dailyRate;
+  const net = Math.max(0, gross - deduction);
 
-  const effective =
-    Math.max(
-      0,
-      totalDays - sickDays
-    );
-
-
-  const gross =
-    effective * dailyRate;
-
-
-  const net =
-    Math.max(
-      0,
-      gross - deduction
-    );
-
-
-  document.getElementById(
-    "salTotalDaysDisplay"
-  ).innerText =
-    `${totalDays} Hari`;
-
-
-  document.getElementById(
-    "salWorkDaysDisplay"
-  ).innerText =
-    `${effective} Hari`;
-
-
-  document.getElementById(
-    "salSickDaysDisplay"
-  ).innerText =
-    `${sickDays} Hari`;
-
-
-  document.getElementById(
-    "salTotalDisplay"
-  ).innerText =
-    formatRupiah(net);
-
-
-  document.getElementById(
-    "salDetailFormula"
-  ).innerText =
-    `(${effective} hari × ${formatRupiah(dailyRate)}) - ${formatRupiah(deduction)}`;
-
+  document.getElementById("salTotalDaysDisplay").innerText = `${totalDays} Hari`;
+  document.getElementById("salWorkDaysDisplay").innerText = `${effective} Hari`;
+  document.getElementById("salSickDaysDisplay").innerText = `${sickDays} Hari`;
+  document.getElementById("salTotalDisplay").innerText = formatRupiah(net);
+  document.getElementById("salDetailFormula").innerText = `(${effective} hari × ${formatRupiah(dailyRate)}) - ${formatRupiah(deduction)}`;
 }
-
 
 function printSalarySlip() {
-
   calculateSalaryFromDates();
-
-
-  const name =
-    document.getElementById(
-      "salEmployeeName"
-    ).value;
-
-
-  const start =
-    document.getElementById(
-      "salStartDate"
-    ).value;
-
-
-  const end =
-    document.getElementById(
-      "salEndDate"
-    ).value;
-
-
-  const dailyRate =
-    Number(
-      document.getElementById(
-        "salDailyRate"
-      ).value
-    ) || 0;
-
-
-  const sickDays =
-    Number(
-      document.getElementById(
-        "salSickDays"
-      ).value
-    ) || 0;
-
-
-  const deduction =
-    Number(
-      document.getElementById(
-        "salDeduction"
-      ).value
-    ) || 0;
-
+  const name = document.getElementById("salEmployeeName").value;
+  const start = document.getElementById("salStartDate").value;
+  const end = document.getElementById("salEndDate").value;
+  const dailyRate = Number(document.getElementById("salDailyRate").value) || 0;
+  const sickDays = Number(document.getElementById("salSickDays").value) || 0;
+  const deduction = Number(document.getElementById("salDeduction").value) || 0;
 
   let totalDays = 0;
-
-
   if (start && end) {
-
-    const startDate =
-      new Date(start + "T00:00:00");
-
-    const endDate =
-      new Date(end + "T00:00:00");
-
-
-    const diff =
-      endDate.getTime() -
-      startDate.getTime();
-
-
-    if (diff >= 0) {
-
-      totalDays =
-        Math.floor(
-          diff /
-          (
-            1000 *
-            60 *
-            60 *
-            24
-          )
-        ) + 1;
-
-    }
-
+    const startDate = new Date(start + "T00:00:00");
+    const endDate = new Date(end + "T00:00:00");
+    const diff = endDate.getTime() - startDate.getTime();
+    if (diff >= 0) totalDays = Math.floor(diff / (1000 * 60 * 60 * 24)) + 1;
   }
 
-
-  const effective =
-    Math.max(
-      0,
-      totalDays - sickDays
-    );
-
-
-  const gross =
-    effective * dailyRate;
-
-
-  const net =
-    Math.max(
-      0,
-      gross - deduction
-    );
-
+  const effective = Math.max(0, totalDays - sickDays);
+  const gross = effective * dailyRate;
+  const net = Math.max(0, gross - deduction);
 
   function displayDate(value) {
-
     if (!value) return "-";
-
-    const [y,m,d] =
-      value.split("-");
-
+    const [y,m,d] = value.split("-");
     return `${d}/${m}/${y}`;
-
   }
 
-
-  document.getElementById(
-    "printName"
-  ).innerText =
-    name;
-
-
-  document.getElementById(
-    "printSignEmp"
-  ).innerText =
-    `( ${name} )`;
-
-
-  document.getElementById(
-    "printPeriod"
-  ).innerText =
-    `${displayDate(start)} s/d ${displayDate(end)} (${totalDays} Hari)`;
-
-
-  document.getElementById(
-    "printSickDaysText"
-  ).innerText =
-    `${sickDays} Hari`;
-
-
-  document.getElementById(
-    "printDate"
-  ).innerText =
-    new Date().toLocaleString("id-ID");
-
-
-  document.getElementById(
-    "printBase"
-  ).innerText =
-    `${formatRupiah(gross)} (${effective} hari × ${formatRupiah(dailyRate)})`;
-
-
-  document.getElementById(
-    "printDeduction"
-  ).innerText =
-    `- ${formatRupiah(deduction)}`;
-
-
-  document.getElementById(
-    "printTotal"
-  ).innerText =
-    formatRupiah(net);
-
+  document.getElementById("printName").innerText = name;
+  document.getElementById("printSignEmp").innerText = `( ${name} )`;
+  document.getElementById("printPeriod").innerText = `${displayDate(start)} s/d ${displayDate(end)} (${totalDays} Hari)`;
+  document.getElementById("printSickDaysText").innerText = `${sickDays} Hari`;
+  document.getElementById("printDate").innerText = new Date().toLocaleString("id-ID");
+  document.getElementById("printBase").innerText = `${formatRupiah(gross)} (${effective} hari × ${formatRupiah(dailyRate)})`;
+  document.getElementById("printDeduction").innerText = `- ${formatRupiah(deduction)}`;
+  document.getElementById("printTotal").innerText = formatRupiah(net);
 
   window.print();
-
 }
-
 </script>
-
 </body>
 </html>
