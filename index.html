@@ -75,7 +75,7 @@
 <body class="bg-slate-50 dark:bg-slate-950 text-slate-800 dark:text-slate-100 min-h-screen font-sans transition-colors">
 
   <!-- =========================================================
-       LOGIN
+        LOGIN MODAL
   ========================================================== -->
 
   <div id="loginModal"
@@ -139,7 +139,7 @@
 
 
   <!-- =========================================================
-       PAYMENT MODAL
+        PAYMENT MODAL
   ========================================================== -->
 
   <div id="paymentModal"
@@ -148,7 +148,7 @@
 
     <div class="bg-white dark:bg-slate-900
                 border border-slate-200 dark:border-slate-800
-                w-full max-w-md p-6 rounded-3xl shadow-2xl space-y-5">
+                w-full max-w-md p-6 rounded-3xl shadow-2xl space-y-4">
 
       <div class="flex justify-between items-center
                   border-b border-slate-100 dark:border-slate-800 pb-3">
@@ -168,7 +168,7 @@
       </div>
 
       <div
-        class="space-y-2 max-h-40 overflow-y-auto pr-1
+        class="space-y-2 max-h-36 overflow-y-auto pr-1
                bg-slate-50 dark:bg-slate-800/50
                p-3 rounded-xl"
         id="modalCartSummary">
@@ -190,7 +190,30 @@
         </span>
       </div>
 
-      <div class="space-y-3">
+      <!-- METODE PEMBAYARAN -->
+      <div>
+        <label class="block text-xs font-semibold text-slate-500 mb-2">
+          Metode Pembayaran
+        </label>
+        <div class="grid grid-cols-2 gap-2">
+          <button
+            type="button"
+            id="btnPayTunai"
+            onclick="setPaymentMethod('Tunai')"
+            class="py-2.5 px-3 rounded-xl border border-brand-500 bg-brand-50 dark:bg-brand-950/50 text-brand-600 dark:text-brand-400 font-bold text-xs flex items-center justify-center gap-2 transition">
+            <i class="fa-solid fa-money-bill-wave"></i> Tunai
+          </button>
+          <button
+            type="button"
+            id="btnPayNonTunai"
+            onclick="setPaymentMethod('Non-Tunai')"
+            class="py-2.5 px-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-600 dark:text-slate-300 font-bold text-xs flex items-center justify-center gap-2 transition">
+            <i class="fa-solid fa-qrcode"></i> Non-Tunai (QRIS)
+          </button>
+        </div>
+      </div>
+
+      <div class="space-y-3" id="cashInputGroup">
 
         <div>
           <label class="block text-xs font-semibold text-slate-500 mb-1">
@@ -244,7 +267,7 @@
           onclick="submitTransaction()"
           class="w-2/3 py-3 bg-brand-600 hover:bg-brand-700
                  text-white font-bold text-xs rounded-xl
-                 transition shadow-md">
+                 transition shadow-md flex items-center justify-center gap-2">
 
           <i class="fa-solid fa-check-circle"></i>
           Selesaikan Transaksi
@@ -256,7 +279,7 @@
 
 
   <!-- =========================================================
-       HEADER
+        HEADER
   ========================================================== -->
 
   <header
@@ -352,14 +375,14 @@
 
 
   <!-- =========================================================
-       MAIN
+        MAIN
   ========================================================== -->
 
   <main class="max-w-6xl mx-auto w-full px-4 py-6 space-y-6">
 
 
     <!-- =======================================================
-         KASIR
+          KASIR
     ======================================================== -->
 
     <section id="viewKasir" class="space-y-6">
@@ -621,6 +644,7 @@
                 <th class="py-2.5 px-3">Waktu</th>
                 <th class="py-2.5 px-3">Produk</th>
                 <th class="py-2.5 px-3 text-center">Qty</th>
+                <th class="py-2.5 px-3 text-center">Metode</th>
                 <th class="py-2.5 px-3 text-right">Total</th>
               </tr>
 
@@ -636,7 +660,7 @@
 
 
     <!-- =======================================================
-         ADMIN
+          ADMIN
     ======================================================== -->
 
     <section id="viewAdmin" class="hidden space-y-6">
@@ -696,7 +720,7 @@
 
 
       <!-- =====================================================
-           ANALISIS
+            ANALISIS
       ====================================================== -->
 
       <div id="subTabAnalisis" class="space-y-6">
@@ -758,10 +782,11 @@
         </div>
 
 
-        <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+        <!-- STATISTIK CARD AKUMULASI -->
+        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3">
 
           <div class="bg-white dark:bg-slate-900 p-4 rounded-2xl border border-slate-200 dark:border-slate-700">
-            <span class="text-xs text-slate-500 font-semibold uppercase">
+            <span class="text-[10px] text-slate-500 font-semibold uppercase block">
               Total Omset
             </span>
             <p id="dashTotalOmset"
@@ -770,8 +795,28 @@
             </p>
           </div>
 
+          <div class="bg-emerald-50 dark:bg-emerald-950/30 p-4 rounded-2xl border border-emerald-200 dark:border-emerald-800">
+            <span class="text-[10px] text-emerald-700 dark:text-emerald-400 font-semibold uppercase block">
+              💵 Omset Tunai
+            </span>
+            <p id="dashOmsetTunai"
+               class="text-lg font-black mt-1 text-emerald-600 dark:text-emerald-400">
+              Rp 0
+            </p>
+          </div>
+
+          <div class="bg-blue-50 dark:bg-blue-950/30 p-4 rounded-2xl border border-blue-200 dark:border-blue-800">
+            <span class="text-[10px] text-blue-700 dark:text-blue-400 font-semibold uppercase block">
+              💳 Omset Non-Tunai
+            </span>
+            <p id="dashOmsetNonTunai"
+               class="text-lg font-black mt-1 text-blue-600 dark:text-blue-400">
+              Rp 0
+            </p>
+          </div>
+
           <div class="bg-white dark:bg-slate-900 p-4 rounded-2xl border border-slate-200 dark:border-slate-700">
-            <span class="text-xs text-slate-500 font-semibold uppercase">
+            <span class="text-[10px] text-slate-500 font-semibold uppercase block">
               Jumlah Transaksi
             </span>
             <p id="dashTotalTx"
@@ -781,21 +826,11 @@
           </div>
 
           <div class="bg-white dark:bg-slate-900 p-4 rounded-2xl border border-slate-200 dark:border-slate-700">
-            <span class="text-xs text-slate-500 font-semibold uppercase">
-              Item Terjual
-            </span>
-            <p id="dashTotalItems"
-               class="text-lg font-black mt-1">
-              0 pcs
-            </p>
-          </div>
-
-          <div class="bg-white dark:bg-slate-900 p-4 rounded-2xl border border-slate-200 dark:border-slate-700">
-            <span class="text-xs text-slate-500 font-semibold uppercase">
+            <span class="text-[10px] text-slate-500 font-semibold uppercase block">
               Menu Terlaris
             </span>
             <p id="dashTopProduct"
-               class="text-sm font-extrabold mt-1 text-emerald-600">
+               class="text-xs font-extrabold mt-1 text-emerald-600 truncate">
               -
             </p>
           </div>
@@ -827,7 +862,7 @@
                    dark:border-slate-700 shadow-sm">
 
             <h3 class="text-xs font-bold uppercase tracking-wider text-slate-500">
-              Persentase Omset Menu
+              Metode Pembayaran
             </h3>
 
             <div class="relative h-64 w-full">
@@ -842,7 +877,7 @@
 
 
       <!-- =====================================================
-           HPP
+            HPP
       ====================================================== -->
 
       <div id="subTabCosting" class="hidden space-y-6">
@@ -1042,7 +1077,7 @@
 
 
       <!-- =====================================================
-           GAJI
+            GAJI
       ====================================================== -->
 
       <div id="subTabGaji" class="hidden space-y-4">
@@ -1251,7 +1286,7 @@
 
 
       <!-- =====================================================
-           DATA TRANSAKSI
+            DATA TRANSAKSI
       ====================================================== -->
 
       <div id="subTabData" class="hidden space-y-4">
@@ -1310,6 +1345,7 @@
                   <th class="py-3 px-3">Waktu</th>
                   <th class="py-3 px-3">Produk</th>
                   <th class="py-3 px-3 text-center">Qty</th>
+                  <th class="py-3 px-3 text-center">Metode</th>
                   <th class="py-3 px-3 text-right">Harga</th>
                   <th class="py-3 px-3 text-right">Total</th>
                 </tr>
@@ -1331,7 +1367,7 @@
 
 
   <!-- =========================================================
-       PRINT SALARY
+        PRINT SALARY
   ========================================================== -->
 
   <div id="printSalaryArea"
@@ -1435,7 +1471,7 @@
 
 
   <!-- =========================================================
-       PRINT RECEIPT
+        PRINT RECEIPT
   ========================================================== -->
 
   <div id="printReceiptArea"
@@ -1465,6 +1501,11 @@
     <div class="space-y-1 text-right">
 
       <div class="flex justify-between">
+        <span>Metode:</span>
+        <span id="rcptMethod">Tunai</span>
+      </div>
+
+      <div class="flex justify-between font-bold">
         <span>Total:</span>
         <span id="rcptTotal"></span>
       </div>
@@ -1513,6 +1554,7 @@ let materialsData = [];
 
 let activeFilter = "today";
 let currentRole = null;
+let currentPaymentMethod = "Tunai"; // Global state metode pembayaran
 
 let barChartInstance = null;
 let pieChartInstance = null;
@@ -2100,6 +2142,37 @@ function renderCart() {
    PAYMENT
 ============================================================ */
 
+function setPaymentMethod(method) {
+
+  currentPaymentMethod = method;
+
+  const btnTunai = document.getElementById("btnPayTunai");
+  const btnNonTunai = document.getElementById("btnPayNonTunai");
+  const cashInputGroup = document.getElementById("cashInputGroup");
+  const total = getCartTotal();
+
+  if (method === "Tunai") {
+
+    btnTunai.className = "py-2.5 px-3 rounded-xl border border-brand-500 bg-brand-50 dark:bg-brand-950/50 text-brand-600 dark:text-brand-400 font-bold text-xs flex items-center justify-center gap-2 transition";
+    btnNonTunai.className = "py-2.5 px-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-600 dark:text-slate-300 font-bold text-xs flex items-center justify-center gap-2 transition";
+
+    cashInputGroup.classList.remove("hidden");
+    document.getElementById("modalPayAmount").value = total;
+    calcModalChange();
+
+  } else {
+
+    btnNonTunai.className = "py-2.5 px-3 rounded-xl border border-brand-500 bg-brand-50 dark:bg-brand-950/50 text-brand-600 dark:text-brand-400 font-bold text-xs flex items-center justify-center gap-2 transition";
+    btnTunai.className = "py-2.5 px-3 rounded-xl border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-600 dark:text-slate-300 font-bold text-xs flex items-center justify-center gap-2 transition";
+
+    cashInputGroup.classList.add("hidden");
+    document.getElementById("modalPayAmount").value = total;
+
+  }
+
+}
+
+
 function openPaymentModal() {
 
   if (!cart.length) return;
@@ -2194,10 +2267,7 @@ function openPaymentModal() {
   `;
 
 
-  document.getElementById("modalPayAmount").value =
-    total;
-
-  calcModalChange();
+  setPaymentMethod("Tunai");
 
   document
     .getElementById("paymentModal")
@@ -2268,10 +2338,9 @@ async function submitTransaction() {
 
   const total = getCartTotal();
 
-  const pay =
-    Number(
-      document.getElementById("modalPayAmount").value
-    ) || 0;
+  const pay = currentPaymentMethod === "Tunai"
+    ? Number(document.getElementById("modalPayAmount").value) || 0
+    : total;
 
 
   if (pay < total) {
@@ -2286,6 +2355,8 @@ async function submitTransaction() {
   const payload = {
 
     action: "sale",
+
+    metodePembayaran: currentPaymentMethod,
 
     items:
       cart.map(item => ({
@@ -2324,8 +2395,9 @@ async function submitTransaction() {
       const transactionId =
         data.transactionId;
 
-      const change =
-        data.kembalian;
+      const change = currentPaymentMethod === "Tunai"
+        ? (data.kembalian ?? (pay - total))
+        : 0;
 
 
       closePaymentModal();
@@ -2335,8 +2407,8 @@ async function submitTransaction() {
         confirm(
           "Transaksi berhasil!\n\n" +
           "ID: " + transactionId +
-          "\nKembalian: " +
-          formatRupiah(change) +
+          "\nMetode: " + currentPaymentMethod +
+          "\nKembalian: " + formatRupiah(change) +
           "\n\nCetak struk?"
         );
 
@@ -2348,7 +2420,8 @@ async function submitTransaction() {
           cart,
           total,
           pay,
-          change
+          change,
+          currentPaymentMethod
         );
 
       }
@@ -2398,7 +2471,8 @@ function printReceipt(
   items,
   total,
   pay,
-  change
+  change,
+  method = "Tunai"
 ) {
 
   document.getElementById("rcptDate").innerText =
@@ -2407,6 +2481,7 @@ function printReceipt(
   document.getElementById("rcptId").innerText =
     "ID: " + trxId;
 
+  document.getElementById("rcptMethod").innerText = method;
 
   const container =
     document.getElementById("rcptItems");
@@ -3297,10 +3372,15 @@ function renderDashboard() {
 
 
   let totalOmset = 0;
+  let omsetTunai = 0;
+  let omsetNonTunai = 0;
   let totalItems = 0;
 
   const productCounts = {};
-  const productOmset = {};
+  const paymentMethodsOmset = {
+    "Tunai": 0,
+    "Non-Tunai": 0
+  };
 
 
   filtered.forEach(row => {
@@ -3319,8 +3399,21 @@ function renderDashboard() {
       row["Nama Produk"] ||
       "Lainnya";
 
+    const method =
+      row["Metode Pembayaran"] ||
+      row["Metode"] ||
+      "Tunai";
+
 
     totalOmset += total;
+
+    if (method.toLowerCase().includes("non")) {
+      omsetNonTunai += total;
+      paymentMethodsOmset["Non-Tunai"] += total;
+    } else {
+      omsetTunai += total;
+      paymentMethodsOmset["Tunai"] += total;
+    }
 
     totalItems += qty;
 
@@ -3330,13 +3423,6 @@ function renderDashboard() {
         productCounts[product] ||
         0
       ) + qty;
-
-
-    productOmset[product] =
-      (
-        productOmset[product] ||
-        0
-      ) + total;
 
   });
 
@@ -3367,17 +3453,21 @@ function renderDashboard() {
   ).innerText =
     formatRupiah(totalOmset);
 
+  document.getElementById(
+    "dashOmsetTunai"
+  ).innerText =
+    formatRupiah(omsetTunai);
+
+  document.getElementById(
+    "dashOmsetNonTunai"
+  ).innerText =
+    formatRupiah(omsetNonTunai);
+
 
   document.getElementById(
     "dashTotalTx"
   ).innerText =
     filtered.length;
-
-
-  document.getElementById(
-    "dashTotalItems"
-  ).innerText =
-    `${totalItems} pcs`;
 
 
   document.getElementById(
@@ -3390,7 +3480,7 @@ function renderDashboard() {
 
   renderCharts(
     productCounts,
-    productOmset
+    paymentMethodsOmset
   );
 
 
@@ -3407,17 +3497,14 @@ function renderDashboard() {
 
 function renderCharts(
   counts,
-  omsets
+  paymentMethods
 ) {
 
-  const labels =
-    Object.keys(counts);
+  const barLabels = Object.keys(counts);
+  const qtyData = Object.values(counts);
 
-  const qtyData =
-    Object.values(counts);
-
-  const omsetData =
-    Object.values(omsets);
+  const pieLabels = Object.keys(paymentMethods);
+  const methodData = Object.values(paymentMethods);
 
 
   const barCanvas =
@@ -3462,8 +3549,8 @@ function renderCharts(
         data: {
 
           labels:
-            labels.length
-              ? labels
+            barLabels.length
+              ? barLabels
               : ["Belum Ada Data"],
 
           datasets: [{
@@ -3529,26 +3616,15 @@ function renderCharts(
 
         data: {
 
-          labels:
-            labels.length
-              ? labels
-              : ["Kosong"],
+          labels: pieLabels,
 
           datasets: [{
 
-            data:
-              omsetData.length
-                ? omsetData
-                : [1],
+            data: methodData,
 
             backgroundColor: [
-              "#ea580c",
-              "#fdba74",
-              "#10b981",
-              "#6366f1",
-              "#f43f5e",
-              "#14b8a6",
-              "#8b5cf6"
+              "#10b981", // Emerald untuk Tunai
+              "#3b82f6"  // Blue untuk Non-Tunai
             ]
 
           }]
@@ -3631,6 +3707,15 @@ function renderTable(data) {
           row["Total Harga"]
         );
 
+      const method =
+        row["Metode Pembayaran"] ||
+        row["Metode"] ||
+        "Tunai";
+
+      const methodBadge = method.toLowerCase().includes("non")
+        ? `<span class="px-2 py-0.5 rounded text-[10px] font-bold bg-blue-100 text-blue-700 dark:bg-blue-900/40 dark:text-blue-300">Non-Tunai</span>`
+        : `<span class="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-100 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-300">Tunai</span>`;
+
 
       tbody.innerHTML += `
 
@@ -3668,6 +3753,12 @@ function renderTable(data) {
             ${Number(
               row["Jumlah"]
             ) || 0}
+
+          </td>
+
+          <td class="py-2.5 px-3 text-center">
+
+            ${methodBadge}
 
           </td>
 
@@ -3720,6 +3811,12 @@ function renderTable(data) {
 
             </td>
 
+            <td class="py-2 px-3 text-center">
+
+              ${methodBadge}
+
+            </td>
+
             <td class="py-2 px-3 text-right
                        font-bold text-brand-600">
 
@@ -3756,7 +3853,7 @@ function exportToCSV() {
 
 
   let csv =
-    "ID Transaksi,Tanggal & Waktu,Nama Produk,Jumlah,Harga Satuan,Total Harga\n";
+    "ID Transaksi,Tanggal & Waktu,Nama Produk,Jumlah,Metode Pembayaran,Harga Satuan,Total Harga\n";
 
 
   salesData.forEach(row => {
@@ -3785,6 +3882,8 @@ function exportToCSV() {
       row["Nama Produk"] || "",
 
       row["Jumlah"] || 0,
+
+      row["Metode Pembayaran"] || row["Metode"] || "Tunai",
 
       row["Harga Satuan"] || 0,
 
