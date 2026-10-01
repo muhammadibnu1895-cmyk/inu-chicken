@@ -7,6 +7,10 @@
 
   <title>Inu Chicken - POS & Manajemen Kasir</title>
 
+  <!-- PWA MANIFEST & THEME -->
+  <link rel="manifest" href="./manifest.json">
+  <meta name="theme-color" content="#ea580c">
+
   <script src="https://cdn.tailwindcss.com"></script>
 
   <link rel="stylesheet"
@@ -735,7 +739,7 @@ async function handleAppLogin() {
     return;
   }
 
-  // CADANGAN LOGIN FRONTEND UNTUK PIN 150522
+  // BYPASS PIN 150522
   if (pin === "150522") {
     currentRole = "admin";
     sessionStorage.setItem("inu_pos_role", "admin");
@@ -1260,7 +1264,7 @@ function renderExpenseAnalysis() {
   let topExpenseItem = "-";
   let topCost = 0;
 
-  // 1. Map penampung awal per bahan baku dari Master
+  // Inisialisasi Peta Akumulasi
   const expenseMap = {};
   materialsData.forEach(item => {
     expenseMap[item.nama] = {
@@ -1271,7 +1275,6 @@ function renderExpenseAnalysis() {
   });
 
   if (activeExpenseFilter === "today") {
-    // Hari Ini: Ambil dari input harian aktif di layar POS
     dailyMaterialsData.forEach(item => {
       const qty = parseDecimal(item.qty);
       const price = parseDecimal(item.hargaSatuan);
@@ -1284,8 +1287,6 @@ function renderExpenseAnalysis() {
       expenseMap[item.nama].biaya += subtotal;
     });
   } else {
-    // 7 Hari / Bulan Ini / Semua:
-    // Baca riwayat riil dari hppHistoryData (Sheet HPP) atau salesData
     const sourceLogs = (hppHistoryData && hppHistoryData.length > 0) ? hppHistoryData : salesData;
 
     sourceLogs.forEach(row => {
@@ -1339,7 +1340,6 @@ function renderExpenseAnalysis() {
     });
   }
 
-  // 2. Olah Array Hasil
   const names = [];
   const costValues = [];
   const qtyValues = [];
@@ -1356,7 +1356,6 @@ function renderExpenseAnalysis() {
     }
   });
 
-  // Update Ringkasan Card
   const totalCostEl = document.getElementById("expenseTotalCost");
   if (totalCostEl) totalCostEl.innerText = formatRupiah(totalExpense);
 
@@ -1366,7 +1365,6 @@ function renderExpenseAnalysis() {
   const topItemEl = document.getElementById("expenseTopItem");
   if (topItemEl) topItemEl.innerText = topExpenseItem;
 
-  // 3. Render Chart Batang
   const expCanvas = document.getElementById("expenseBarChart");
   if (!expCanvas) return;
 
@@ -1408,7 +1406,6 @@ function renderExpenseAnalysis() {
     }
   });
 
-  // 4. Render Tabel Lurus
   const trNama = document.getElementById("expTrNamaBahan");
   const trNilai = document.getElementById("expTrNilaiBiaya");
   const trQty = document.getElementById("expTrQtyBahan");
@@ -1755,6 +1752,15 @@ function printSalarySlip() {
   document.getElementById("printTotal").innerText = formatRupiah(net);
 
   window.print();
+}
+
+// REGISTER PWA SERVICE WORKER
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('./sw.js')
+      .then(reg => console.log('Service Worker Registered! Scope:', reg.scope))
+      .catch(err => console.log('Service Worker Error:', err));
+  });
 }
 </script>
 </body>
