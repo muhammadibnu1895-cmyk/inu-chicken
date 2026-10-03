@@ -87,6 +87,7 @@
       </div>
       <div>
         <h2 class="text-xl font-black text-slate-900 dark:text-white">Inu Chicken System</h2>
+        <p class="text-xs text-slate-400 mt-1">Masukkan PIN Kasir atau Admin</p>
       </div>
       <div class="space-y-4">
         <input type="password" id="appPinInput" maxlength="6" inputmode="numeric" placeholder="Masukkan PIN" class="w-full text-center text-2xl tracking-[0.5em] font-bold py-3.5 bg-slate-100 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-2xl focus:outline-none focus:ring-2 focus:ring-brand-500 transition">
@@ -572,7 +573,6 @@
               <button onclick="fetchSalesData()" class="px-3 py-1.5 bg-slate-100 dark:bg-slate-800 text-xs rounded-lg font-bold shadow-sm transition">
                 <i class="fa-solid fa-rotate"></i> Refresh
               </button>
-              <!-- TOMBOL ARSIP & RESET TAHUN BARU OTOMATIS -->
               <button onclick="triggerYearlyArchive()" id="btnArchiveData" class="px-3 py-1.5 bg-red-600 hover:bg-red-700 text-white text-xs rounded-lg font-bold shadow-sm transition">
                 <i class="fa-solid fa-box-archive"></i> Arsip & Reset Tahun Baru
               </button>
@@ -758,7 +758,6 @@ async function handleAppLogin() {
     return;
   }
 
-  // Pengecekan PIN murni dikirim ke Google Apps Script (Aman dari Inspect Element)
   try {
     const response = await fetch(`${APPS_SCRIPT_URL}?action=verifyPin&pin=${encodeURIComponent(pin)}`);
     const res = await response.json();
@@ -768,26 +767,7 @@ async function handleAppLogin() {
       sessionStorage.setItem("inu_pos_role", res.role);
       applyPermissions();
       document.getElementById("loginModal").classList.add("hidden");
-      fetchSalesData();
-    } else {
-      errEl.innerText = "PIN Salah / Tidak Terdaftar!";
-      errEl.classList.remove("hidden");
-    }
-  } catch (error) {
-    errEl.innerText = "Tidak dapat terhubung ke server.";
-    errEl.classList.remove("hidden");
-  }
-}
-  try {
-    const response = await fetch(`${APPS_SCRIPT_URL}?action=verifyPin&pin=${encodeURIComponent(pin)}`);
-    const res = await response.json();
-
-    if (res.status === "success" && res.valid) {
-      currentRole = res.role;
-      sessionStorage.setItem("inu_pos_role", res.role);
-      applyPermissions();
-      document.getElementById("loginModal").classList.add("hidden");
-      fetchSalesData();
+      await fetchSalesData();
     } else {
       errEl.innerText = "PIN Salah / Tidak Terdaftar!";
       errEl.classList.remove("hidden");
@@ -1571,7 +1551,6 @@ function renderDashboard() {
     if (method.toLowerCase().includes("non")) omsetNonTunai += total;
     else omsetTunai += total;
 
-    // TOTAL QTY MURNI HANYA MENGHITUNG "NASI + AYAM" DAN "AYAM ONLY"
     const lowerProd = product.toLowerCase();
     if (lowerProd === "nasi + ayam" || lowerProd === "ayam" || lowerProd.includes("ayam")) {
       totalAyamNasiQty += qty;
