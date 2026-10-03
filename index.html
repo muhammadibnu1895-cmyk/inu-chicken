@@ -307,7 +307,7 @@
 
         <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
           <div class="bg-white dark:bg-slate-900 p-4 rounded-2xl border border-slate-200 dark:border-slate-700">
-            <span class="text-[10px] text-slate-500 font-semibold uppercase block">Total Omset</span>
+            <span class="text-[10px] text-slate-500 font-semibold uppercase block">Total Penjualan</span>
             <p id="dashTotalOmset" class="text-lg font-black mt-1 text-brand-600">Rp 0</p>
           </div>
           <div class="bg-emerald-50 dark:bg-emerald-950/30 p-4 rounded-2xl border border-emerald-200 dark:border-emerald-800">
@@ -319,13 +319,13 @@
             <p id="dashOmsetNonTunai" class="text-lg font-black mt-1 text-blue-600 dark:text-blue-400">Rp 0</p>
           </div>
           <div class="bg-white dark:bg-slate-900 p-4 rounded-2xl border border-slate-200 dark:border-slate-700">
-            <span class="text-[10px] text-slate-500 font-semibold uppercase block">Total Qty (Ayam + Nasi)</span>
+            <span class="text-[10px] text-slate-500 font-semibold uppercase block">Total Qty (Ayam + Nasi & Ayam)</span>
             <p id="dashTotalAyamNasiQty" class="text-lg font-black mt-1 text-brand-600">0 pcs</p>
           </div>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <div class="md:col-span-2 bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm flex flex-col justify-between">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div class="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm flex flex-col justify-between">
             <div>
               <h3 class="text-xs font-bold uppercase tracking-wider text-slate-500 text-center mb-4">INFORMASI PENJUALAN INU CHICKEN</h3>
               <div class="relative h-64 w-full">
@@ -346,10 +346,26 @@
               </div>
             </div>
           </div>
-          <div class="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm">
-            <h3 class="text-xs font-bold uppercase tracking-wider text-slate-500 mb-4">Metode Pembayaran</h3>
-            <div class="relative h-72 w-full">
-              <canvas id="productPieChart"></canvas>
+
+          <div class="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm flex flex-col justify-between">
+            <div>
+              <h3 class="text-xs font-bold uppercase tracking-wider text-slate-500 text-center mb-4">INFORMASI PENJUALAN TERLARIS</h3>
+              <div class="relative h-64 w-full">
+                <canvas id="topSalesBarChart"></canvas>
+              </div>
+            </div>
+            <div class="mt-4 border border-slate-200 dark:border-slate-700 rounded-xl overflow-hidden text-[11px]">
+              <div class="overflow-x-auto">
+                <table class="w-full text-center border-collapse">
+                  <thead>
+                    <tr id="trNamaTop" class="font-bold border-b border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800/50"></tr>
+                  </thead>
+                  <tbody>
+                    <tr id="trNilaiTop" class="border-b border-slate-100 dark:border-slate-800"></tr>
+                    <tr id="trQtyTop" class="bg-emerald-50/50 dark:bg-emerald-950/20 font-bold text-emerald-600 dark:text-emerald-400"></tr>
+                  </tbody>
+                </table>
+              </div>
             </div>
           </div>
         </div>
@@ -550,12 +566,16 @@
         <section class="bg-white dark:bg-slate-900 p-5 rounded-2xl border border-slate-200 dark:border-slate-700 shadow-sm">
           <div class="flex flex-wrap justify-between items-center gap-3 mb-4">
             <h2 class="text-base font-bold"><i class="fa-solid fa-database text-brand-600"></i> Data Sheet Penjualan</h2>
-            <div class="flex gap-2">
+            <div class="flex flex-wrap gap-2">
               <button onclick="exportToCSV()" class="px-3 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white text-xs rounded-lg font-bold">
                 <i class="fa-solid fa-file-excel"></i> Ekspor CSV
               </button>
               <button onclick="fetchSalesData()" class="px-3 py-1.5 bg-slate-100 dark:bg-slate-800 text-xs rounded-lg font-bold">
                 <i class="fa-solid fa-rotate"></i> Refresh
+              </button>
+              <!-- TOMBOL ARSIP & RESET TAHUN BARU OTOMATIS -->
+              <button onclick="triggerYearlyArchive()" id="btnArchiveData" class="px-3 py-1.5 bg-red-600 hover:bg-red-700 text-white text-xs rounded-lg font-bold shadow-sm transition">
+                <i class="fa-solid fa-box-archive"></i> Arsip & Reset Tahun Baru
               </button>
             </div>
           </div>
@@ -665,7 +685,7 @@ let activeExpenseFilter = "today";
 let currentRole = null;
 let currentPaymentMethod = "Tunai";
 let barChartInstance = null;
-let pieChartInstance = null;
+let topSalesChartInstance = null;
 let expenseChartInstance = null;
 
 function formatRupiah(number) {
@@ -1264,7 +1284,6 @@ function renderExpenseAnalysis() {
   let topExpenseItem = "-";
   let topCost = 0;
 
-  // Inisialisasi Peta Akumulasi
   const expenseMap = {};
   materialsData.forEach(item => {
     expenseMap[item.nama] = {
@@ -1543,8 +1562,11 @@ function renderDashboard() {
     if (method.toLowerCase().includes("non")) omsetNonTunai += total;
     else omsetTunai += total;
 
+    // TOTAL QTY MURNI HANYA MENGHITUNG "NASI + AYAM" DAN "AYAM ONLY"
     const lowerProd = product.toLowerCase();
-    if (lowerProd.includes("ayam") || lowerProd.includes("nasi")) totalAyamNasiQty += qty;
+    if (lowerProd === "nasi + ayam" || lowerProd === "ayam" || lowerProd.includes("ayam")) {
+      totalAyamNasiQty += qty;
+    }
 
     if (!productSummary[product]) productSummary[product] = { omset: 0, qty: 0 };
     productSummary[product].omset += total;
@@ -1564,12 +1586,13 @@ function renderCharts(productSummary, paymentMethods) {
   const products = Object.keys(productSummary);
   const omsetValues = products.map(p => productSummary[p].omset);
   const barCanvas = document.getElementById("productBarChart");
-  const pieCanvas = document.getElementById("productPieChart");
+  const topSalesCanvas = document.getElementById("topSalesBarChart");
 
-  if (!barCanvas || !pieCanvas) return;
+  if (!barCanvas || !topSalesCanvas) return;
   if (barChartInstance) barChartInstance.destroy();
-  if (pieChartInstance) pieChartInstance.destroy();
+  if (topSalesChartInstance) topSalesChartInstance.destroy();
 
+  // 1. GRAFIK KIRI: INFORMASI PENJUALAN INU CHICKEN
   barChartInstance = new Chart(barCanvas.getContext("2d"), {
     type: "bar",
     data: {
@@ -1610,10 +1633,48 @@ function renderCharts(productSummary, paymentMethods) {
     trQty.innerHTML += `<td class="p-2 font-black text-blue-600 dark:text-blue-400 border-l border-slate-200 dark:border-slate-700">${data.qty}</td>`;
   });
 
-  pieChartInstance = new Chart(pieCanvas.getContext("2d"), {
-    type: "doughnut",
-    data: { labels: Object.keys(paymentMethods), datasets: [{ data: Object.values(paymentMethods), backgroundColor: ["#10b981", "#3b82f6"] }] },
-    options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: "bottom" } } }
+  // 2. GRAFIK KANAN: INFORMASI PENJUALAN TERLARIS (URUTAN QTY TERBANYAK KE TERKECIL)
+  const sortedProducts = products.slice().sort((a, b) => (productSummary[b].qty || 0) - (productSummary[a].qty || 0));
+  const topOmsetValues = sortedProducts.map(p => productSummary[p].omset);
+
+  topSalesChartInstance = new Chart(topSalesCanvas.getContext("2d"), {
+    type: "bar",
+    data: {
+      labels: sortedProducts,
+      datasets: [{ label: "NILAI", data: topOmsetValues, backgroundColor: "#10b981", borderRadius: 6, barPercentage: 0.45 }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          callbacks: {
+            label: function(context) {
+              const prodName = context.label;
+              const qty = productSummary[prodName] ? productSummary[prodName].qty : 0;
+              return [` NILAI: ${formatRupiah(context.raw)}`, ` QTY: ${qty}`];
+            }
+          }
+        }
+      },
+      scales: { x: { grid: { display: false }, ticks: { display: false } }, y: { beginAtZero: true, display: false } }
+    }
+  });
+
+  const trNamaTop = document.getElementById("trNamaTop");
+  const trNilaiTop = document.getElementById("trNilaiTop");
+  const trQtyTop = document.getElementById("trQtyTop");
+
+  trNamaTop.innerHTML = `<td class="p-2 text-left font-extrabold text-slate-600 bg-slate-100 dark:bg-slate-800 w-32">NAMA BARANG</td>`;
+  trNilaiTop.innerHTML = `<td class="p-2 text-left font-extrabold text-emerald-600 bg-slate-50 dark:bg-slate-800/80 w-32">NILAI</td>`;
+  trQtyTop.innerHTML = `<td class="p-2 text-left font-extrabold text-emerald-600 dark:text-emerald-400 bg-emerald-100/50 dark:bg-emerald-900/40 w-32">QTY</td>`;
+
+  sortedProducts.forEach(p => {
+    const data = productSummary[p] || { omset: 0, qty: 0 };
+    trNamaTop.innerHTML += `<td class="p-2 font-bold uppercase text-slate-700 dark:text-slate-200 border-l border-slate-200 dark:border-slate-700">${escapeHtml(p)}</td>`;
+    trNilaiTop.innerHTML += `<td class="p-2 font-bold text-emerald-600 border-l border-slate-200 dark:border-slate-700">${formatRupiah(data.omset)}</td>`;
+    trQtyTop.innerHTML += `<td class="p-2 font-black text-emerald-600 dark:text-emerald-400 border-l border-slate-200 dark:border-slate-700">${data.qty}</td>`;
   });
 }
 
@@ -1689,6 +1750,48 @@ function exportToCSV() {
   URL.revokeObjectURL(url);
 }
 
+// FUNGSI ARSIP TAHUNAN OTOMATIS
+async function triggerYearlyArchive() {
+  const confirmFirst = confirm("PERINGATAN!\n\nProses ini akan mengarsipkan seluruh data Penjualan & HPP tahun ini ke tab baru di Google Sheets, lalu mengosongkan sheet utama untuk tahun baru.\n\nApakah Anda yakin ingin melanjutkan?");
+  if (!confirmFirst) return;
+
+  const doubleCheck = prompt("Ketik 'ARSIP' (huruf besar) untuk mengonfirmasi proses reset:");
+  if (doubleCheck !== "ARSIP") {
+    alert("Konfirmasi tidak sesuai. Proses dibatalkan.");
+    return;
+  }
+
+  const btn = document.getElementById("btnArchiveData");
+  if (btn) {
+    btn.disabled = true;
+    btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Mengarsipkan...';
+  }
+
+  try {
+    const payload = { action: "archiveYearlyData" };
+    const response = await fetch(APPS_SCRIPT_URL, {
+      method: "POST",
+      body: JSON.stringify(payload)
+    });
+    const data = await response.json();
+
+    if (data.status === "success") {
+      alert(data.message);
+      await fetchSalesData();
+    } else {
+      alert("Gagal melakukan arsip:\n" + data.message);
+    }
+  } catch (error) {
+    console.error(error);
+    alert("Terjadi kesalahan jaringan saat melakukan arsip.");
+  } finally {
+    if (btn) {
+      btn.disabled = false;
+      btn.innerHTML = '<i class="fa-solid fa-box-archive"></i> Arsip & Reset Tahun Baru';
+    }
+  }
+}
+
 function calculateSalaryFromDates() {
   const start = document.getElementById("salStartDate").value;
   const end = document.getElementById("salEndDate").value;
@@ -1754,7 +1857,7 @@ function printSalarySlip() {
   window.print();
 }
 
-// REGISTER PWA SERVICE WORKER
+// REGISTER PWA SERVICE WORKER DARI FOLDER UTAMA
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => {
     navigator.serviceWorker.register('./sw.js')
