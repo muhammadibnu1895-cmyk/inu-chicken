@@ -759,16 +759,26 @@ async function handleAppLogin() {
     return;
   }
 
-  // BYPASS PIN 150522
-  if (pin === "150522") {
-    currentRole = "admin";
-    sessionStorage.setItem("inu_pos_role", "admin");
-    applyPermissions();
-    document.getElementById("loginModal").classList.add("hidden");
-    fetchSalesData();
-    return;
-  }
+  // Pengecekan PIN murni dikirim ke Google Apps Script (Aman dari Inspect Element)
+  try {
+    const response = await fetch(`${APPS_SCRIPT_URL}?action=verifyPin&pin=${encodeURIComponent(pin)}`);
+    const res = await response.json();
 
+    if (res.status === "success" && res.valid) {
+      currentRole = res.role;
+      sessionStorage.setItem("inu_pos_role", res.role);
+      applyPermissions();
+      document.getElementById("loginModal").classList.add("hidden");
+      fetchSalesData();
+    } else {
+      errEl.innerText = "PIN Salah / Tidak Terdaftar!";
+      errEl.classList.remove("hidden");
+    }
+  } catch (error) {
+    errEl.innerText = "Tidak dapat terhubung ke server.";
+    errEl.classList.remove("hidden");
+  }
+}
   try {
     const response = await fetch(`${APPS_SCRIPT_URL}?action=verifyPin&pin=${encodeURIComponent(pin)}`);
     const res = await response.json();
