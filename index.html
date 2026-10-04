@@ -737,9 +737,15 @@ function formatDateInput(date) {
 
 function checkStoredLogin() {
   const savedRole = sessionStorage.getItem("inu_pos_role");
-  if (savedRole === "admin" || savedRole === "kasir") {
+  const savedName = sessionStorage.getItem("inu_pos_user_name");
+
+  if ((savedRole === "admin" || savedRole === "kasir") && savedName) {
     currentRole = savedRole;
     applyPermissions();
+    
+    const salEmpEl = document.getElementById("salEmployeeName");
+    if (salEmpEl) salEmpEl.value = savedName;
+
     document.getElementById("loginModal").classList.add("hidden");
     fetchSalesData();
   } else {
@@ -764,18 +770,26 @@ async function handleAppLogin() {
 
     if (res.status === "success" && res.valid) {
       currentRole = res.role;
+      const empName = res.employeeName || (currentRole === "admin" ? "Owner / Admin" : "Kasir Shift");
+
       sessionStorage.setItem("inu_pos_role", res.role);
+      sessionStorage.setItem("inu_pos_user_name", empName);
+
       applyPermissions();
+
+      const salEmpEl = document.getElementById("salEmployeeName");
+      if (salEmpEl) salEmpEl.value = empName;
+
       document.getElementById("loginModal").classList.add("hidden");
 
-      // LOG ABSEN MASUK SECARA ASYNCHRONOUS
+      // LOG ABSENSI MASUK OTOMATIS
       fetch(APPS_SCRIPT_URL, {
         method: "POST",
         body: JSON.stringify({
           action: "recordAttendance",
           type: "clockIn",
           role: currentRole,
-          employeeName: currentRole === "admin" ? "Admin" : "Kasir Shift"
+          employeeName: empName
         })
       }).then(r => r.json()).then(att => {
         if (att && att.attendanceId) {
@@ -809,27 +823,66 @@ function applyPermissions() {
   }
 }
 
+// FUNGSI LOGOUT TERPERBARUI DENGAN KEEPALIVE KONTINU
 async function logoutApp() {
   const activeAttId = sessionStorage.getItem("active_attendance_id");
-  if (activeAttId) {
-    fetch(APPS_SCRIPT_URL, {
-      method: "POST",
-      body: JSON.stringify({
-        action: "recordAttendance",
-        type: "clockOut",
-        attendanceId: activeAttId
-      })
-    }).catch(e => console.log("Clockout error:", e));
+  const userName = sessionStorage.getItem("inu_pos_user_name") || (currentRole === "admin" ? "Owner / Admin" : "Kasir Shift");
+
+  if (activeAttId || userName) {
+    const payload = JSON.stringify({
+      action: "recordAttendance",
+      type: "clockOut",
+      attendanceId: activeAttId || "",
+      employeeName: userName,
+      role: currentRole
+    });
+
+    try {
+      fetch(APPS_SCRIPT_URL, {
+        method: "POST",
+        body: payload,
+        keepalive: true, // Mencegah browser membatalkan koneksi saat logout
+        headers: { "Content-Type": "text/plain;charset=utf-8" }
+      }).catch(e => console.log("Clockout send error:", e));
+    } catch (e) {
+      console.log("Logout error:", e);
+    }
+
     sessionStorage.removeItem("active_attendance_id");
   }
 
   sessionStorage.removeItem("inu_pos_role");
+  sessionStorage.removeItem("inu_pos_user_name");
   currentRole = null;
   cart = [];
   renderCart();
+  
   document.getElementById("appPinInput").value = "";
   document.getElementById("loginModal").classList.remove("hidden");
 }
+
+// PENGAMAN AUTOMATIS JIKA TAB / BROWSER LANGSUNG DITUTUP TANPA KLIK LOGOUT
+window.addEventListener("beforeunload", () => {
+  const activeAttId = sessionStorage.getItem("active_attendance_id");
+  const userName = sessionStorage.getItem("inu_pos_user_name");
+
+  if ((activeAttId || userName) && APPS_SCRIPT_URL) {
+    const payload = JSON.stringify({
+      action: "recordAttendance",
+      type: "clockOut",
+      attendanceId: activeAttId || "",
+      employeeName: userName || "",
+      role: currentRole
+    });
+
+    fetch(APPS_SCRIPT_URL, {
+      method: "POST",
+      body: payload,
+      keepalive: true,
+      headers: { "Content-Type": "text/plain;charset=utf-8" }
+    });
+  }
+});
 
 function switchRole(role) {
   if (role === "admin" && currentRole !== "admin") {
