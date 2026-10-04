@@ -1019,7 +1019,7 @@ function openPaymentModal() {
 
   const quick = document.getElementById("quickMoneyButtons");
   const rounded10 = Math.ceil(total / 10000) * 10000;
-  const rounded50 = Math.ceil(total / 50000) * 50000;
+  const rounded50 = Math.ceil(total / 33000) * 33000;
 
   quick.innerHTML = `
     <button onclick="setModalPayAmount(${total})" class="px-2.5 py-1 bg-slate-200 dark:bg-slate-700 text-[11px] font-bold rounded-lg">Uang Pas</button>
