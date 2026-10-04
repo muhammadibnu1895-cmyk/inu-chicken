@@ -826,7 +826,7 @@ function applyPermissions() {
 // FUNGSI LOGOUT TERPERBARUI DENGAN KEEPALIVE KONTINU
 async function logoutApp() {
   const activeAttId = sessionStorage.getItem("active_attendance_id");
-  const userName = sessionStorage.getItem("inu_pos_user_name") || (currentRole === "admin" ? "Owner / Admin" : "Kasir Shift");
+  const userName = sessionStorage.getItem("inu_pos_user_name") || (currentRole === "admin" ? "Owner" : "Wulan");
 
   if (activeAttId || userName) {
     const payload = JSON.stringify({
